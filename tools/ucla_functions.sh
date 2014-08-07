@@ -1,4 +1,6 @@
+#!/usr/bin/env bash
 batfish_generate_commit() {
+
    batfish_expect_args 2 $# || return 1
    if [ -z "$BATFISH_CONFIRM" ]; then
       local BATFISH_CONFIRM=true
@@ -86,7 +88,7 @@ batfish_analyze_self(){
    rm -rf cmpres_self
    mkdir tmpres_self
    mkdir cmpres_self
-   cat $COMMITS | parallel batfish_analyze_self_helper {} $UCLA_GIT_ROOT\;
+   cat $COMMITS | parallel -j6 batfish_analyze_self_helper {} $UCLA_GIT_ROOT\;
    if [ "${PIPESTATUS[0]}" -ne 0 -o "${PIPESTATUS[1]}" -ne 0 ]; then
       return 1
    fi
@@ -98,6 +100,7 @@ batfish_analyze_self_helper(){
    local SEC_COMMIT=$1
    local UCLA_GIT_ROOT=$2
    local TMP_RESULT=$PWD/tmpres_self/tmpres_self-$SEC_COMMIT
+   local TMP_RESULT_ERR=$PWD/tmpres_self/tmpres_self-err-$SEC_COMMIT
    local CMP_RESULT=$PWD/cmpres_self/cmpres_self-$SEC_COMMIT
    local FAIL_COMMIT=$PWD/fail_commits
    {
@@ -106,9 +109,13 @@ batfish_analyze_self_helper(){
    TODELETE_TEST_RIG2=$PWD/test-$SEC_COMMIT
    batfish_generate_commit $UCLA_GIT_ROOT $SEC_COMMIT || return 1 ;
    rm -rf $ORI_TEST_RIG2 
-   batfish -commits $TEST_RIG2 $TEST_RIG2 || return 1 ;
+   batfish -ee -commits $TEST_RIG2 $TEST_RIG2 || local FAILED=1
    rm -rf $TODELETE_TEST_RIG2
-   } > $TMP_RESULT
+   if [ -n "$FAILED" ];	then
+	echo $SEC_COMMIT >> $FAIL_COMMIT
+	return 1 ;
+   fi
+   } > $TMP_RESULT 2>$TMP_RESULT_ERR
    sed -n '/Compare/,/End Compare/p' $TMP_RESULT > $CMP_RESULT 
    if [ "${PIPESTATUS[0]}" -ne 0 -o "${PIPESTATUS[1]}" -ne 0 ]; then
       return 1
