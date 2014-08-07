@@ -14,6 +14,7 @@ import org.apache.commons.cli.ParseException;
 
 public class Settings {
 
+   private static final String ARG_COMMITS = "commits";
    private static final String ARG_ANONYMIZE = "anonymize";
    private static final String ARG_CB_HOST = "lbhost";
    private static final String ARG_CB_PORT = "lbport";
@@ -22,6 +23,7 @@ public class Settings {
    private static final String ARG_DATA_PLANE = "dp";
    private static final String ARG_DATA_PLANE_DIR = "dpdir";
    private static final String ARG_DIFF = "diff";
+   private static final String ARG_DR = "dr";
    private static final String ARG_DISABLE_Z3_SIMPLIFICATION = "nosimplify";
    private static final String ARG_DUMP_CONTROL_PLANE_FACTS = "dumpcp";
    private static final String ARG_DUMP_FACTS_DIR = "dumpdir";
@@ -36,6 +38,7 @@ public class Settings {
    private static final String ARG_GUI = "gui";
    private static final String ARG_HELP = "help";
    private static final String ARG_LOG_LEVEL = "log";
+   private static final String ARG_MAX_SUBGROUP_SIZE = "max_subgroup_size";
    private static final String ARG_LOGICDIR = "logicdir";
    private static final String ARG_NO_TRAFFIC = "notraffic";
    private static final String ARG_PREDHELP = "predhelp";
@@ -81,6 +84,7 @@ public class Settings {
    private static final String DEFAULT_FLOW_PATH = "flows";
    private static final String DEFAULT_FLOW_SINK_PATH = "flow_sinks";
    private static final String DEFAULT_LOG_LEVEL = "2";
+   private static final int DEFAULT_MAX_SUBGROUP_SIZE = 100;
    private static final List<String> DEFAULT_PREDICATES = Collections
          .singletonList("InstalledRoute");
    private static final String DEFAULT_SERIALIZE_INDEPENDENT_PATH = "serialized-independent-configs";
@@ -91,10 +95,13 @@ public class Settings {
    private static final String DEFAULT_Z3_OUTPUT = "z3-dataplane-output.smt2";
    private static final boolean DEFAULT_Z3_SIMPLIFY = true;
    private static final String EXECUTABLE_NAME = "batfish";
+   private static final int MAX_MAX_SUBGROUP_SIZE = 100;
 
    private boolean _anonymize;
    private String _anonymizeDir;
    private boolean _canExecute;
+   private List<String> _commits;
+   private boolean _compareCommits;
    private String _cbHost;
    private int _cbPort;
    private boolean _compile;
@@ -105,6 +112,7 @@ public class Settings {
    private boolean _dataPlane;
    private String _dataPlaneDir;
    private boolean _diff;
+   private boolean _dr;
    private boolean _dumpControlPlaneFacts;
    private String _dumpFactsDir;
    private boolean _dumpIF;
@@ -120,6 +128,7 @@ public class Settings {
    private String _hsaOutputDir;
    private String _logicDir;
    private int _logLevel;
+   private int _maxSubgroupSize;
    private boolean _noTraffic;
    private Options _options;
    private List<String> _predicates;
@@ -177,6 +186,14 @@ public class Settings {
       return _revertBranchName;
    }
 
+   public List<String> getCommits() {
+      return _commits;
+   }
+
+   public boolean getCompareCommits() {
+      return _compareCommits;
+   }
+
    public boolean getConcretize() {
       return _concretize;
    }
@@ -211,6 +228,10 @@ public class Settings {
 
    public boolean getDiff() {
       return _diff;
+   }
+
+   public boolean getDr() {
+      return _dr;
    }
 
    public boolean getDumpControlPlaneFacts() {
@@ -263,6 +284,10 @@ public class Settings {
 
    public int getLogLevel() {
       return _logLevel;
+   }
+
+   public int getMaxSubgroupSize() {
+      return _maxSubgroupSize;
    }
 
    public boolean getNoTraffic() {
@@ -347,6 +372,9 @@ public class Settings {
                   "list of LogicBlox predicates to query (defaults to '"
                         + DEFAULT_PREDICATES.get(0) + "')")
             .create(ARG_PREDICATES));
+      _options.addOption(OptionBuilder.withArgName("commits").hasArgs()
+            .withDescription("list of commit names to be compared ")
+            .create(ARG_COMMITS));
       _options.addOption(OptionBuilder
             .withArgName("path")
             .hasArg()
@@ -406,6 +434,13 @@ public class Settings {
                   .withDescription(
                         "exit on first parse error (otherwise will exit on last parse error)")
                   .create(ARG_EXIT_ON_PARSE_ERROR));
+      _options
+            .addOption(OptionBuilder
+                  .withArgName(ARG_MAX_SUBGROUP_SIZE)
+                  .hasOptionalArg()
+                  .withDescription(
+                        "parse UCLA distribution routers and generate department subgroups")
+                  .create(ARG_DR));
       _options.addOption(OptionBuilder.withDescription(
             "generate z3 data plane logic").create(ARG_Z3));
       _options.addOption(OptionBuilder.withArgName(ARGNAME_Z3_OUTPUT).hasArg()
@@ -488,13 +523,10 @@ public class Settings {
       _options.addOption(OptionBuilder.withDescription(
             "compute and serialize data plane (requires logicblox)").create(
             ARG_DATA_PLANE));
-      _options
-            .addOption(OptionBuilder
-                  .hasArg()
-                  .withArgName(ARGNAME_DATA_PLANE_DIR)
-                  .withDescription(
-                        "path to read or write serialized data plane")
-                  .create(ARG_DATA_PLANE_DIR));
+      _options.addOption(OptionBuilder.hasArg()
+            .withArgName(ARGNAME_DATA_PLANE_DIR)
+            .withDescription("path to read or write serialized data plane")
+            .create(ARG_DATA_PLANE_DIR));
    }
 
    private void parseCommandLine(String[] args) {
@@ -551,6 +583,14 @@ public class Settings {
       _update = line.hasOption(ARG_UPDATE);
       _noTraffic = line.hasOption(ARG_NO_TRAFFIC);
       _exitOnParseError = line.hasOption(ARG_EXIT_ON_PARSE_ERROR);
+      _dr = line.hasOption(ARG_DR);
+      _maxSubgroupSize = Integer
+            .parseInt(line.getOptionValue(ARG_MAX_SUBGROUP_SIZE,
+                  Integer.toString(DEFAULT_MAX_SUBGROUP_SIZE)));
+      if (_maxSubgroupSize <= 0 || _maxSubgroupSize > MAX_MAX_SUBGROUP_SIZE) {
+         throw new Error("Max subgroup size must be between 1 and "
+               + MAX_MAX_SUBGROUP_SIZE);
+      }
       _z3 = line.hasOption(ARG_Z3);
       if (_z3) {
          _z3File = line.getOptionValue(ARG_Z3_OUTPUT, DEFAULT_Z3_OUTPUT);
@@ -584,6 +624,12 @@ public class Settings {
       _revertBranchName = line.getOptionValue(ARG_REVERT);
       _revert = (_revertBranchName != null);
       _redirectStdErr = line.hasOption(ARG_REDIRECT_STDERR);
+
+      _compareCommits = line.hasOption(ARG_COMMITS);
+      if (line.hasOption(ARG_COMMITS)) {
+         _commits = Arrays.asList(line.getOptionValues(ARG_COMMITS));
+      }
+
       _anonymize = line.hasOption(ARG_ANONYMIZE);
       if (_anonymize) {
          _anonymizeDir = line.getOptionValue(ARG_ANONYMIZE);
@@ -603,7 +649,8 @@ public class Settings {
       _serializeIndependentPath = line.getOptionValue(
             ARG_SERIALIZE_INDEPENDENT_PATH, DEFAULT_SERIALIZE_INDEPENDENT_PATH);
       _dataPlane = line.hasOption(ARG_DATA_PLANE);
-      _dataPlaneDir = line.getOptionValue(ARG_DATA_PLANE_DIR, DEFAULT_DATA_PLANE_DIR);
+      _dataPlaneDir = line.getOptionValue(ARG_DATA_PLANE_DIR,
+            DEFAULT_DATA_PLANE_DIR);
    }
 
    public boolean redirectStdErr() {

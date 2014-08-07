@@ -2,6 +2,7 @@ package batfish.representation.juniper;
 
 import batfish.representation.juniper.MatchType;
 import batfish.representation.juniper.PolicyStatementMatchLine;
+import batfish.util.Util;
 
 public class PolicyStatementMatchNeighborLine extends PolicyStatementMatchLine {
 
@@ -18,5 +19,15 @@ public class PolicyStatementMatchNeighborLine extends PolicyStatementMatchLine {
 
    public String getNeighborIp() {
       return _neighborIp;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((PolicyStatementMatchLine) o).getType() != MatchType.NEIGHBOR) {
+         return false;
+      }
+
+      PolicyStatementMatchNeighborLine rhsLine = (PolicyStatementMatchNeighborLine) o;
+      return Util.equalOrNull(_neighborIp, rhsLine._neighborIp);
    }
 }

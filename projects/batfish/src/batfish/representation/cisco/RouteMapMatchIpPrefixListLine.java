@@ -21,4 +21,14 @@ public class RouteMapMatchIpPrefixListLine extends RouteMapMatchLine {
       return RouteMapMatchType.IP_PREFIX_LIST;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.IP_PREFIX_LIST) {
+         return false;
+      }
+
+      RouteMapMatchIpPrefixListLine rhsLine = (RouteMapMatchIpPrefixListLine) o;
+      return getListNames().equals(rhsLine.getListNames());
+   }
+
 }

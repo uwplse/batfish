@@ -19,4 +19,14 @@ public class RouteMapMatchNeighborLine extends RouteMapMatchLine {
       return RouteMapMatchType.NEIGHBOR;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.NEIGHBOR) {
+         return false;
+      }
+
+      RouteMapMatchNeighborLine rhsLine = (RouteMapMatchNeighborLine) o;
+      return getNeighborIp().equals(rhsLine.getNeighborIp());
+   }
+
 }

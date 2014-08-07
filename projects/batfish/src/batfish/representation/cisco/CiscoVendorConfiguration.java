@@ -1168,4 +1168,9 @@ public class CiscoVendorConfiguration extends CiscoConfiguration implements
       return false;
    }
 
+   @Override
+   public String getVendor() {
+      return VENDOR_NAME;
+   }
+
 }

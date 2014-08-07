@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import batfish.representation.LineAction;
+import batfish.representation.RepresentationObject;
 import batfish.util.SubRange;
+import batfish.util.Util;
 
-public class ExtendedAccessListTerm {
+public class ExtendedAccessListTerm implements RepresentationObject {
 
    private LineAction _ala;
    private List<String> _destinationAddress;
@@ -244,6 +246,19 @@ public class ExtendedAccessListTerm {
 
    public void setLineAction(LineAction a) {
       _ala = a;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      ExtendedAccessListTerm rhs = (ExtendedAccessListTerm) o;
+      return Util.equalOrNull(_ala, rhs._ala)
+            && Util.sameRepresentationLists(_destinationAddress,
+                  rhs._destinationAddress)
+            && Util.sameRepresentationLists(_dstPortRanges, rhs._dstPortRanges)
+            && Util.sameRepresentationLists(_protocols, rhs._protocols)
+            && Util.sameRepresentationLists(_sourceAddress, rhs._sourceAddress)
+            && Util.sameRepresentationLists(_srcPortRanges, rhs._srcPortRanges)
+            && Util.equalOrNull(_tName, rhs._tName);
    }
 
 }

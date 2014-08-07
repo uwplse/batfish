@@ -3,7 +3,10 @@ package batfish.representation.juniper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BGPGroup {
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
+public class BGPGroup implements RepresentationObject {
    private Long _clusterId;
    private String _name;
    private Integer _localAS;
@@ -35,7 +38,7 @@ public class BGPGroup {
    public void setRemoteAS(int remoteAS) {
       _remoteAS = remoteAS;
    }
-   
+
    public void setLocalAS(int localAS) {
       _localAS = localAS;
    }
@@ -43,8 +46,8 @@ public class BGPGroup {
    public void addNeighbor(BGPNeighbor n) {
       _neighbors.add(n);
    }
-   
-   public void setIsExternal(boolean e){
+
+   public void setIsExternal(boolean e) {
       _isExternal = e;
    }
 
@@ -60,14 +63,14 @@ public class BGPGroup {
       return _clusterId;
    }
 
-   public boolean getIsExternal(){
+   public boolean getIsExternal() {
       return _isExternal;
    }
-   
+
    public Integer getRemoteAS() {
       return _remoteAS;
    }
-   
+
    public Integer getLocalAS() {
       return _localAS;
    }
@@ -102,6 +105,17 @@ public class BGPGroup {
 
    public void setUpdateSource(String updateSource) {
       _updateSource = updateSource;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      BGPGroup rhs = (BGPGroup) o;
+      return Util.equalOrNull(_clusterId, rhs._clusterId)
+            && Util.equalOrNull(_name, rhs._name)
+            && Util.equalOrNull(_localAS, rhs._localAS)
+            && _routeReflectorClient == rhs._routeReflectorClient
+            && Util.sameRepresentationLists(_neighbors, rhs._neighbors)
+            && _isExternal == rhs._isExternal;
    }
 
 }

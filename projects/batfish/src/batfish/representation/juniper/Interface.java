@@ -3,11 +3,13 @@ package batfish.representation.juniper;
 import java.util.ArrayList;
 import java.util.List;
 
+import batfish.representation.RepresentationObject;
 import batfish.representation.SwitchportEncapsulationType;
 import batfish.representation.SwitchportMode;
 import batfish.util.SubRange;
+import batfish.util.Util;
 
-public class Interface {
+public class Interface implements RepresentationObject {
 
    private int _accessVlan;
    private boolean _active;
@@ -139,16 +141,47 @@ public class Interface {
    public String getOutgoingFilter() {
       return _outgoingFilter;
    }
-   
+
    public void setOutgoingFilter(String accessListName) {
       _outgoingFilter = accessListName;
    }
-   
+
    public void setIncomingFilter(String accessListName) {
       _incomingFilter = accessListName;
    }
-   
+
    public String getIncomingFilter() {
       return _incomingFilter;
+   }
+
+   /*
+    * private int _accessVlan; private boolean _active; private
+    * ArrayList<SubRange> _allowedVlans; private Double _bandwidth; private
+    * String _incomingFilter; private String _ip; private String _name; private
+    * int _nativeVlan; private Integer _ospfCost; private int _ospfDeadInterval;
+    * private int _ospfHelloMultiplier; private String _outgoingFilter; private
+    * String _subnet; private SwitchportMode _switchportMode; private
+    * SwitchportEncapsulationType _switchportTrunkEncapsulation;
+    */
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      Interface rhs = (Interface) o;
+      return _accessVlan == rhs._accessVlan
+            && _active == rhs._active
+            && Util.sameRepresentationLists(_allowedVlans, rhs._allowedVlans)
+            && Util.equalOrNull(_bandwidth, rhs._bandwidth)
+            && Util.equalOrNull(_incomingFilter, rhs._incomingFilter)
+            && Util.equalOrNull(_ip, rhs._ip)
+            && Util.equalOrNull(_name, rhs._name)
+            && _nativeVlan == rhs._nativeVlan
+            && Util.equalOrNull(_ospfCost, rhs._ospfCost)
+            && _ospfDeadInterval == rhs._ospfDeadInterval
+            && _ospfHelloMultiplier == rhs._ospfHelloMultiplier
+            && Util.equalOrNull(_outgoingFilter, rhs._outgoingFilter)
+            && Util.equalOrNull(_subnet, rhs._subnet)
+            && Util.equalOrNull(_switchportMode, rhs._switchportMode)
+            && Util.equalOrNull(_switchportTrunkEncapsulation,
+                  rhs._switchportTrunkEncapsulation);
    }
 }

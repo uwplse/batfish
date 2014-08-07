@@ -1,6 +1,9 @@
 package batfish.representation.juniper;
 
-public class PolicyStatementSetLocalPreferenceLine extends PolicyStatementSetLine {
+import batfish.util.Util;
+
+public class PolicyStatementSetLocalPreferenceLine extends
+      PolicyStatementSetLine {
 
    private int _localPreference;
 
@@ -16,5 +19,15 @@ public class PolicyStatementSetLocalPreferenceLine extends PolicyStatementSetLin
    public int getLocalPreference() {
       return _localPreference;
    }
-   
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((PolicyStatementSetLine) o).getSetType() != SetType.LOCAL_PREFERENCE) {
+         return false;
+      }
+
+      PolicyStatementSetLocalPreferenceLine rhsLine = (PolicyStatementSetLocalPreferenceLine) o;
+      return Util.equalOrNull(_localPreference, rhsLine._localPreference);
+   }
+
 }

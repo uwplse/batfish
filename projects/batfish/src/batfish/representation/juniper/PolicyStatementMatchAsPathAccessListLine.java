@@ -1,6 +1,9 @@
 package batfish.representation.juniper;
 
-public class PolicyStatementMatchAsPathAccessListLine extends PolicyStatementMatchLine {
+import batfish.util.Util;
+
+public class PolicyStatementMatchAsPathAccessListLine extends
+      PolicyStatementMatchLine {
 
    private String _listName;
 
@@ -16,5 +19,15 @@ public class PolicyStatementMatchAsPathAccessListLine extends PolicyStatementMat
    public String getListName() {
       return _listName;
    }
-   
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((PolicyStatementMatchLine) o).getType() != MatchType.AS_PATH_ACCESS_LIST) {
+         return false;
+      }
+
+      PolicyStatementMatchAsPathAccessListLine rhsLine = (PolicyStatementMatchAsPathAccessListLine) o;
+      return Util.equalOrNull(_listName, rhsLine._listName);
+   }
+
 }

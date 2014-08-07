@@ -8,14 +8,14 @@ public class AsPath extends ArrayList<AsSet> {
 
    public String getIFString(String indentString) {
 
-	   String retString = String.format("%s AsPath: ", indentString);
-	   
-	   for (AsSet asSet : this) {
-		   retString += asSet.getIFString("");
-	   }
-	   
-	   return retString;
-	   
+      String retString = String.format("%s AsPath: ", indentString);
+
+      for (AsSet asSet : this) {
+         retString += asSet.getIFString("");
+      }
+
+      return retString;
+
    }
 
 }

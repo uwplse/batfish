@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import batfish.grammar.cisco.CiscoGrammar.Extended_access_list_stanzaContext;
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
-public class ExtendedAccessList implements Serializable {
+public class ExtendedAccessList implements Serializable, RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 
@@ -48,5 +50,12 @@ public class ExtendedAccessList implements Serializable {
          output += "\n" + line;
       }
       return output;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      ExtendedAccessList rhs = (ExtendedAccessList) o;
+      return Util.equalOrNull(_id, rhs._id)
+            && Util.sameRepresentationLists(_lines, rhs._lines);
    }
 }

@@ -4,10 +4,11 @@ import java.util.Collections;
 import java.util.List;
 
 import batfish.representation.LineAction;
+import batfish.representation.RepresentationObject;
 import batfish.util.SubRange;
 import batfish.util.Util;
 
-public class ExtendedAccessListLine {
+public class ExtendedAccessListLine implements RepresentationObject {
 
    private LineAction _ala;
    private String _dstIp;
@@ -36,7 +37,7 @@ public class ExtendedAccessListLine {
          srcPortRanges = Collections.singletonList(new SubRange(0, 65535));
       }
       if (dstPortRanges == null) {
-            dstPortRanges = Collections.singletonList(new SubRange(0, 65535));
+         dstPortRanges = Collections.singletonList(new SubRange(0, 65535));
       }
    }
 
@@ -119,6 +120,19 @@ public class ExtendedAccessListLine {
             + _srcWildcard + ", DestinationIp:" + _dstIp
             + ", DestinationWildcard:" + _dstWildcard + ", PortRange:"
             + _srcPortRanges + "]";
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      ExtendedAccessListLine rhs = (ExtendedAccessListLine) o;
+      return Util.equalOrNull(_ala, rhs._ala)
+            && Util.equalOrNull(_dstIp, rhs._dstIp)
+            && Util.sameRepresentationLists(_dstPortRanges, rhs._dstPortRanges)
+            && Util.equalOrNull(_dstWildcard, rhs._dstWildcard)
+            && Util.equalOrNull(_id, rhs._id) && _protocol == rhs._protocol
+            && Util.equalOrNull(_srcIp, rhs._srcIp)
+            && Util.sameRepresentationLists(_srcPortRanges, rhs._srcPortRanges)
+            && Util.equalOrNull(_srcWildcard, rhs._srcWildcard);
    }
 
 }

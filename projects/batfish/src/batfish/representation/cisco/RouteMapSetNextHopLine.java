@@ -32,8 +32,17 @@ public class RouteMapSetNextHopLine extends RouteMapSetLine {
    }
 
    @Override
-   public RouteMapSetType getType(){
+   public RouteMapSetType getType() {
       return RouteMapSetType.NEXT_HOP;
    }
-   
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.NEXT_HOP) {
+         return false;
+      }
+
+      RouteMapSetNextHopLine rhsLine = (RouteMapSetNextHopLine) o;
+      return getNextHops().equals(rhsLine.getNextHops());
+   }
 }

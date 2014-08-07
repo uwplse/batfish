@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 import batfish.representation.Ip;
 import batfish.representation.LineAction;
+import batfish.representation.RepresentationObject;
 import batfish.util.SubRange;
+import batfish.util.Util;
 
-public class PrefixListLine implements Serializable {
+public class PrefixListLine implements Serializable, RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 
@@ -40,6 +42,15 @@ public class PrefixListLine implements Serializable {
 
    public int getPrefixLength() {
       return _prefixLength;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      PrefixListLine rhs = (PrefixListLine) o;
+      return Util.equalOrNull(_action, rhs._action)
+            && Util.equalOrNull(_lengthRange, rhs._lengthRange)
+            && Util.equalOrNull(_prefix, rhs._prefix)
+            && Util.equalOrNull(_prefixLength, rhs._prefixLength);
    }
 
 }

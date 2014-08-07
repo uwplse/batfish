@@ -3,8 +3,11 @@ package batfish.representation.cisco;
 import java.io.Serializable;
 
 import batfish.representation.Ip;
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
-public abstract class BgpPeerGroup implements Serializable {
+public abstract class BgpPeerGroup implements Serializable,
+      RepresentationObject {
 
    private static final long serialVersionUID = 1L;
    protected Ip _clusterId;
@@ -143,6 +146,24 @@ public abstract class BgpPeerGroup implements Serializable {
 
    public void setUpdateSource(String updateSource) {
       _updateSource = updateSource;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      BgpPeerGroup rhs = (BgpPeerGroup) o;
+
+      return Util.equalOrNull(_clusterId, rhs._clusterId)
+            && Util.equalOrNull(_defaultOriginate, rhs._defaultOriginate)
+            && Util.equalOrNull(_defaultOriginateMap, rhs._defaultOriginateMap)
+            && Util.equalOrNull(_inboundPrefixList, rhs._inboundPrefixList)
+            && Util.equalOrNull(_inboundRouteMap, rhs._inboundRouteMap)
+            && Util.equalOrNull(_outboundPrefixList, rhs._outboundPrefixList)
+            && Util.equalOrNull(_outboundRouteMap, rhs._outboundRouteMap)
+            && Util.equalOrNull(_remoteAS, _remoteAS)
+            && Util.equalOrNull(_routeReflectorClient,
+                  rhs._routeReflectorClient)
+            && Util.equalOrNull(_sendCommunity, rhs._sendCommunity)
+            && Util.equalOrNull(_updateSource, rhs._updateSource);
    }
 
 }

@@ -26,8 +26,17 @@ public class RouteMapSetDeleteCommunityLine extends RouteMapSetLine {
    }
 
    @Override
-   public RouteMapSetType getType(){
+   public RouteMapSetType getType() {
       return RouteMapSetType.DELETE_COMMUNITY;
    }
-   
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.DELETE_COMMUNITY) {
+         return false;
+      }
+
+      RouteMapSetDeleteCommunityLine rhsLine = (RouteMapSetDeleteCommunityLine) o;
+      return getListName().equals(rhsLine.getListName());
+   }
 }

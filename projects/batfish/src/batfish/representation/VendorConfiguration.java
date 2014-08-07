@@ -9,6 +9,8 @@ public interface VendorConfiguration extends Serializable {
 
    String getHostname();
 
+   String getVendor();
+
    Configuration toVendorIndependentConfiguration()
          throws VendorConversionException;
 

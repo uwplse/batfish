@@ -155,4 +155,12 @@ public class JuniperConfiguration {
       return _configuration;
    }
 
+   public int getAsNum() {
+      return _asNum;
+   }
+
+   public HashMap<String, String> getInterfaceAddressMap() {
+      return _interfaceAddressMap;
+   }
+
 }

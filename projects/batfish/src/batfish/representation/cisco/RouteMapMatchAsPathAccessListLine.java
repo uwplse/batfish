@@ -21,4 +21,14 @@ public class RouteMapMatchAsPathAccessListLine extends RouteMapMatchLine {
       return RouteMapMatchType.AS_PATH_ACCESS_LIST;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.AS_PATH_ACCESS_LIST) {
+         return false;
+      }
+
+      RouteMapMatchAsPathAccessListLine rhAccessListLine = (RouteMapMatchAsPathAccessListLine) o;
+      return getListNames().equals(rhAccessListLine.getListNames());
+   }
+
 }

@@ -24,10 +24,20 @@ public class RouteMapSetAdditiveCommunityLine extends RouteMapSetLine {
    public PolicyMapSetLine toPolicyMapSetLine(Configuration c) {
       return new PolicyMapSetAddCommunityLine(_communities);
    }
-   
+
    @Override
-   public RouteMapSetType getType(){
+   public RouteMapSetType getType() {
       return RouteMapSetType.ADDITIVE_COMMUNITY;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.ADDITIVE_COMMUNITY) {
+         return false;
+      }
+
+      RouteMapSetAdditiveCommunityLine rhsLine = (RouteMapSetAdditiveCommunityLine) o;
+      return getCommunities().equals(rhsLine.getCommunities());
    }
 
 }

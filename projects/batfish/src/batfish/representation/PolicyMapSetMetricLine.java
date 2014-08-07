@@ -10,6 +10,14 @@ public class PolicyMapSetMetricLine extends PolicyMapSetLine {
       _metric = metric;
    }
 
+   @Override
+   public boolean equals(Object o) {
+      if (((PolicyMapSetLine) o).getType() != PolicyMapSetType.METRIC)
+         return false;
+      PolicyMapSetMetricLine rhsLine = (PolicyMapSetMetricLine) o;
+      return getMetric() == rhsLine.getMetric();
+   }
+
    public int getMetric() {
       return _metric;
    }

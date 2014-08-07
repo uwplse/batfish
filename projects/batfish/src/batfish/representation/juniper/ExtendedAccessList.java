@@ -14,8 +14,19 @@ public class ExtendedAccessList {
    public ExtendedAccessList(String id) {
       _id = id;
       _lines = new LinkedList<ExtendedAccessListLine>();
-      _lines.add(new ExtendedAccessListLine(LineAction.REJECT, 0,
-            "0.0.0.0", "255.255.255.255", "0.0.0.0", "255.255.255.255", null, null)); //TODO: Stanley, change these 'null's so destination port ranges work in Juniper
+      _lines.add(new ExtendedAccessListLine(LineAction.REJECT, 0, "0.0.0.0",
+            "255.255.255.255", "0.0.0.0", "255.255.255.255", null, null)); // TODO:
+                                                                           // Stanley,
+                                                                           // change
+                                                                           // these
+                                                                           // 'null's
+                                                                           // so
+                                                                           // destination
+                                                                           // port
+                                                                           // ranges
+                                                                           // work
+                                                                           // in
+                                                                           // Juniper
       _terms = new ArrayList<ExtendedAccessListTerm>();
    }
 
@@ -23,19 +34,19 @@ public class ExtendedAccessList {
       return _id;
    }
 
-   public void addTerm(ExtendedAccessListTerm t){
+   public void addTerm(ExtendedAccessListTerm t) {
       _terms.add(t);
    }
-   
+
    public void addLine(ExtendedAccessListLine all) {
-      _lines.add(_lines.size()-1, all);
+      _lines.add(_lines.size() - 1, all);
    }
 
    public List<ExtendedAccessListLine> getLines() {
       return _lines;
    }
-   
-   public List<ExtendedAccessListTerm> getTerms(){
+
+   public List<ExtendedAccessListTerm> getTerms() {
       return _terms;
    }
 

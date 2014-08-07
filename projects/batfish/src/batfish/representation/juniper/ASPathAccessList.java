@@ -2,7 +2,6 @@ package batfish.representation.juniper;
 
 import java.util.List;
 
-
 public class ASPathAccessList {
    private List<ASPathAccessListLine> _lines;
    private String _name;

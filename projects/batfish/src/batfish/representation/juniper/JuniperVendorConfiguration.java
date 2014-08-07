@@ -39,6 +39,7 @@ import batfish.representation.PolicyMapSetMetricLine;
 import batfish.representation.PolicyMapSetNextHopLine;
 import batfish.representation.RouteFilterList;
 import batfish.representation.VendorConfiguration;
+import batfish.representation.juniper.ExpandedCommunityList;
 import batfish.util.Util;
 
 public class JuniperVendorConfiguration implements VendorConfiguration {
@@ -519,7 +520,8 @@ public class JuniperVendorConfiguration implements VendorConfiguration {
       String nextHopInterface = staticRoute.getNextHopInterface();
       int prefixLength = Util.numSubnetBits(staticRoute.getMask());
       return new batfish.representation.StaticRoute(prefix, prefixLength,
-            nextHopIp, nextHopInterface, staticRoute.getDistance(), staticRoute.getTag());
+            nextHopIp, nextHopInterface, staticRoute.getDistance(),
+            staticRoute.getTag());
    }
 
    private int _asNum;
@@ -864,6 +866,23 @@ public class JuniperVendorConfiguration implements VendorConfiguration {
       }
 
       return c;
+   }
+
+   @Override
+   public String getVendor() {
+      return VENDOR_NAME;
+   }
+
+   public Map<String, ASPathAccessList> getAsPathAccessLists() {
+      return _asPathAccessLists;
+   }
+
+   public Map<String, ExpandedCommunityList> getExpandedCommunityLists() {
+      return _expandedCommunityLists;
+   }
+
+   public Object getAsNum() {
+      return _asNum;
    }
 
 }

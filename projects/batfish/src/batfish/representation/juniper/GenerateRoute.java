@@ -4,16 +4,17 @@ public class GenerateRoute {
    private String _prefix;
    private int _prefixLength;
    private String _policy;
-   private int  _preference;
+   private int _preference;
 
-   public GenerateRoute(String prefix, int prefixLength, String policy, int distance) {
+   public GenerateRoute(String prefix, int prefixLength, String policy,
+         int distance) {
       _prefix = prefix;
       _prefixLength = prefixLength;
       _policy = policy;
       _preference = distance;
    }
-   
-   public void setPolicy(String p){
+
+   public void setPolicy(String p) {
       _policy = p;
    }
 

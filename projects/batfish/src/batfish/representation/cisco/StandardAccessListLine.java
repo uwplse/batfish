@@ -4,8 +4,10 @@ import java.io.Serializable;
 
 import batfish.representation.Ip;
 import batfish.representation.LineAction;
+import batfish.representation.RepresentationObject;
 
-public class StandardAccessListLine implements Serializable {
+public class StandardAccessListLine implements Serializable,
+      RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 
@@ -36,4 +38,17 @@ public class StandardAccessListLine implements Serializable {
             new Ip(0xFFFFFFFFl), null, null);
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      StandardAccessListLine rhs = (StandardAccessListLine) o;
+      if (_action == null && rhs.getAction() != null)
+         return false;
+      if (_ip == null && rhs.getIP() != null)
+         return false;
+      if (_wildcard == null && rhs.getWildcard() != null)
+         return false;
+      return (_action.equals(rhs.getAction()) && _ip.equals(rhs.getIP()) && _wildcard
+            .equals(rhs.getWildcard()));
+
+   }
 }

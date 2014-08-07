@@ -32,6 +32,8 @@ public class Ip implements Comparable<Ip>, Serializable {
 
    @Override
    public boolean equals(Object o) {
+      if (o == null)
+         return false;
       Ip rhs = (Ip) o;
       return _ip.equals(rhs._ip);
    }

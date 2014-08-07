@@ -20,8 +20,8 @@ public class ExpandedCommunityList {
    public void addLine(ExpandedCommunityListLine line) {
       _lines.add(line);
    }
-   
-   public List<ExpandedCommunityListLine> getLines(){
+
+   public List<ExpandedCommunityListLine> getLines() {
       return _lines;
    }
 

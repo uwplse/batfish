@@ -19,7 +19,8 @@ public class PolicyStatement {
    }
 
    public List<PolicyStatementClause> getClauseList() {
-      return Arrays.asList(_clauses.values().toArray(new PolicyStatementClause[0]));
+      return Arrays.asList(_clauses.values().toArray(
+            new PolicyStatementClause[0]));
    }
 
    public NavigableMap<Integer, PolicyStatementClause> getClauseMap() {

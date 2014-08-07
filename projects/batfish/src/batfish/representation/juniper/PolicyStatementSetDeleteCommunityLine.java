@@ -1,6 +1,9 @@
 package batfish.representation.juniper;
 
-public class PolicyStatementSetDeleteCommunityLine extends PolicyStatementSetLine {
+import batfish.util.Util;
+
+public class PolicyStatementSetDeleteCommunityLine extends
+      PolicyStatementSetLine {
 
    private String _listName;
 
@@ -15,5 +18,15 @@ public class PolicyStatementSetDeleteCommunityLine extends PolicyStatementSetLin
 
    public String getListName() {
       return _listName;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((PolicyStatementSetLine) o).getSetType() != SetType.DELETE_COMMUNITY) {
+         return false;
+      }
+
+      PolicyStatementSetDeleteCommunityLine rhsLine = (PolicyStatementSetDeleteCommunityLine) o;
+      return Util.equalOrNull(_listName, rhsLine._listName);
    }
 }

@@ -1,24 +1,27 @@
 package batfish.representation.juniper;
 
+import batfish.util.Util;
+
 public class RouteFilterThroughLine extends RouteFilterLine {
-   //IP Prefix
+   // IP Prefix
    private String _prefix;
-   
-   //Range for prefix-length to be matched
+
+   // Range for prefix-length to be matched
    private int _prefixLength;
-   
-   //Another IP Prefix if the match type includes a range of prefix
+
+   // Another IP Prefix if the match type includes a range of prefix
    private String _secondPrefix;
 
    private int _secondPrefixLength;
 
-   public RouteFilterThroughLine(String prefix, int prefixLength, String secondPrefix, int secondPrefixLength) {
+   public RouteFilterThroughLine(String prefix, int prefixLength,
+         String secondPrefix, int secondPrefixLength) {
       _prefix = prefix;
       _prefixLength = prefixLength;
       _secondPrefix = secondPrefix;
       _secondPrefixLength = secondPrefixLength;
    }
-   
+
    public String getPrefix() {
       return _prefix;
    }
@@ -40,5 +43,18 @@ public class RouteFilterThroughLine extends RouteFilterLine {
       return RouteFilterLineType.THROUGH;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteFilterLine) o).getType() != RouteFilterLineType.THROUGH) {
+         return false;
+      }
+
+      RouteFilterThroughLine rhsLine = (RouteFilterThroughLine) o;
+      return Util.equalOrNull(_prefix, rhsLine._prefix)
+            && _prefixLength == rhsLine._prefixLength
+            && Util.equalOrNull(_secondPrefix, rhsLine._secondPrefix)
+            && _secondPrefixLength == rhsLine._secondPrefixLength;
+
+   }
 
 }

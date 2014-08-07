@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-public class BGPProcess {
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
+public class BGPProcess implements RepresentationObject {
 
    private int _pid;
    private String _routerID;
@@ -21,7 +24,7 @@ public class BGPProcess {
    public int getPid() {
       return _pid;
    }
-   
+
    public String getRouterID() {
       return _routerID;
    }
@@ -49,14 +52,23 @@ public class BGPProcess {
    public void addActivatedNeighbors(List<String> addresses) {
       _activatedNeighbors.addAll(addresses);
    }
-   
-   public void setAsNum(int as){
+
+   public void setAsNum(int as) {
       _pid = as;
    }
-   
+
    public void setRouterID(String id) {
       _routerID = id;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      BGPProcess rhs = (BGPProcess) o;
+      return _pid == rhs._pid
+            && Util.equalOrNull(_routerID, rhs._routerID)
+            && Util.sameRepresentationMaps(_peerGroups, rhs._peerGroups)
+            && Util.sameRepresentationLists(_activatedNeighbors,
+                  rhs._activatedNeighbors);
+   }
 
 }

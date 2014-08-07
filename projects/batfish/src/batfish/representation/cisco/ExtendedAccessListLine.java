@@ -6,10 +6,12 @@ import java.util.List;
 
 import batfish.representation.Ip;
 import batfish.representation.LineAction;
+import batfish.representation.RepresentationObject;
 import batfish.util.SubRange;
 import batfish.util.Util;
 
-public class ExtendedAccessListLine implements Serializable {
+public class ExtendedAccessListLine implements Serializable,
+      RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 
@@ -90,4 +92,21 @@ public class ExtendedAccessListLine implements Serializable {
             + _srcPortRanges + "]";
    }
 
+   /*
+    * private LineAction _action; private Ip _dstIp; private List<SubRange>
+    * _dstPortRanges; private Ip _dstWildcard; private int _protocol; private Ip
+    * _srcIp; private List<SubRange> _srcPortRanges; private Ip _srcWildcard;
+    */
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      ExtendedAccessListLine rhs = (ExtendedAccessListLine) o;
+      return Util.equalOrNull(_action, rhs._action)
+            && Util.equalOrNull(_dstIp, rhs._dstIp)
+            && Util.sameRepresentationLists(_dstPortRanges, rhs._dstPortRanges)
+            && Util.equalOrNull(_dstWildcard, rhs._dstWildcard)
+            && _protocol == rhs._protocol
+            && Util.equalOrNull(_srcIp, rhs._srcIp)
+            && Util.sameRepresentationLists(_srcPortRanges, rhs._srcPortRanges)
+            && Util.equalOrNull(_srcWildcard, rhs._srcWildcard);
+   }
 }

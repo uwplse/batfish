@@ -1,7 +1,9 @@
 package batfish.representation.juniper;
 
-public abstract class PolicyStatementMatchLine {
-   
+import batfish.representation.RepresentationObject;
+
+public abstract class PolicyStatementMatchLine implements RepresentationObject {
+
    public abstract MatchType getType();
 
 }

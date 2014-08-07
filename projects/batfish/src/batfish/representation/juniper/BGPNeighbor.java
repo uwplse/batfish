@@ -3,7 +3,10 @@ package batfish.representation.juniper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BGPNeighbor {
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
+public class BGPNeighbor implements RepresentationObject {
    private String _ip;
    private Integer _remoteAS;
    private Integer _localAS;
@@ -62,6 +65,18 @@ public class BGPNeighbor {
 
    public void setUpdateSource(String updateSource) {
       _updateSource = updateSource;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      BGPNeighbor rhs = (BGPNeighbor) o;
+      return Util.equalOrNull(_ip, rhs._ip)
+            && Util.equalOrNull(_remoteAS, rhs._remoteAS)
+            && Util.equalOrNull(_localAS, rhs._localAS)
+            && Util.sameRepresentationLists(_inboundPolicyStatementName,
+                  rhs._inboundPolicyStatementName)
+            && Util.equalOrNull(_outboundPolicyStatementName,
+                  rhs._outboundPolicyStatementName);
    }
 
 }

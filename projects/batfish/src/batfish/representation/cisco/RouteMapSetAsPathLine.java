@@ -22,6 +22,12 @@ public class RouteMapSetAsPathLine extends RouteMapSetLine {
    }
 
    @Override
+   public boolean equalsRepresentation(Object o) {
+      // TODO Auto-generated method stub
+      return false;
+   }
+
+   @Override
    public RouteMapSetType getType() {
       return RouteMapSetType.AS_PATH;
    }

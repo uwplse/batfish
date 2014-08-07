@@ -2,8 +2,10 @@ package batfish.representation.cisco;
 
 import batfish.representation.OspfMetricType;
 import batfish.representation.Protocol;
+import batfish.representation.RepresentationObject;
 
-public class OspfRedistributionPolicy extends RedistributionPolicy {
+public class OspfRedistributionPolicy extends RedistributionPolicy implements
+      RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 
@@ -62,4 +64,18 @@ public class OspfRedistributionPolicy extends RedistributionPolicy {
       _tag = tag;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      OspfRedistributionPolicy rhs = (OspfRedistributionPolicy) o;
+      if (_map == null) {
+         if (rhs.getMap() != null)
+            return false;
+         return _metric == rhs.getMetric()
+               && _metricType == rhs.getMetricType()
+               && _subnets == rhs.getSubnets() && _tag == rhs.getTag();
+      }
+      return _map.equals(rhs.getMap()) && _metric == rhs.getMetric()
+            && _metricType == rhs.getMetricType()
+            && _subnets == rhs.getSubnets() && _tag == rhs.getTag();
+   }
 }

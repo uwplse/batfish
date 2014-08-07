@@ -2,7 +2,10 @@ package batfish.representation.juniper;
 
 import java.util.List;
 
-public class PolicyStatementMatchIpAccessListLine extends PolicyStatementMatchLine {
+import batfish.util.Util;
+
+public class PolicyStatementMatchIpAccessListLine extends
+      PolicyStatementMatchLine {
 
    private List<String> _listNames;
 
@@ -18,5 +21,15 @@ public class PolicyStatementMatchIpAccessListLine extends PolicyStatementMatchLi
    public List<String> getListNames() {
       return _listNames;
    }
-   
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((PolicyStatementMatchLine) o).getType() != MatchType.IP_ACCESS_LIST) {
+         return false;
+      }
+
+      PolicyStatementMatchIpAccessListLine rhsLine = (PolicyStatementMatchIpAccessListLine) o;
+      return Util.sameRepresentationLists(_listNames, rhsLine._listNames);
+   }
+
 }

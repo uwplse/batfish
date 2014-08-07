@@ -21,4 +21,13 @@ public class RouteMapMatchProtocolLine extends RouteMapMatchLine {
       return RouteMapMatchType.PROTOCOL;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.PROTOCOL) {
+         return false;
+      }
+
+      RouteMapMatchProtocolLine rhsLine = (RouteMapMatchProtocolLine) o;
+      return getProtocl().equals(rhsLine.getProtocl());
+   }
 }

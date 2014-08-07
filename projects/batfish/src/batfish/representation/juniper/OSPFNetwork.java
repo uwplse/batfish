@@ -1,6 +1,9 @@
 package batfish.representation.juniper;
 
-public class OSPFNetwork {
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
+public class OSPFNetwork implements RepresentationObject {
 
    private String _networkAddress;
    private String _subnetMask;
@@ -12,8 +15,8 @@ public class OSPFNetwork {
       _subnetMask = subnetMask;
       _area = area;
    }
-   
-   public OSPFNetwork(String inf, int area){
+
+   public OSPFNetwork(String inf, int area) {
       _interface = inf;
       _area = area;
    }
@@ -32,6 +35,15 @@ public class OSPFNetwork {
 
    public String getInterface() {
       return _interface;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      OSPFNetwork rhs = (OSPFNetwork) o;
+      return Util.equalOrNull(_networkAddress, rhs._networkAddress)
+            && Util.equalOrNull(_subnetMask, rhs._subnetMask)
+            && _area == rhs._area
+            && Util.equalOrNull(_interface, rhs._interface);
    }
 
 }

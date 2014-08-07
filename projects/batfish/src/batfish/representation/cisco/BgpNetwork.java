@@ -3,8 +3,9 @@ package batfish.representation.cisco;
 import java.io.Serializable;
 
 import batfish.representation.Ip;
+import batfish.representation.RepresentationObject;
 
-public class BgpNetwork implements Serializable {
+public class BgpNetwork implements Serializable, RepresentationObject {
 
    private static final long serialVersionUID = 1L;
    private Ip _networkAddress;
@@ -17,23 +18,27 @@ public class BgpNetwork implements Serializable {
 
    @Override
    public boolean equals(Object o) {
-      if (o == null)
-         return false;
       BgpNetwork rhs = (BgpNetwork) o;
-      return _networkAddress.equals(rhs.getNetworkAddress()) && _subnetMask.equals(rhs.getSubnetMask());
+      return _networkAddress.equals(rhs.getNetworkAddress())
+            && _subnetMask.equals(rhs.getSubnetMask());
    }
-	
+
    @Override
-   public int hashCode(){
+   public int hashCode() {
       return _networkAddress.hashCode() | _subnetMask.hashCode();
    }
-   
+
    public Ip getNetworkAddress() {
       return _networkAddress;
    }
 
    public Ip getSubnetMask() {
       return _subnetMask;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      return equals(o);
    }
 
 }

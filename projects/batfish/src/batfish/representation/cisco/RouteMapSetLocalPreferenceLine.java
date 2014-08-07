@@ -24,8 +24,17 @@ public class RouteMapSetLocalPreferenceLine extends RouteMapSetLine {
    }
 
    @Override
-   public RouteMapSetType getType(){
+   public RouteMapSetType getType() {
       return RouteMapSetType.LOCAL_PREFERENCE;
    }
-   
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.LOCAL_PREFERENCE) {
+         return false;
+      }
+
+      RouteMapSetLocalPreferenceLine rhsLine = (RouteMapSetLocalPreferenceLine) o;
+      return getLocalPreference() == (rhsLine.getLocalPreference());
+   }
 }

@@ -26,8 +26,18 @@ public class RouteMapSetCommunityLine extends RouteMapSetLine {
    }
 
    @Override
-   public RouteMapSetType getType(){
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.COMMUNITY) {
+         return false;
+      }
+
+      RouteMapSetCommunityLine rhsLine = (RouteMapSetCommunityLine) o;
+      return getCommunities().equals(rhsLine.getCommunities());
+   }
+
+   @Override
+   public RouteMapSetType getType() {
       return RouteMapSetType.COMMUNITY;
    }
-   
+
 }

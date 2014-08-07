@@ -1,7 +1,9 @@
 package batfish.representation.juniper;
 
-public abstract class PolicyStatementSetLine {
+import batfish.representation.RepresentationObject;
 
-	public abstract SetType getSetType();
+public abstract class PolicyStatementSetLine implements RepresentationObject {
+
+   public abstract SetType getSetType();
 
 }

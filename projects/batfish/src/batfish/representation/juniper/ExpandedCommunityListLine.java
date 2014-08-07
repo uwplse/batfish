@@ -10,11 +10,11 @@ public class ExpandedCommunityListLine {
       _action = action;
       _regex = regex;
    }
-   
+
    public String getRegex() {
       return _regex;
    }
-   
+
    public LineAction getAction() {
       return _action;
    }

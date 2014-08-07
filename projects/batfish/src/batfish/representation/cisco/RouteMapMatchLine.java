@@ -2,7 +2,10 @@ package batfish.representation.cisco;
 
 import java.io.Serializable;
 
-public abstract class RouteMapMatchLine implements Serializable {
+import batfish.representation.RepresentationObject;
+
+public abstract class RouteMapMatchLine implements Serializable,
+      RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 

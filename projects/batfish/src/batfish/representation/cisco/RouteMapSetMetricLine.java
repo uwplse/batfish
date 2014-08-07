@@ -24,8 +24,17 @@ public class RouteMapSetMetricLine extends RouteMapSetLine {
    }
 
    @Override
-   public RouteMapSetType getType(){
+   public RouteMapSetType getType() {
       return RouteMapSetType.METRIC;
    }
-   
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.METRIC) {
+         return false;
+      }
+
+      RouteMapSetMetricLine rhsLine = (RouteMapSetMetricLine) o;
+      return getMetric() == (rhsLine.getMetric());
+   }
 }

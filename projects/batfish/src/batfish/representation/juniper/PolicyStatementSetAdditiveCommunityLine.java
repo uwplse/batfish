@@ -1,6 +1,9 @@
 package batfish.representation.juniper;
 
-public class PolicyStatementSetAdditiveCommunityLine extends PolicyStatementSetLine {
+import batfish.util.Util;
+
+public class PolicyStatementSetAdditiveCommunityLine extends
+      PolicyStatementSetLine {
 
    private String _communities;
 
@@ -16,5 +19,15 @@ public class PolicyStatementSetAdditiveCommunityLine extends PolicyStatementSetL
    public String getCommunities() {
       return _communities;
    }
-   
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((PolicyStatementSetLine) o).getSetType() != SetType.ADDITIVE_COMMUNITY) {
+         return false;
+      }
+
+      PolicyStatementSetAdditiveCommunityLine rhsLine = (PolicyStatementSetAdditiveCommunityLine) o;
+      return Util.equalOrNull(_communities, rhsLine._communities);
+   }
+
 }

@@ -21,4 +21,13 @@ public class RouteMapMatchTagLine extends RouteMapMatchLine {
       return RouteMapMatchType.TAG;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.TAG) {
+         return false;
+      }
+
+      RouteMapMatchTagLine rhsLine = (RouteMapMatchTagLine) o;
+      return getTags().equals(rhsLine.getTags());
+   }
 }

@@ -1,12 +1,92 @@
 package batfish.util;
 
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+
+import batfish.representation.RepresentationObject;
 
 public class Util {
    public static final String FACT_BLOCK_FOOTER = "\n//FACTS END HERE\n"
          + "   }) // clauses\n" + "} <-- .\n";
+
+   public static boolean equalOrNull(Object lhs, Object rhs) {
+      if (lhs == null && rhs == null) {
+         return true;
+      }
+      if (lhs == null || rhs == null) {
+         return false;
+      }
+      else {
+         if (lhs instanceof RepresentationObject
+               && rhs instanceof RepresentationObject)
+            return ((RepresentationObject) lhs)
+                  .equalsRepresentation((RepresentationObject) rhs);
+         else
+            return lhs.equals(rhs);
+
+      }
+   }
+
+   public static <E> boolean sameRepresentationLists(java.util.List<E> c1,
+         java.util.List<E> c2) {
+      if (c1 == null && c2 == null)
+         return true;
+      if (c1 == null || c2 == null)
+         return false;
+      if (c1.size() != c2.size())
+         return false;
+
+      Iterator<E> it2 = c2.iterator();
+      for (Iterator<E> it = c1.iterator(); it.hasNext();) {
+         if (!equalOrNull((E) it.next(), (E) it2.next()))
+            return false;
+      }
+
+      return true;
+   }
+
+   public static <E> boolean sameRepresentationSets(Set<E> c1, Set<E> c2) {
+      if (c1 == null && c2 == null)
+         return true;
+      if (c1 == null || c2 == null)
+         return false;
+      if (c1.size() != c2.size())
+         return false;
+
+      Iterator<E> it2 = c2.iterator();
+      for (Iterator<E> it = c1.iterator(); it.hasNext();) {
+         if (!equalOrNull((E) it.next(), (E) it2.next()))
+            return false;
+      }
+
+      return true;
+   }
+
+   public static <K, V> boolean sameRepresentationMaps(Map<K, V> c1,
+         Map<K, V> c2) {
+      if (c1 == null && c2 == null)
+         return true;
+      if (c1 == null || c2 == null)
+         return false;
+      if (c1.size() != c2.size())
+         return false;
+
+      Iterator<Entry<K, V>> it2 = c2.entrySet().iterator();
+      for (Iterator<Entry<K, V>> it = c1.entrySet().iterator(); it.hasNext();) {
+         Entry<K, V> e1 = it.next();
+         Entry<K, V> e2 = it2.next();
+         if (!equalOrNull(e1.getKey(), e2.getKey())
+               || !equalOrNull(e1.getValue(), e2.getValue()))
+            return false;
+      }
+
+      return true;
+   }
 
    public static String clearDuplicateLines(String input) {
       String[] lines = input.split("\\n");
@@ -40,16 +120,16 @@ public class Util {
       }
       return s;
    }
-   
+
    public static String getIndentString(int indentLevel) {
-	   
-	   String retString = "";
-	   
-	   for (int i=0; i< indentLevel; i++) {
-		   retString += "  ";
-	   }   
-	   
-	   return retString;
+
+      String retString = "";
+
+      for (int i = 0; i < indentLevel; i++) {
+         retString += "  ";
+      }
+
+      return retString;
    }
 
    public static String getIpFromIpSubnetPair(String pair) {
@@ -112,12 +192,12 @@ public class Util {
          return "" + port;
       }
    }
-   
+
    public static int getPrefixLengthFromIpSubnetPair(String pair) {
       int slashPos = pair.indexOf('/');
       return Integer.parseInt(pair.substring(slashPos + 1, pair.length()));
    }
-   
+
    public static String getProtocolName(int protocol) {
       switch (protocol) {
       case 0:
@@ -223,7 +303,7 @@ public class Util {
       }
       return wildcard;
    }
-   
+
    public static String toHSAInterfaceName(String name) {
       if (name.startsWith("xe-")) {
          String numberSection = name.substring(3);
@@ -242,10 +322,10 @@ public class Util {
       else if (name.startsWith("fxp")) {
          String numberSection = name.substring(3);
          String[] numbers = numberSection.split("\\.");
-         return "fxp" + numbers[0] + "/" + numbers[1];         
+         return "fxp" + numbers[0] + "/" + numbers[1];
       }
       else if (name.startsWith("Vlan")) {
-         return name.replace("Vlan","Flan") + "/0";
+         return name.replace("Vlan", "Flan") + "/0";
       }
       else if (name.startsWith("Port-channel")) {
          return name.replace("Port-channel", "pc") + "/0";

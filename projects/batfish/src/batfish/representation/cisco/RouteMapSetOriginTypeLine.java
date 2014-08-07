@@ -4,6 +4,7 @@ import batfish.representation.Configuration;
 import batfish.representation.OriginType;
 import batfish.representation.PolicyMapSetLine;
 import batfish.representation.PolicyMapSetOriginTypeLine;
+import batfish.util.Util;
 
 public class RouteMapSetOriginTypeLine extends RouteMapSetLine {
 
@@ -33,6 +34,16 @@ public class RouteMapSetOriginTypeLine extends RouteMapSetLine {
    @Override
    public PolicyMapSetLine toPolicyMapSetLine(Configuration c) {
       return new PolicyMapSetOriginTypeLine(_originType);
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.ORIGIN_TYPE) {
+         return false;
+      }
+
+      RouteMapSetOriginTypeLine rhsLine = (RouteMapSetOriginTypeLine) o;
+      return Util.equalOrNull(_asNum, rhsLine._asNum) && Util.equalOrNull(_originType, rhsLine._originType);
    }
 
 }

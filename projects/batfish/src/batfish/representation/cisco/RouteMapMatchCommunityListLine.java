@@ -21,4 +21,14 @@ public class RouteMapMatchCommunityListLine extends RouteMapMatchLine {
       return RouteMapMatchType.COMMUNITY_LIST;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.COMMUNITY_LIST) {
+         return false;
+      }
+
+      RouteMapMatchCommunityListLine rhsLine = (RouteMapMatchCommunityListLine) o;
+      return getListNames().equals(rhsLine.getListNames());
+   }
+
 }

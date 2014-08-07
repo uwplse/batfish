@@ -21,4 +21,14 @@ public class RouteMapMatchIpAccessListLine extends RouteMapMatchLine {
       return RouteMapMatchType.IP_ACCESS_LIST;
    }
 
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.IP_ACCESS_LIST) {
+         return false;
+      }
+
+      RouteMapMatchIpAccessListLine rhsLine = (RouteMapMatchIpAccessListLine) o;
+      return getListNames().equals(rhsLine.getListNames());
+   }
+
 }

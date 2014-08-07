@@ -14,8 +14,19 @@ public class RouteMapSetCommunityNoneLine extends RouteMapSetLine {
    }
 
    @Override
-   public RouteMapSetType getType(){
+   public boolean equalsRepresentation(Object o) {
+      if (o == null)
+         return false;
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.COMMUNITY_NONE) {
+         return false;
+      }
+
+      return true;
+   }
+
+   @Override
+   public RouteMapSetType getType() {
       return RouteMapSetType.COMMUNITY_NONE;
    }
-   
+
 }

@@ -225,8 +225,8 @@ public class BgpProcess implements Serializable {
    public Ip getRouterId() {
       return _routerId;
    }
-   
-   public Set<String> getShutdownNeighbors(){
+
+   public Set<String> getShutdownNeighbors() {
       return _shutdownNeighbors;
    }
 
