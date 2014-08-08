@@ -551,7 +551,7 @@ public class Batfish {
             }
          }
          else {
-            print(1, "REMOVED node:"
+            print(1, "REMOVED NODE:"
                   + firstConfigurations.get(e.getKey()).getHostname() + "\n\n");
          }
       }
@@ -559,7 +559,7 @@ public class Batfish {
       Set<String> tmpSet = secondConfigurations.keySet();
       tmpSet.removeAll(firstConfigurations.keySet());
       for (String hostname : tmpSet) {
-         print(1, "ADDED node:" + hostname + "\n\n");
+         print(1, "ADDED NODE:" + hostname + "\n\n");
       }
 
       if (changed) {
@@ -581,7 +581,7 @@ public class Batfish {
             juniperConfiguration2.getConfiguration());
       if (changed) {
          print(1,
-               "_configuration CHANGED at "
+               "_configuration(CONFIGS) CHANGED at "
                      + juniperConfiguration.getRouterID() + "\n");
          nodeChanged = true;
       }
@@ -589,7 +589,7 @@ public class Batfish {
       changed = (juniperConfiguration.getAsNum() != juniperConfiguration2
             .getAsNum());
       if (changed) {
-         print(1, "_asNum CHANGED at " + juniperConfiguration.getRouterID()
+         print(1, "_asNum(ASNS) CHANGED at " + juniperConfiguration.getRouterID()
                + "\n");
          nodeChanged = true;
       }
@@ -597,7 +597,7 @@ public class Batfish {
       changed = !Util.equalOrNull(juniperConfiguration.getRouterID(),
             juniperConfiguration2.getRouterID());
       if (changed) {
-         print(1, "_routerID CHANGED at " + juniperConfiguration.getRouterID()
+         print(1, "_routerID(RID) CHANGED at " + juniperConfiguration.getRouterID()
                + "\n");
          nodeChanged = true;
       }
@@ -607,12 +607,12 @@ public class Batfish {
             juniperConfiguration2.getInterfaceAddressMap());
       if (changed) {
          print(1,
-               "_interfaceAddressMap CHANGED at "
+               "_interfaceAddressMap(IAM) CHANGED at "
                      + juniperConfiguration.getRouterID() + "\n");
          nodeChanged = true;
       }
       if (nodeChanged) {
-         print(1, juniperConfiguration.getRouterID() + " CHANGED\n\n");
+         print(1, "NODE " +juniperConfiguration.getRouterID() + " CHANGED\n\n");
       }
 
       return nodeChanged;
@@ -992,7 +992,7 @@ public class Batfish {
             ciscoConfiguration2.getAsPathAccessLists());
       if (changed) {
          print(1,
-               "_asPathAccessLists CHANGED at "
+               "_asPathAccessLists(ASAL) CHANGED at "
                      + ciscoConfiguration.getHostname() + "\n");
          nodeChanged = true;
       }
@@ -1000,7 +1000,7 @@ public class Batfish {
       changed = compareBGPProcess(ciscoConfiguration.getBgpProcess(),
             ciscoConfiguration2.getBgpProcess());
       if (changed) {
-         print(1, "_bgpProcess CHANGED at " + ciscoConfiguration.getHostname()
+         print(1, "_bgpProcess(BGP) CHANGED at " + ciscoConfiguration.getHostname()
                + "\n");
          nodeChanged = true;
       }
@@ -1010,7 +1010,7 @@ public class Batfish {
             ciscoConfiguration2.getExpandedCommunityLists());
       if (changed) {
          print(1,
-               "_expandedCommunityLists CHANGED at "
+               "_expandedCommunityLists(ECL) CHANGED at "
                      + ciscoConfiguration.getHostname() + "\n");
          nodeChanged = true;
       }
@@ -1020,7 +1020,7 @@ public class Batfish {
             ciscoConfiguration2.getExtendedAcls());
       if (changed) {
          print(1,
-               "_extendedAccessLists CHANGED at "
+               "_extendedAccessLists(EAL) CHANGED at "
                      + ciscoConfiguration.getHostname() + "\n");
          nodeChanged = true;
       }
@@ -1028,7 +1028,7 @@ public class Batfish {
       changed = compareInterfaces(ciscoConfiguration.getInterfaces(),
             ciscoConfiguration2.getInterfaces());
       if (changed) {
-         print(1, "_interfaces CHANGED at " + ciscoConfiguration.getHostname()
+         print(1, "_interfaces(IS) CHANGED at " + ciscoConfiguration.getHostname()
                + "\n");
          nodeChanged = true;
       }
@@ -1036,7 +1036,7 @@ public class Batfish {
       changed = compareOspfProcess(ciscoConfiguration.getOspfProcess(),
             ciscoConfiguration2.getOspfProcess());
       if (changed) {
-         print(1, "_ospfProcess CHANGED at " + ciscoConfiguration.getHostname()
+         print(1, "_ospfProcess(OSPF) CHANGED at " + ciscoConfiguration.getHostname()
                + "\n");
          nodeChanged = true;
       }
@@ -1044,7 +1044,7 @@ public class Batfish {
       changed = comparePrefixLists(ciscoConfiguration.getPrefixLists(),
             ciscoConfiguration2.getPrefixLists());
       if (changed) {
-         print(1, "_prefixLists CHANGED at " + ciscoConfiguration.getHostname()
+         print(1, "_prefixLists(PXLIST) CHANGED at " + ciscoConfiguration.getHostname()
                + "\n");
          nodeChanged = true;
       }
@@ -1052,7 +1052,7 @@ public class Batfish {
       changed = compareRouteMap(ciscoConfiguration.getRouteMaps(),
             ciscoConfiguration2.getRouteMaps());
       if (changed) {
-         print(1, "_routeMaps CHANGED at " + ciscoConfiguration.getHostname()
+         print(1, "_routeMaps(RMAP) CHANGED at " + ciscoConfiguration.getHostname()
                + "\n");
          nodeChanged = true;
       }
@@ -1062,7 +1062,7 @@ public class Batfish {
             ciscoConfiguration2.getStandardAcls());
       if (changed) {
          print(1,
-               "_standardAccessLists CHANGED at "
+               "_standardAccessLists(SAL) CHANGED at "
                      + ciscoConfiguration.getHostname() + "\n");
          nodeChanged = true;
       }
@@ -1072,7 +1072,7 @@ public class Batfish {
             ciscoConfiguration2.getStandardCommunityLists());
       if (changed) {
          print(1,
-               "_standardCommunityLists CHANGED at "
+               "_standardCommunityLists(SCL) CHANGED at "
                      + ciscoConfiguration.getHostname() + "\n");
          nodeChanged = true;
       }
@@ -1081,13 +1081,13 @@ public class Batfish {
             ciscoConfiguration2.getStaticRoutes());
       if (changed) {
          print(1,
-               "_staticRoutes CHANGED at " + ciscoConfiguration.getHostname()
+               "_staticRoutes(SR) CHANGED at " + ciscoConfiguration.getHostname()
                      + "\n");
          nodeChanged = true;
       }
 
       if (nodeChanged) {
-         print(1, ciscoConfiguration.getHostname() + " CHANGED\n\n");
+         print(1, "NODE " + ciscoConfiguration.getHostname() + " CHANGED\n\n");
       }
 
       return nodeChanged;
