@@ -237,7 +237,7 @@ public class DeptGenerator {
             }
          }
          ParseTreeWalker walker = new ParseTreeWalker();
-         CiscoControlPlaneExtractor extractor = new CiscoControlPlaneExtractor(fileText);
+         CiscoControlPlaneExtractor extractor = new CiscoControlPlaneExtractor(fileText,parser4);
          walker.walk(extractor, tree);
          
          vc = (CiscoVendorConfiguration) extractor.getVendorConfiguration();

@@ -2302,7 +2302,7 @@ public class Batfish {
          }
          ParseTreeWalker walker = new ParseTreeWalker();
          CiscoControlPlaneExtractor extractor = new CiscoControlPlaneExtractor(
-               fileText);
+               fileText, parser4);
          walker.walk(extractor, tree);
          CiscoConfiguration config = (CiscoConfiguration) extractor
                .getVendorConfiguration();
