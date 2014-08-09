@@ -43,6 +43,7 @@ public class Settings {
    private static final String ARG_NO_TRAFFIC = "notraffic";
    private static final String ARG_PREDHELP = "predhelp";
    private static final String ARG_PREDICATES = "predicates";
+   private static final String ARG_PRINT_PARSE_TREES = "ppt";
    private static final String ARG_QUERY = "query";
    private static final String ARG_QUERY_ALL = "all";
    private static final String ARG_REDIRECT_STDERR = "redirect";
@@ -132,6 +133,7 @@ public class Settings {
    private boolean _noTraffic;
    private Options _options;
    private List<String> _predicates;
+   private boolean _printParseTree;
    private boolean _printSemantics;
    private boolean _query;
    private boolean _queryAll;
@@ -527,6 +529,8 @@ public class Settings {
             .withArgName(ARGNAME_DATA_PLANE_DIR)
             .withDescription("path to read or write serialized data plane")
             .create(ARG_DATA_PLANE_DIR));
+      _options.addOption(OptionBuilder.withDescription("print parse trees")
+            .create(ARG_PRINT_PARSE_TREES));
    }
 
    private void parseCommandLine(String[] args) {
@@ -583,14 +587,6 @@ public class Settings {
       _update = line.hasOption(ARG_UPDATE);
       _noTraffic = line.hasOption(ARG_NO_TRAFFIC);
       _exitOnParseError = line.hasOption(ARG_EXIT_ON_PARSE_ERROR);
-      _dr = line.hasOption(ARG_DR);
-      _maxSubgroupSize = Integer
-            .parseInt(line.getOptionValue(ARG_MAX_SUBGROUP_SIZE,
-                  Integer.toString(DEFAULT_MAX_SUBGROUP_SIZE)));
-      if (_maxSubgroupSize <= 0 || _maxSubgroupSize > MAX_MAX_SUBGROUP_SIZE) {
-         throw new Error("Max subgroup size must be between 1 and "
-               + MAX_MAX_SUBGROUP_SIZE);
-      }
       _z3 = line.hasOption(ARG_Z3);
       if (_z3) {
          _z3File = line.getOptionValue(ARG_Z3_OUTPUT, DEFAULT_Z3_OUTPUT);
@@ -651,6 +647,11 @@ public class Settings {
       _dataPlane = line.hasOption(ARG_DATA_PLANE);
       _dataPlaneDir = line.getOptionValue(ARG_DATA_PLANE_DIR,
             DEFAULT_DATA_PLANE_DIR);
+      _printParseTree = line.hasOption(ARG_PRINT_PARSE_TREES);
+   }
+
+   public boolean printParseTree() {
+      return _printParseTree;
    }
 
    public boolean redirectStdErr() {

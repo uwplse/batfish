@@ -1,7 +1,7 @@
 lexer grammar CiscoGrammarCommonLexer;
 
 options {
-	superClass = batfish.util.DummyLexer;
+	superClass = 'batfish.grammar.BatfishLexer';
 }
 
 @header {
@@ -153,6 +153,11 @@ AES256_SHA1
    'aes256-sha1'
 ;
 
+AGGREGATE
+:
+   'aggregate'
+;
+
 AGGREGATE_ADDRESS
 :
    'aggregate-address'
@@ -208,6 +213,11 @@ AP
    'ap'
 ;
 
+AQM_REGISTER_FNF
+:
+   'aqm-register-fnf'
+;
+
 ARCHIVE
 :
    'archive'
@@ -216,6 +226,12 @@ ARCHIVE
 AREA
 :
    'area'
+;
+
+ARP
+:
+   'arp'
+   { enableIPV6_ADDRESS = false; }
 ;
 
 AS_PATH
@@ -408,6 +424,11 @@ CABLE_RANGE
    'cable-range'
 ;
 
+CABLELENGTH
+:
+   'cablelength' -> pushMode(M_COMMENT)
+;
+
 CACHE
 :
    'cache'
@@ -466,6 +487,11 @@ CDP
 CEF
 :
    'cef'
+;
+
+CERTIFICATE
+:
+   'certificate' -> pushMode(M_CERTIFICATE)
 ;
 
 CGMP
@@ -556,6 +582,28 @@ COLLECT
 COMM_LIST
 :
    'comm-list'
+;
+
+COMMANDER_ADDRESS
+:
+   'commander-address'
+   { enableIPV6_ADDRESS = false; }
+;
+
+COMMUNITY
+:
+   'community'
+   { enableIPV6_ADDRESS = false; }
+;
+
+COMMUNITY_LIST
+:
+   'community-list'
+   {
+      enableIPV6_ADDRESS = false;
+      enableCOMMUNITY_LIST_NUM = true;
+      enableDEC = false;
+   }
 ;
 
 CONFIG_REGISTER
@@ -713,6 +761,11 @@ DENY
    'deny'
 ;
 
+DES
+:
+   'des' -> pushMode(M_DES) 
+;
+
 DES_SHA1
 :
    'des-sha1'
@@ -858,6 +911,11 @@ DSPFARM
    'dspfarm'
 ;
 
+DSS
+:
+   'dss'
+;
+
 DSU
 :
    'dsu'
@@ -938,6 +996,11 @@ END
    'end'
 ;
 
+ENGINEID
+:
+   'engineid' -> pushMode(M_COMMENT)
+;
+
 ENROLLMENT
 :
    'enrollment'
@@ -948,14 +1011,14 @@ ENVIRONMENT
    'environment'
 ;
 
-EQ
-:
-   'eq'
-;
-
 EOF_LITERAL
 :
    'EOF'
+;
+
+EQ
+:
+   'eq'
 ;
 
 ERRDISABLE
@@ -1043,6 +1106,16 @@ EXPANDED
    'expanded'
 ;
 
+EXTCOMM_LIST
+:
+   'extcomm-list'
+;
+
+EXTCOMMUNITY_LIST
+:
+   'extcommunity-list'
+;
+
 EXTENDED
 :
    'extended'
@@ -1098,6 +1171,13 @@ FILE_ENTRY
 FILTER_LIST
 :
    'filter-list'
+;
+
+FIREWALL
+:
+   'firewall'
+   { enableIPV6_ADDRESS = false; }
+
 ;
 
 FINGER
@@ -1405,6 +1485,13 @@ INSTANCE
    'instance'
 ;
 
+INTERFACE
+:
+   'interface'
+   { enableIPV6_ADDRESS = false; }
+
+;
+
 INTERNAL
 :
    'internal'
@@ -1413,6 +1500,11 @@ INTERNAL
 INTERNET
 :
    'internet'
+;
+
+INVALID_SPI_RECOVERY
+:
+   'invalid-spi-recovery'
 ;
 
 IP
@@ -1513,6 +1605,11 @@ KEYRING
 LAPB
 :
    'lapb'
+;
+
+LAST_AS
+:
+   'last-as'
 ;
 
 LE
@@ -1620,6 +1717,11 @@ LOCAL_PREFERENCE
    'local-preference'
 ;
 
+LOCATION
+:
+   'location' -> pushMode(M_COMMENT)
+;
+
 LOG
 :
    'log'
@@ -1663,6 +1765,16 @@ LRE
 LT
 :
    'lt'
+;
+
+MAC
+:
+   'mac' -> pushMode(M_COMMENT)
+;
+
+MAC_ADDRESS
+:
+   'mac-address' -> pushMode(M_COMMENT)
 ;
 
 MAC_ADDRESS_TABLE
@@ -1916,6 +2028,11 @@ NAMEIF
    'nameif'
 ;
 
+NAME
+:
+   'name' -> pushMode(M_NAME)
+;
+
 NAMES
 :
    'names'
@@ -1980,6 +2097,12 @@ NETBIOS_SS
 :
    'netbios-ss'
 ;
+
+NETCONF
+:
+   'netconf'
+;
+
 
 NETWORK
 :
@@ -2111,6 +2234,11 @@ OTHER_ACCESS
    'other-access'
 ;
 
+OUI
+:
+   'oui' -> pushMode(M_COMMENT)
+;
+
 OUT
 :
    'out'
@@ -2154,6 +2282,11 @@ PARTICIPATE
 PASSIVE_INTERFACE
 :
    'passive-interface'
+;
+
+PASSWORD
+:
+   'password' -> pushMode(M_COMMENT)
 ;
 
 PASSWORD_STORAGE
@@ -2386,6 +2519,11 @@ QUEUE_SET
    'queue-set'
 ;
 
+QUIT
+:
+   'quit'
+;
+
 RADIUS
 :
    'radius'
@@ -2399,6 +2537,11 @@ RADIUS_COMMON_PW
 RADIUS_SERVER
 :
    'radius-server'
+;
+
+RANDOM_DETECT
+:
+   'random-detect'
 ;
 
 RANGE
@@ -2464,6 +2607,11 @@ REDUNDANCY
 REFLECT
 :
    'reflect'
+;
+
+REMARK
+:
+   'remark' -> pushMode(M_REMARK)
 ;
 
 REMOTE_AS
@@ -2661,6 +2809,11 @@ SEND_COMMUNITY
    'send-community'
 ;
 
+SEND_LABEL
+:
+   'send-label'
+;
+
 SENDER
 :
    'sender'
@@ -2744,6 +2897,16 @@ SETUP
 SFLOW
 :
    'sflow'
+;
+
+SHA1
+:
+   'sha1' -> pushMode(M_SHA1)
+;
+
+SHAPE
+:
+   'shape'
 ;
 
 SHELL
@@ -2929,6 +3092,11 @@ SUBSCRIBE_TO
 SUBSCRIBE_TO_ALERT_GROUP
 :
    'subscribe-to-alert-group'
+;
+
+SUBSCRIBER
+:
+   'subscriber'
 ;
 
 SUMMARY_ONLY
@@ -3362,6 +3530,12 @@ WEBVPN
    'webvpn'
 ;
 
+WEIGHT
+:
+   'weight'
+;
+
+
 WINS_SERVER
 :
    'wins-server'
@@ -3416,6 +3590,49 @@ XX_HIDE
 
 // Other Tokens
 
+COMMUNITY_NUMBER
+:
+   F_Digit
+   {!enableIPV6_ADDRESS}?
+   
+   F_Digit* ':' F_Digit+
+;
+
+VARIABLE
+:
+   (
+      (
+         (
+            F_Variable_RequiredVarChar {!enableIPV6_ADDRESS}? F_Variable_VarChar*
+         )
+         |
+         (
+            F_Variable_RequiredVarChar_Ipv6 {enableIPV6_ADDRESS}? F_Variable_VarChar_Ipv6*
+         )
+      )
+      |
+      (
+         (
+            F_Variable_VarChar {!enableIPV6_ADDRESS}? F_Variable_VarChar* F_Variable_RequiredVarChar F_Variable_VarChar*
+         )
+         |
+         (
+            F_Variable_VarChar_Ipv6 {enableIPV6_ADDRESS}? F_Variable_VarChar_Ipv6* F_Variable_RequiredVarChar_Ipv6 F_Variable_VarChar_Ipv6*
+         )
+      )
+   )
+   {
+      if (enableACL_NUM) {
+         enableACL_NUM = false;
+         enableDEC = true;
+      }
+      if (enableCOMMUNITY_LIST_NUM) {
+         enableCOMMUNITY_LIST_NUM = false;
+         enableDEC = true;
+      }
+   }
+;
+
 ACL_NUM
 :
    F_Digit
@@ -3469,15 +3686,6 @@ ANGLE_BRACKET_RIGHT
    '>'
 ;
 
-ARP
-:
-   'arp'
-   {
-                   enableIPV6_ADDRESS = false;
-                  }
-
-;
-
 ASTERISK
 :
    '*'
@@ -3513,19 +3721,9 @@ BRACKET_RIGHT
    ']'
 ;
 
-CABLELENGTH
-:
-   'cablelength' -> pushMode(M_COMMENT)
-;
-
 CARAT
 :
    '^'
-;
-
-CERTIFICATE
-:
-   'certificate' -> pushMode(M_CERTIFICATE)
 ;
 
 COLON
@@ -3536,35 +3734,6 @@ COLON
 COMMA
 :
    ','
-;
-
-COMMANDER_ADDRESS
-:
-   'commander-address'
-   {
-                                               enableIPV6_ADDRESS = false;
-                                              }
-
-;
-
-COMMUNITY
-:
-   'community'
-   {
-                               enableIPV6_ADDRESS = false;
-                              }
-
-;
-
-COMMUNITY_LIST
-:
-   'community-list'
-   {
-                                         enableIPV6_ADDRESS = false;
-                                         enableCOMMUNITY_LIST_NUM = true;
-                                         enableDEC = false;
-                                        }
-
 ;
 
 COMMUNITY_LIST_NUM
@@ -3585,14 +3754,6 @@ COMMUNITY_LIST_NUM
 		enableDEC = true;
 	}
 
-;
-
-COMMUNITY_NUMBER
-:
-   F_Digit
-   {!enableIPV6_ADDRESS}?
-   
-   F_Digit* ':' F_Digit+
 ;
 
 COMMENT_CLOSING_LINE
@@ -3630,11 +3791,6 @@ DOUBLE_QUOTE
    '"'
 ;
 
-ENGINEID
-:
-   'engineid' -> pushMode(M_COMMENT)
-;
-
 EQUALS
 :
    '='
@@ -3647,13 +3803,6 @@ ESCAPE_C
       | '\u0003'
       | '#'
 );
-
-FIREWALL
-:
-   'firewall'
-   { enableIPV6_ADDRESS = false; }
-
-;
 
 FLOAT
 :
@@ -3670,23 +3819,6 @@ FORWARD_SLASH
 HEX
 :
    '0x' F_HexDigit+
-;
-
-INTERFACE
-:
-   'interface'
-   { enableIPV6_ADDRESS = false; }
-
-;
-
-SHA1_HASH
-:
-   'sha1' ' ' F_Digit+ ' ' F_HexDigit+
-;
-
-DES_HASH
-:
-   'des' ' ' F_Digit+ ' ' F_HexDigit+
 ;
 
 IP_PREFIX
@@ -3716,7 +3848,7 @@ IPV6_PREFIX
          (
             (
                F_HexDigit+ ':'
-			)* F_HexDigit+
+         )* F_HexDigit+
          )?
       )
       |
@@ -3754,45 +3886,20 @@ IPV6_ADDRESS
 
          ':' ':'?
       )+
-      (
-         F_HexDigit+
-      )?
    )
-;
-
-LOCATION
-:
-   'location' -> pushMode(M_COMMENT)
-;
-
-MAC
-:
-   'mac' -> pushMode(M_COMMENT)
-;
-
-MAC_ADDRESS
-:
-   'mac-address' -> pushMode(M_COMMENT)
-;
-
-NAME
-:
-   'name' -> pushMode(M_NAME)
+   (
+      F_HexDigit+
+   )?
 ;
 
 NEWLINE
 :
-   F_Newline
+   F_Newline+
    {
    	enableIPV6_ADDRESS = true;
    	enableIP_ADDRESS = true;
   }
 
-;
-
-OUI
-:
-   'oui' -> pushMode(M_COMMENT)
 ;
 
 PAREN_LEFT
@@ -3803,11 +3910,6 @@ PAREN_LEFT
 PAREN_RIGHT
 :
    ')'
-;
-
-PASSWORD
-:
-   'password' -> pushMode(M_COMMENT)
 ;
 
 PERCENT
@@ -3830,16 +3932,6 @@ POUND
    '#'
 ;
 
-REMARK
-:
-   'remark' -> pushMode(M_REMARK)
-;
-
-QUIT
-:
-   'quit'
-;
-
 SEMICOLON
 :
    ';'
@@ -3855,82 +3947,12 @@ UNDERSCORE
    '_'
 ;
 
-VARIABLE
-:
-   (
-      (
-         F_Digit
-         {!enableIPV6_ADDRESS}?
-         (
-            F_Letter
-            | F_Digit
-            | '-'
-            | '_'
-            | '.'
-            | '/'
-            | '&'
-            | '+'
-            | '['
-            | ']'
-            | ':'
-         )*
-      )
-      |
-      (
-         (
-            F_Letter
-            | '_'
-         )
-         (
-            F_Letter
-            | F_Digit
-            | '-'
-            | '_'
-            | '.'
-            | '/'
-            | '&'
-            | '+'
-            | '['
-            | ']'
-            |
-            (
-               {!enableIPV6_ADDRESS}?
-
-               ':'
-            )
-         )*
-      )
-   )
-   {
-		if (enableACL_NUM) {
-			enableACL_NUM = false;
-			enableDEC = true;
-		}
-		if (enableCOMMUNITY_LIST_NUM) {
-			enableCOMMUNITY_LIST_NUM = false;
-			enableDEC = true;
-		}
-	}
-
-;
-
 WS
 :
-   (
-      ' '
-      | '\t'
-      | '\u000C'
-   ) -> channel(HIDDEN)
+   F_Whitespace -> channel(HIDDEN)
 ;
 
 // Fragments
-
-fragment
-F_Newline
-:
-   '\n'
-   | '\r'
-;
 
 fragment
 F_DecByte
@@ -3981,6 +4003,13 @@ F_LowerCaseLetter
 ;
 
 fragment
+F_Newline
+:
+   '\n'
+   | '\r'
+;
+
+fragment
 F_PositiveHexDigit
 :
    (
@@ -4000,6 +4029,38 @@ fragment
 F_UpperCaseLetter
 :
    'A' .. 'Z'
+;
+
+fragment
+F_Variable_RequiredVarChar
+:
+   ~('0'..'9' | [ \t\n\r/.])
+;
+
+fragment
+F_Variable_RequiredVarChar_Ipv6
+:
+   ~('0'..'9' | [ \t\n\r/.:])
+;
+
+fragment
+F_Variable_VarChar
+:
+   ~[ \t\n\r/.]
+;
+
+fragment
+F_Variable_VarChar_Ipv6
+:
+   ~[ \t\n\r/:.]
+;
+
+fragment
+F_Whitespace
+:
+   ' '
+   | '\t'
+   | '\u000C'
 ;
 
 mode M_BANNER;
@@ -4070,6 +4131,23 @@ M_COMMENT_NON_NEWLINE
    ~'\n'+
 ;
 
+mode M_DES;
+
+M_DES_DEC_PART
+:
+   F_Digit+
+;
+
+M_DES_HEX_PART
+:
+   F_HexDigit+ -> popMode
+;
+
+M_DES_WS
+:
+   ' '+ -> channel(HIDDEN)
+;
+
 mode M_DESCRIPTION;
 
 M_DESCRIPTION_NEWLINE
@@ -4122,7 +4200,7 @@ M_MOTD_WS
 
 M_MOTD_NON_ESCAPE_C
 :
-   ~(' ' | '\t' | '\u000C' | '\n')+
+   ~(' ' | '\t' | '\u000C' | '\n')+?
 ;
 
 mode M_NAME;
@@ -4151,4 +4229,21 @@ M_REMARK_NEWLINE
 M_REMARK_REMARK
 :
    ~'\n'+
+;
+
+mode M_SHA1;
+
+M_SHA1_DEC_PART
+:
+   F_Digit+
+;
+
+M_SHA1_HEX_PART
+:
+   F_HexDigit+ -> popMode
+;
+
+M_SHA1_WS
+:
+   ' '+ -> channel(HIDDEN)
 ;
