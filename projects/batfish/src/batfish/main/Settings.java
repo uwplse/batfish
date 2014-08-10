@@ -556,6 +556,7 @@ public class Settings {
          return;
       }
       _counts = line.hasOption(ARG_COUNT);
+      _dr = line.hasOption(ARG_DR);
       _queryAll = line.hasOption(ARG_QUERY_ALL);
       _query = line.hasOption(ARG_QUERY);
       if (line.hasOption(ARG_PREDHELP)) {
