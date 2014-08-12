@@ -14,25 +14,19 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FileUtils;
 
-import batfish.grammar.BatfishLexer;
-import batfish.grammar.BatfishParser;
-
-import batfish.grammar.cisco.CiscoGrammar;
-import batfish.grammar.cisco.CiscoGrammar.Cisco_configurationContext;
-import batfish.grammar.cisco.CiscoGrammarCommonLexer;
+import batfish.grammar.BatfishCombinedParser;
+import batfish.grammar.ParseTreePrettyPrinter;
+import batfish.grammar.cisco.CiscoCombinedParser;
 import batfish.grammar.cisco.controlplane.CiscoControlPlaneExtractor;
 import batfish.main.Batfish;
 import batfish.main.Settings;
-
 import batfish.representation.Ip;
-
 import batfish.representation.cisco.BgpPeerGroup;
 import batfish.representation.cisco.BgpProcess;
-
 import batfish.representation.cisco.CiscoVendorConfiguration;
 import batfish.representation.cisco.Interface;
 import batfish.representation.cisco.NamedBgpPeerGroup;
@@ -202,31 +196,22 @@ public class DeptGenerator {
          if (fileText.length() == 0) {
             continue;
          }
-         BatfishParser bParser = null;
-         BatfishLexer bLexer = null;
          CiscoVendorConfiguration vc = null;
 
-         print(2, "Parsing: \"" + currentPath + "\"" + "\n");
-         org.antlr.v4.runtime.CharStream stream = new org.antlr.v4.runtime.ANTLRInputStream(
+         print(1, "Parsing: \"" + currentPath + "\"");
+         CiscoControlPlaneExtractor extractor = null;
+         BatfishCombinedParser combinedParser = new CiscoCombinedParser(
                fileText);
-         CiscoGrammarCommonLexer lexer4 = new CiscoGrammarCommonLexer(stream);
-         bLexer = lexer4;
-         org.antlr.v4.runtime.CommonTokenStream tokens4 = new org.antlr.v4.runtime.CommonTokenStream(
-               lexer4);
-         CiscoGrammar parser4 = new CiscoGrammar(tokens4);
-         bParser = parser4;
-         parser4.getInterpreter().setPredictionMode(PredictionMode.SLL);
-         Cisco_configurationContext tree = parser4.cisco_configuration();
-         List<String> parserErrors = bParser.getErrors();
-         List<String> lexerErrors = bLexer.getErrors();
-         int numErrors = parserErrors.size() + lexerErrors.size();
+         ParserRuleContext tree = combinedParser.parse();
+         List<String> errors = combinedParser.getErrors();
+         int numErrors = errors.size();
          if (numErrors > 0) {
-            error(0, " ..." + numErrors + " ERROR(S)\n");
-            for (String msg : lexerErrors) {
-               error(2, "\tlexer: " + msg + "\n");
-            }
-            for (String msg : parserErrors) {
-               error(2, "\tparser: " + msg + "\n");
+            error(1, " ..." + numErrors + " ERROR(S)\n");
+            for (int i = 0; i < numErrors; i++) {
+               String prefix = "ERROR " + (i + 1) + ": ";
+               String msg = errors.get(i);
+               String prefixedMsg = Util.applyPrefix(prefix, msg);
+               error(1, prefixedMsg + "\n");
             }
             if (_settings.exitOnParseError()) {
                return null;
@@ -236,9 +221,24 @@ public class DeptGenerator {
                continue;
             }
          }
+         else if (!_settings.printParseTree()) {
+            print(1, "...OK\n");
+         }
+         else {
+            print(0, "...OK, PRINTING PARSE TREE:\n");
+            print(0,
+                  ParseTreePrettyPrinter.print(tree,
+                        combinedParser.getParser())
+                        + "\n\n");
+         }
+         extractor = new CiscoControlPlaneExtractor(fileText,
+               combinedParser.getParser());
          ParseTreeWalker walker = new ParseTreeWalker();
-         CiscoControlPlaneExtractor extractor = new CiscoControlPlaneExtractor(fileText,parser4);
          walker.walk(extractor, tree);
+         for (String warning : extractor.getWarnings()) {
+            error(2, warning);
+         }
+         assert Boolean.TRUE;
          
          vc = (CiscoVendorConfiguration) extractor.getVendorConfiguration();
          configs.add(vc);

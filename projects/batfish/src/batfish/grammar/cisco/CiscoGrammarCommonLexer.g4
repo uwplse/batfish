@@ -14,6 +14,18 @@ boolean enableIP_ADDRESS = true;
 boolean enableDEC = true;
 boolean enableACL_NUM = false;
 boolean enableCOMMUNITY_LIST_NUM = false;
+
+@Override
+public String printStateVariables() {
+   StringBuilder sb = new StringBuilder();
+   sb.append("enableIPV6_ADDRESS: " + enableIPV6_ADDRESS + "\n");
+   sb.append("enableIP_ADDRESS: " + enableIP_ADDRESS + "\n");
+   sb.append("enableDEC: " + enableDEC + "\n");
+   sb.append("enableACL_NUM: " + enableACL_NUM+ "\n");
+   sb.append("enableCOMMUNITY_LIST_NUM: " + enableCOMMUNITY_LIST_NUM + "\n");
+   return sb.toString();
+}
+
 }
 
 tokens {
@@ -366,7 +378,12 @@ BANDWIDTH
 
 BANNER
 :
-   'banner' -> pushMode(M_BANNER)
+   'banner' ' '+
+   (
+      'exec'
+      | 'login'
+      | 'motd'
+   ) -> pushMode(M_BANNER)
 ;
 
 BFD
@@ -699,6 +716,11 @@ CTS
 DAMPENING
 :
    'dampening'
+;
+
+DATABITS
+:
+   'databits'
 ;
 
 DBL
@@ -1243,6 +1265,11 @@ FLOW_TOP_TALKERS
 FLOWCONTROL
 :
    'flowcontrol'
+;
+
+FLUSH_AT_ACTIVATION
+:
+   'flush-at-activation'
 ;
 
 FORWARD_PROTOCOL
@@ -1977,7 +2004,6 @@ MLAG
    'mlag'
 ;
 
-
 MLD
 :
    'mld'
@@ -2078,6 +2104,11 @@ MULTIPOINT
    'multipoint'
 ;
 
+MVR
+:
+   'mvr'
+;
+
 NAME_LOOKUP
 :
    'name-lookup'
@@ -2167,7 +2198,6 @@ NETCONF
 :
    'netconf'
 ;
-
 
 NETWORK
 :
@@ -2342,6 +2372,11 @@ PARAMETERS
 PARENT
 :
    'parent'
+;
+
+PARSER
+:
+   'parser'
 ;
 
 PARTICIPATE
@@ -2754,6 +2789,11 @@ ROLE
    'role'
 ;
 
+ROTARY
+:
+   'rotary'
+;
+
 ROUTE
 :
    'route'
@@ -2947,6 +2987,11 @@ SERVICE_POLICY
 SERVICE_TYPE
 :
    'service-type'
+;
+
+SESSION_DISCONNECT_WARNING
+:
+   'session-disconnect-warning' -> pushMode(M_COMMENT)
 ;
 
 SESSION_LIMIT
@@ -4173,54 +4218,39 @@ M_BANNER_WS:
    )+ -> channel(HIDDEN)
 ;
 
-M_BANNER_LOGIN
-:
-   'login' -> type(LOGIN), pushMode(M_MOTD_LOGIN)
-;
-
-M_BANNER_MOTD
-:
-   'motd' -> type(MOTD)
-;
-
-M_BANNER_NEWLINE
-:
-   '\n' -> type(NEWLINE), popMode
-;
-
 M_BANNER_ESCAPE_C
 :
    (
       '^C'
       | '\u0003'
-   ) -> type(ESCAPE_C), pushMode(M_MOTD_C)
+   ) -> type(ESCAPE_C), mode(M_MOTD_C)
 ;
 
 M_BANNER_HASH
 :
-   '#' -> type(POUND), pushMode(M_MOTD_HASH)
+   '#' -> type(POUND), mode(M_MOTD_HASH)
+;
+
+M_BANNER_NEWLINE
+:
+   '\n' -> type(NEWLINE), mode(M_MOTD_EOF)
 ;
 
 mode M_CERTIFICATE;
-
-M_CERTIFICATE_WS
-:
-   (
-      ' '
-      | '\t'
-      | '\u000C'
-      | '\n'
-   )+
-;
 
 M_CERTIFICATE_QUIT
 :
    'quit' -> type(QUIT), popMode
 ;
 
-M_CERTIFICATE_WORD
+M_CERTIFICATE_TEXT
 :
-   ~( ' ' | '\t' | '\u000C' | '\n' )+
+   (
+      ~'q'
+      | ('q' ~'u')
+      | ('qu' ~'i')
+      | ('qui' ~'t') 
+   )+
 ;
 
 mode M_COMMENT;
@@ -4283,51 +4313,43 @@ M_MOTD_C_ESCAPE_C
    (
       '^C'
       | '\u0003'
-   ) -> type(ESCAPE_C), popMode
+   ) -> type(ESCAPE_C), mode(DEFAULT_MODE)
 ;
 
-M_MOTD_C_NON_ESCAPE_C
+M_MOTD_C_MOTD
 :
-   .+?
+   (
+      ('^' ~[^C\u0003])
+      | ~'^'
+   )+
+;
+
+mode M_MOTD_EOF;
+
+M_MOTD_EOF_EOF
+:
+   'EOF' -> type(EOF_LITERAL), mode(DEFAULT_MODE)
+;
+
+M_MOTD_EOF_MOTD
+:
+   (
+      ~'E'
+      | ('E' ~'O')
+      | ('EO' ~'F')
+   )+
 ;
 
 mode M_MOTD_HASH;
 
 M_MOTD_HASH_HASH
 :
-   '#' -> type(POUND), popMode
+   '#' -> type(POUND), mode(DEFAULT_MODE)
 ;
 
 M_MOTD_HASH_MOTD
 :
    ~'#'+
-;
-
-mode M_MOTD_LOGIN;
-
-M_MOTD_LOGIN_WS
-:
-   (
-      ' '
-      | '\t'
-      | '\u000C'
-      | '\n'
-   )+
-;
-
-M_MOTD_LOGIN_EOF
-:
-   'EOF' -> type(EOF_LITERAL), popMode
-;
-
-M_MOTD_LOGIN_WORD
-:
-   ~(
-      ' '
-      | '\t'
-      | '\u000C'
-      | '\n'
-   )+
 ;
 
 mode M_NAME;

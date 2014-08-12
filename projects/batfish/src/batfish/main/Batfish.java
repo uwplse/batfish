@@ -34,7 +34,7 @@ import java.util.TreeSet;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -44,16 +44,13 @@ import com.logicblox.connect.Workspace.Relation;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import batfish.grammar.BatfishLexer;
-import batfish.grammar.BatfishParser;
+import batfish.grammar.BatfishCombinedParser;
 import batfish.grammar.ConfigurationLexer;
 import batfish.grammar.ConfigurationParser;
 import batfish.grammar.ParseTreePrettyPrinter;
 import batfish.grammar.TopologyLexer;
 import batfish.grammar.TopologyParser;
-import batfish.grammar.cisco.CiscoGrammar;
-import batfish.grammar.cisco.CiscoGrammar.Cisco_configurationContext;
-import batfish.grammar.cisco.CiscoGrammarCommonLexer;
+import batfish.grammar.cisco.CiscoCombinedParser;
 import batfish.grammar.cisco.controlplane.CiscoControlPlaneExtractor;
 import batfish.grammar.juniper.FlatJuniperGrammarLexer;
 import batfish.grammar.juniper.FlatJuniperGrammarParser;
@@ -2033,22 +2030,6 @@ public class Batfish {
 
    }
 
-   public Map<String, CiscoConfiguration> getCiscoConfigurations(
-         String testRigPath) {
-      Map<File, String> configurationData = readConfigurationFiles(testRigPath);
-      // Get generated facts from configuration files
-      List<CiscoConfiguration> configurations = parseCiscoConfigFiles(configurationData);
-      if (configurations == null) {
-         quit(1);
-      }
-      Map<String, CiscoConfiguration> configurationMap = new TreeMap<String, CiscoConfiguration>();
-      for (CiscoConfiguration configuration : configurations) {
-         configurationMap.put(configuration.getHostname(), configuration);
-      }
-
-      return configurationMap;
-   }
-
    public Map<String, Configuration> getConfigurations(
          String serializedVendorConfigPath) {
       Map<String, VendorConfiguration> vendorConfigurations = deserializeVendorConfigurations(serializedVendorConfigPath);
@@ -2251,70 +2232,6 @@ public class Batfish {
       _lbFrontends.add(lbFrontend);
       return lbFrontend;
 
-   }
-
-   public List<CiscoConfiguration> parseCiscoConfigFiles(
-         Map<File, String> configurationData) {
-      print(1, "\n*** PARSING CONFIGURATION FILES ***\n");
-      resetTimer();
-      List<CiscoConfiguration> configurations = new ArrayList<CiscoConfiguration>();
-
-      boolean processingError = false;
-      for (File currentFile : configurationData.keySet()) {
-         String fileText = configurationData.get(currentFile);
-         String currentPath = currentFile.getAbsolutePath();
-         if (fileText.length() == 0) {
-            continue;
-         }
-         BatfishParser bParser = null;
-         BatfishLexer bLexer = null;
-
-         // antlr 4 stuff
-         print(2, "Parsing: \"" + currentPath + "\"" + "\n");
-         org.antlr.v4.runtime.CharStream stream = new org.antlr.v4.runtime.ANTLRInputStream(
-               fileText);
-         CiscoGrammarCommonLexer lexer4 = new CiscoGrammarCommonLexer(stream);
-         bLexer = lexer4;
-         org.antlr.v4.runtime.CommonTokenStream tokens4 = new org.antlr.v4.runtime.CommonTokenStream(
-               lexer4);
-         CiscoGrammar parser4 = new CiscoGrammar(tokens4);
-         bParser = parser4;
-         parser4.getInterpreter().setPredictionMode(PredictionMode.SLL);
-         Cisco_configurationContext tree = parser4.cisco_configuration();
-         List<String> parserErrors = bParser.getErrors();
-         List<String> lexerErrors = bLexer.getErrors();
-         int numErrors = parserErrors.size() + lexerErrors.size();
-         if (numErrors > 0) {
-            error(0, " ..." + numErrors + " ERROR(S)\n");
-            for (String msg : lexerErrors) {
-               error(2, "\tlexer: " + msg + "\n");
-            }
-            for (String msg : parserErrors) {
-               error(2, "\tparser: " + msg + "\n");
-            }
-            if (_settings.exitOnParseError()) {
-               return null;
-            }
-            else {
-               processingError = true;
-               continue;
-            }
-         }
-         ParseTreeWalker walker = new ParseTreeWalker();
-         CiscoControlPlaneExtractor extractor = new CiscoControlPlaneExtractor(
-               fileText, parser4);
-         walker.walk(extractor, tree);
-         CiscoConfiguration config = (CiscoConfiguration) extractor
-               .getVendorConfiguration();
-         configurations.add(config);
-      }
-      if (processingError) {
-         return null;
-      }
-      else {
-         printElapsedTime();
-         return configurations;
-      }
    }
 
    private Map<String, Configuration> parseConfigurations(
@@ -2520,32 +2437,22 @@ public class Batfish {
          }
          CiscoControlPlaneExtractor extractor = null;
          boolean antlr4 = false;
-         BatfishParser bParser = null;
-         BatfishLexer bLexer = null;
          if (fileText.charAt(0) == '!') {
             // antlr 4 stuff
-            print(2, "Parsing: \"" + currentPath + "\"");
+            print(1, "Parsing: \"" + currentPath + "\"");
             antlr4 = true;
-            org.antlr.v4.runtime.CharStream stream = new org.antlr.v4.runtime.ANTLRInputStream(
+            BatfishCombinedParser combinedParser = new CiscoCombinedParser(
                   fileText);
-            CiscoGrammarCommonLexer lexer4 = new CiscoGrammarCommonLexer(stream);
-            bLexer = lexer4;
-            org.antlr.v4.runtime.CommonTokenStream tokens4 = new org.antlr.v4.runtime.CommonTokenStream(
-                  lexer4);
-            CiscoGrammar parser4 = new CiscoGrammar(tokens4);
-            bParser = parser4;
-            parser4.getInterpreter().setPredictionMode(PredictionMode.SLL);
-            Cisco_configurationContext tree = parser4.cisco_configuration();
-            List<String> parserErrors = bParser.getErrors();
-            List<String> lexerErrors = bLexer.getErrors();
-            int numErrors = parserErrors.size() + lexerErrors.size();
+            ParserRuleContext tree = combinedParser.parse();
+            List<String> errors = combinedParser.getErrors();
+            int numErrors = errors.size();
             if (numErrors > 0) {
-               error(0, " ..." + numErrors + " ERROR(S)\n");
-               for (String msg : lexerErrors) {
-                  error(2, "\tlexer: " + msg + "\n");
-               }
-               for (String msg : parserErrors) {
-                  error(2, "\tparser: " + msg + "\n");
+               error(1, " ..." + numErrors + " ERROR(S)\n");
+               for (int i = 0; i < numErrors; i++) {
+                  String prefix = "ERROR " + (i + 1) + ": ";
+                  String msg = errors.get(i);
+                  String prefixedMsg = Util.applyPrefix(prefix, msg);
+                  error(1, prefixedMsg + "\n");
                }
                if (_settings.exitOnParseError()) {
                   return null;
@@ -2556,17 +2463,21 @@ public class Batfish {
                }
             }
             else if (!_settings.printParseTree()) {
-               print(2, "...OK\n");
+               print(1, "...OK\n");
             }
             else {
-               print(2, "...OK, PRINTING PARSE TREE:\n");
-               print(2, ParseTreePrettyPrinter.print(tree, parser4) + "\n\n");
+               print(0, "...OK, PRINTING PARSE TREE:\n");
+               print(0,
+                     ParseTreePrettyPrinter.print(tree,
+                           combinedParser.getParser())
+                           + "\n\n");
             }
-            extractor = new CiscoControlPlaneExtractor(fileText, parser4);
+            extractor = new CiscoControlPlaneExtractor(fileText,
+                  combinedParser.getParser());
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(extractor, tree);
             for (String warning : extractor.getWarnings()) {
-               error(1, warning);
+               error(2, warning);
             }
             vc = extractor.getVendorConfiguration();
             assert Boolean.TRUE;
@@ -3083,6 +2994,7 @@ public class Batfish {
       }
       print(1, "\n*** SERIALIZING VENDOR CONFIGURATION STRUCTURES ***\n");
       resetTimer();
+      new File(outputPath).mkdirs();
       for (String name : vendorConfigurations.keySet()) {
          VendorConfiguration vc = vendorConfigurations.get(name);
          Path currentOutputPath = Paths.get(outputPath, name);

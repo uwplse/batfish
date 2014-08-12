@@ -557,6 +557,13 @@ public class Settings {
       }
       _counts = line.hasOption(ARG_COUNT);
       _dr = line.hasOption(ARG_DR);
+      _maxSubgroupSize = Integer
+            .parseInt(line.getOptionValue(ARG_MAX_SUBGROUP_SIZE,
+                  Integer.toString(DEFAULT_MAX_SUBGROUP_SIZE)));
+      if (_maxSubgroupSize <= 0 || _maxSubgroupSize > MAX_MAX_SUBGROUP_SIZE) {
+         throw new Error("Max subgroup size must be between 1 and "
+               + MAX_MAX_SUBGROUP_SIZE);
+      }
       _queryAll = line.hasOption(ARG_QUERY_ALL);
       _query = line.hasOption(ARG_QUERY);
       if (line.hasOption(ARG_PREDHELP)) {

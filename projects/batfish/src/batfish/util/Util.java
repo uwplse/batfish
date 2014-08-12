@@ -14,6 +14,15 @@ public class Util {
    public static final String FACT_BLOCK_FOOTER = "\n//FACTS END HERE\n"
          + "   }) // clauses\n" + "} <-- .\n";
 
+   public static String applyPrefix(String prefix, String msg) {
+      String[] lines = msg.split("\n");
+      StringBuilder sb = new StringBuilder();
+      for (String line : lines) {
+         sb.append(prefix + line + "\n");
+      }
+      return sb.toString();
+   }
+
    public static boolean equalOrNull(Object lhs, Object rhs) {
       if (lhs == null && rhs == null) {
          return true;
@@ -120,16 +129,16 @@ public class Util {
       }
       return s;
    }
-
+   
    public static String getIndentString(int indentLevel) {
-
-      String retString = "";
-
-      for (int i = 0; i < indentLevel; i++) {
-         retString += "  ";
-      }
-
-      return retString;
+	   
+	   String retString = "";
+	   
+	   for (int i=0; i< indentLevel; i++) {
+		   retString += "  ";
+	   }   
+	   
+	   return retString;
    }
 
    public static String getIpFromIpSubnetPair(String pair) {
@@ -192,12 +201,12 @@ public class Util {
          return "" + port;
       }
    }
-
+   
    public static int getPrefixLengthFromIpSubnetPair(String pair) {
       int slashPos = pair.indexOf('/');
       return Integer.parseInt(pair.substring(slashPos + 1, pair.length()));
    }
-
+   
    public static String getProtocolName(int protocol) {
       switch (protocol) {
       case 0:
@@ -303,7 +312,7 @@ public class Util {
       }
       return wildcard;
    }
-
+   
    public static String toHSAInterfaceName(String name) {
       if (name.startsWith("xe-")) {
          String numberSection = name.substring(3);
@@ -322,10 +331,10 @@ public class Util {
       else if (name.startsWith("fxp")) {
          String numberSection = name.substring(3);
          String[] numbers = numberSection.split("\\.");
-         return "fxp" + numbers[0] + "/" + numbers[1];
+         return "fxp" + numbers[0] + "/" + numbers[1];         
       }
       else if (name.startsWith("Vlan")) {
-         return name.replace("Vlan", "Flan") + "/0";
+         return name.replace("Vlan","Flan") + "/0";
       }
       else if (name.startsWith("Port-channel")) {
          return name.replace("Port-channel", "pc") + "/0";
