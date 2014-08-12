@@ -181,6 +181,7 @@ batfish_mkucla() {
    cd $TEST_RIG/configs
    find $UCLA_CONFIGS -type f -not -wholename '*\.git*' -and -not -name 'router.db' -and -not -name '*lab\.ucla\.net*' -and -not -name 'sw*' -and -not -name 'ra*' -and -not -name 'sr*' -and -not -name 'br*' -and -not -name 'vg*' -and -not -name 'vr*' -and -not -name 'rtr*' -and -not -name 'border*' -exec cp -a {} . \;
    rm $(grep -l '!RANCID.*aruba.*' *)
+   rm $(grep -l '!RANCID.*cat5.*' *)
    #rm -f $(grep -l '!RANCID.*alcatel.*' *)
    #rm -f $(grep -l '!RANCID.*cisco-nx.*' *)
    cp -a $DC_STUB .
