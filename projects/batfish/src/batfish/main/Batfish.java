@@ -54,7 +54,6 @@ import batfish.grammar.cisco.CiscoCombinedParser;
 import batfish.grammar.cisco.controlplane.CiscoControlPlaneExtractor;
 import batfish.grammar.juniper.FlatJuniperGrammarLexer;
 import batfish.grammar.juniper.FlatJuniperGrammarParser;
-import batfish.grammar.juniper.JuniperConfiguration;
 import batfish.grammar.juniper.JuniperGrammarLexer;
 import batfish.grammar.juniper.JuniperGrammarParser;
 import batfish.grammar.topology.BatfishTopologyLexer;
@@ -543,8 +542,10 @@ public class Batfish {
             else if (firstConfigurations.get(e.getKey()).getVendor()
                   .equals("juniper")) {
                if (compareJuniperConfigurations(
-                     (JuniperConfiguration) firstConfigurations.get(e.getKey()),
-                     (JuniperConfiguration) secondConfigurations.get(e.getKey())))
+                     (JuniperVendorConfiguration) firstConfigurations.get(e
+                           .getKey()),
+                     (JuniperVendorConfiguration) secondConfigurations.get(e
+                           .getKey())))
                   changed = true;
             }
          }
@@ -599,8 +600,10 @@ public class Batfish {
             else if (firstConfigurations.get(e.getKey()).getVendor()
                   .equals("juniper")) {
                if (compareJuniperConfigurations(
-                     (JuniperConfiguration) firstConfigurations.get(e.getKey()),
-                     (JuniperConfiguration) secondConfigurations.get(e.getKey())))
+                     (JuniperVendorConfiguration) firstConfigurations.get(e
+                           .getKey()),
+                     (JuniperVendorConfiguration) secondConfigurations.get(e
+                           .getKey())))
                   changed = true;
             }
          }
@@ -625,49 +628,22 @@ public class Batfish {
       print(1, "*** End Compare***\n\n");
 
    }
-   
+
    private boolean compareJuniperConfigurations(
-         JuniperConfiguration juniperConfiguration,
-         JuniperConfiguration juniperConfiguration2) {
+         JuniperVendorConfiguration juniperVendorConfigurationConfiguration,
+         JuniperVendorConfiguration juniperVendorConfigurationConfiguration2) {
       boolean nodeChanged = false;
       boolean changed = compareJuniperVendorConfigurations(
-            juniperConfiguration.getConfiguration(),
-            juniperConfiguration2.getConfiguration());
+            juniperVendorConfigurationConfiguration,
+            juniperVendorConfigurationConfiguration2);
       if (changed) {
-         print(1,
-               "_configuration(CONFIGS) CHANGED at "
-                     + juniperConfiguration.getRouterID() + "\n");
          nodeChanged = true;
       }
 
-      changed = (juniperConfiguration.getAsNum() != juniperConfiguration2
-            .getAsNum());
-      if (changed) {
-         print(1,
-               "_asNum(ASNS) CHANGED at " + juniperConfiguration.getRouterID()
-                     + "\n");
-         nodeChanged = true;
-      }
-
-      changed = !Util.equalOrNull(juniperConfiguration.getRouterID(),
-            juniperConfiguration2.getRouterID());
-      if (changed) {
-         print(1,
-               "_routerID(RID) CHANGED at "
-                     + juniperConfiguration.getRouterID() + "\n");
-         nodeChanged = true;
-      }
-
-      changed = Util.cmpRepresentationMaps(
-            juniperConfiguration.getInterfaceAddressMap(),
-            juniperConfiguration2.getInterfaceAddressMap()) != 0;
-      if (changed) {
-         print(1, "_interfaceAddressMap(IAM) CHANGED at "
-               + juniperConfiguration.getRouterID() + "\n");
-         nodeChanged = true;
-      }
       if (nodeChanged) {
-         print(1, "NODE " + juniperConfiguration.getRouterID() + " CHANGED\n\n");
+         print(1,
+               "NODE " + juniperVendorConfigurationConfiguration.getHostname()
+                     + " CHANGED\n\n");
       }
 
       return nodeChanged;
@@ -731,7 +707,8 @@ public class Batfish {
          nodeChanged = true;
       }
 
-      changed = (configuration.getHostname() != configuration2.getHostname());
+      changed = (!Util.equalOrNull(configuration.getHostname(),
+            configuration2.getHostname()));
       if (changed) {
          print(1, "_hostname CHANGED at " + configuration.getHostname() + "\n");
          nodeChanged = true;
@@ -1029,7 +1006,7 @@ public class Batfish {
 
    private boolean compareBGPProcesses(List<BGPProcess> bgpProcesses,
          List<BGPProcess> bgpProcesses2) {
-      return (Util.cmpRepresentationLists(bgpProcesses, bgpProcesses2) == 0);
+      return (Util.cmpRepresentationLists(bgpProcesses, bgpProcesses2) != 0);
    }
 
    public boolean compareCiscoConfigurations(
@@ -1556,14 +1533,15 @@ public class Batfish {
       }
 
       if (Util.cmpRepresentationSets(ospfProcess.getInterfaceBlacklist(),
-            ospfProcess2.getInterfaceBlacklist())!=0) {
+            ospfProcess2.getInterfaceBlacklist()) != 0) {
          res = true;
          print(1, "_interfaceBlacklist, ");
       }
 
-      int ospfres = Util.cmpRepresentationSets(ospfProcess.getInterfaceWhitelist(),
+      int ospfres = Util.cmpRepresentationSets(
+            ospfProcess.getInterfaceWhitelist(),
             ospfProcess2.getInterfaceWhitelist());
-      if ( ospfres != 0) {
+      if (ospfres != 0) {
          res = true;
          switch (ospfres) {
          case 1:
@@ -1583,13 +1561,13 @@ public class Batfish {
       }
 
       if (Util.cmpRepresentationSets(ospfProcess.getNetworks(),
-            ospfProcess2.getNetworks())!=0) {
+            ospfProcess2.getNetworks()) != 0) {
          res = true;
          print(1, "_networks, ");
       }
 
       if (Util.cmpRepresentationMaps(ospfProcess.getNssas(),
-            ospfProcess2.getNssas())!=0) {
+            ospfProcess2.getNssas()) != 0) {
          res = true;
          print(1, "_nssas, ");
       }
@@ -1600,7 +1578,7 @@ public class Batfish {
       }
 
       if (Util.cmpRepresentationMaps(ospfProcess.getRedistributionPolicies(),
-            ospfProcess2.getRedistributionPolicies())!=0) {
+            ospfProcess2.getRedistributionPolicies()) != 0) {
          res = true;
          print(1, "_redistributionPolicies, ");
       }
@@ -1618,7 +1596,7 @@ public class Batfish {
       }
 
       if (Util.cmpRepresentationSets(ospfProcess.getWildcardNetworks(),
-            ospfProcess2.getWildcardNetworks())!=0) {
+            ospfProcess2.getWildcardNetworks()) != 0) {
          res = true;
          print(1, "_wildcardNetworks, ");
       }
@@ -1664,7 +1642,7 @@ public class Batfish {
             }
 
             if (Util.cmpRepresentationLists(interface1.getAllowedVlans(),
-                  interface2.getAllowedVlans())!=0) {
+                  interface2.getAllowedVlans()) != 0) {
                interfaceChanged = true;
                print(1, "_allowedVlans, ");
             }
@@ -1726,7 +1704,7 @@ public class Batfish {
             }
 
             if (Util.cmpRepresentationMaps(interface1.getSecondaryIps(),
-                  interface2.getSecondaryIps())!=0) {
+                  interface2.getSecondaryIps()) != 0) {
                interfaceChanged = true;
                print(1, "_secondaryIps, ");
             }
@@ -1802,7 +1780,7 @@ public class Batfish {
             }
 
             if (Util.cmpRepresentationLists(elist1.getLines(),
-                  elist2.getLines())!=0) {
+                  elist2.getLines()) != 0) {
                elistChanged = true;
                print(1, "_lines, ");
             }
@@ -1913,7 +1891,7 @@ public class Batfish {
          print(1, "_aggregateNetworks, ");
       }
       if (Util.cmpRepresentationMaps(bgpProcess.getAllPeerGroups(),
-            bgpProcess2.getAllPeerGroups())!=0) {
+            bgpProcess2.getAllPeerGroups()) != 0) {
          res = true;
          print(1, "_allPeerGroups, ");
       }
@@ -1936,13 +1914,13 @@ public class Batfish {
       }
 
       if (Util.cmpRepresentationMaps(bgpProcess.getIpPeerGroups(),
-            bgpProcess2.getIpPeerGroups())!=0) {
+            bgpProcess2.getIpPeerGroups()) != 0) {
          res = true;
          print(1, "_ipPeerGroups, ");
       }
 
       if (Util.cmpRepresentationMaps(bgpProcess.getNamedPeerGroups(),
-            bgpProcess2.getNamedPeerGroups())!=0) {
+            bgpProcess2.getNamedPeerGroups()) != 0) {
          res = true;
          print(1, "_namedPeerGroups, ");
       }
@@ -2070,8 +2048,7 @@ public class Batfish {
                listChanged = true;
                print(1, "_name, ");
             }
-            if (Util
-                  .cmpRepresentationLists(list1.getLines(), list2.getLines())!=0) {
+            if (Util.cmpRepresentationLists(list1.getLines(), list2.getLines()) != 0) {
                listChanged = true;
                print(1, "_lines, ");
             }

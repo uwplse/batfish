@@ -229,7 +229,7 @@ public class Interface extends NamedStructure {
    public void setRoutingPolicy(PolicyMap policy) {
       _routingPolicy = policy;
    }
-   
+
    public void setSubnetMask(Ip subnet) {
       _subnet = subnet;
    }

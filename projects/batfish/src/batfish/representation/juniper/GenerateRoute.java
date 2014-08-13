@@ -1,6 +1,9 @@
 package batfish.representation.juniper;
 
-public class GenerateRoute {
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
+public class GenerateRoute implements RepresentationObject {
    private String _prefix;
    private int _prefixLength;
    private String _policy;
@@ -32,5 +35,14 @@ public class GenerateRoute {
 
    public int getPreference() {
       return _preference;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      GenerateRoute rhs = (GenerateRoute) o;
+      return Util.equalOrNull(_prefix, rhs._prefix)
+            && _prefixLength == rhs._prefixLength
+            && Util.equalOrNull(_policy, rhs._policy)
+            && _preference == rhs._preference;
    }
 }

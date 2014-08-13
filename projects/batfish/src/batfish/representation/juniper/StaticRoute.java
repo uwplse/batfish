@@ -1,6 +1,9 @@
 package batfish.representation.juniper;
 
-public class StaticRoute {
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
+public class StaticRoute implements RepresentationObject {
    private int _distance;
    private String _mask;
    private String _nextHopInterface;
@@ -40,6 +43,15 @@ public class StaticRoute {
 
    public int getTag() {
       return _tag;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      StaticRoute rhs = (StaticRoute) o;
+      return _distance == rhs._distance && Util.equalOrNull(_mask, rhs._mask)
+            && Util.equalOrNull(_nextHopInterface, rhs._nextHopInterface)
+            && Util.equalOrNull(_nextHopIp, rhs._nextHopIp)
+            && Util.equalOrNull(_prefix, rhs._prefix) && _tag == rhs._tag;
    }
 
 }

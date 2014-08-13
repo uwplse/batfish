@@ -65,11 +65,11 @@ public class OSPFProcess implements RepresentationObject {
    public boolean equalsRepresentation(Object o) {
       OSPFProcess rhs = (OSPFProcess) o;
       return _pid == rhs._pid
-            && (Util.cmpRepresentationLists(_networks, rhs._networks)==0)
+            && (Util.cmpRepresentationLists(_networks, rhs._networks) == 0)
             && Util.equalOrNull(_routerId, rhs._routerId)
             && _referenceBandwidth == rhs._referenceBandwidth
             && (Util.cmpRepresentationLists(_exportPolicyStatements,
-                  rhs._exportPolicyStatements)==0);
+                  rhs._exportPolicyStatements) == 0);
    }
 
 }

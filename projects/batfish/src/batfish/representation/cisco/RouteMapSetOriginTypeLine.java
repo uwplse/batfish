@@ -25,12 +25,12 @@ public class RouteMapSetOriginTypeLine extends RouteMapSetLine {
    public OriginType getOriginType() {
       return _originType;
    }
-   
+
    @Override
    public RouteMapSetType getType() {
       return RouteMapSetType.ORIGIN_TYPE;
    }
-   
+
    @Override
    public PolicyMapSetLine toPolicyMapSetLine(Configuration c) {
       return new PolicyMapSetOriginTypeLine(_originType);
@@ -43,7 +43,8 @@ public class RouteMapSetOriginTypeLine extends RouteMapSetLine {
       }
 
       RouteMapSetOriginTypeLine rhsLine = (RouteMapSetOriginTypeLine) o;
-      return Util.equalOrNull(_asNum, rhsLine._asNum) && Util.equalOrNull(_originType, rhsLine._originType);
+      return Util.equalOrNull(_asNum, rhsLine._asNum)
+            && Util.equalOrNull(_originType, rhsLine._originType);
    }
 
 }

@@ -934,8 +934,8 @@ public class CiscoVendorConfiguration extends CiscoConfiguration implements
    }
 
    private batfish.representation.Interface toInterface(Interface iface,
-         Map<String, IpAccessList> ipAccessLists, Map<String, PolicyMap> policyMaps)
-         throws VendorConversionException {
+         Map<String, IpAccessList> ipAccessLists,
+         Map<String, PolicyMap> policyMaps) throws VendorConversionException {
       batfish.representation.Interface newIface = new batfish.representation.Interface(
             iface.getName());
       newIface.setAccessVlan(iface.getAccessVlan());
