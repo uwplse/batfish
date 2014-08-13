@@ -56,6 +56,6 @@ public class ExtendedAccessList implements Serializable, RepresentationObject {
    public boolean equalsRepresentation(Object o) {
       ExtendedAccessList rhs = (ExtendedAccessList) o;
       return Util.equalOrNull(_id, rhs._id)
-            && Util.sameRepresentationLists(_lines, rhs._lines);
+            && Util.cmpRepresentationLists(_lines, rhs._lines) == 0;
    }
 }

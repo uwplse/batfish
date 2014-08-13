@@ -73,8 +73,8 @@ public class BGPNeighbor implements RepresentationObject {
       return Util.equalOrNull(_ip, rhs._ip)
             && Util.equalOrNull(_remoteAS, rhs._remoteAS)
             && Util.equalOrNull(_localAS, rhs._localAS)
-            && Util.sameRepresentationLists(_inboundPolicyStatementName,
-                  rhs._inboundPolicyStatementName)
+            && Util.cmpRepresentationLists(_inboundPolicyStatementName,
+                  rhs._inboundPolicyStatementName) == 0
             && Util.equalOrNull(_outboundPolicyStatementName,
                   rhs._outboundPolicyStatementName);
    }

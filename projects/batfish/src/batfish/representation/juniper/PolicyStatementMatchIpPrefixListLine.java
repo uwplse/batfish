@@ -29,7 +29,7 @@ public class PolicyStatementMatchIpPrefixListLine extends
       }
 
       PolicyStatementMatchIpPrefixListLine rhsLine = (PolicyStatementMatchIpPrefixListLine) o;
-      return Util.sameRepresentationLists(_listNames, rhsLine._listNames);
+      return Util.cmpRepresentationLists(_listNames, rhsLine._listNames) == 0;
    }
 
 }

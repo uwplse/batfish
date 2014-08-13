@@ -169,7 +169,7 @@ public class Interface implements RepresentationObject {
       Interface rhs = (Interface) o;
       return _accessVlan == rhs._accessVlan
             && _active == rhs._active
-            && Util.sameRepresentationLists(_allowedVlans, rhs._allowedVlans)
+            && (Util.cmpRepresentationLists(_allowedVlans, rhs._allowedVlans) == 0)
             && Util.equalOrNull(_bandwidth, rhs._bandwidth)
             && Util.equalOrNull(_incomingFilter, rhs._incomingFilter)
             && Util.equalOrNull(_ip, rhs._ip)

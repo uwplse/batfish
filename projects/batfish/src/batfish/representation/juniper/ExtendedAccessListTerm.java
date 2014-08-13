@@ -252,12 +252,12 @@ public class ExtendedAccessListTerm implements RepresentationObject {
    public boolean equalsRepresentation(Object o) {
       ExtendedAccessListTerm rhs = (ExtendedAccessListTerm) o;
       return Util.equalOrNull(_ala, rhs._ala)
-            && Util.sameRepresentationLists(_destinationAddress,
-                  rhs._destinationAddress)
-            && Util.sameRepresentationLists(_dstPortRanges, rhs._dstPortRanges)
-            && Util.sameRepresentationLists(_protocols, rhs._protocols)
-            && Util.sameRepresentationLists(_sourceAddress, rhs._sourceAddress)
-            && Util.sameRepresentationLists(_srcPortRanges, rhs._srcPortRanges)
+            && Util.cmpRepresentationLists(_destinationAddress,
+                  rhs._destinationAddress) == 0
+            && Util.cmpRepresentationLists(_dstPortRanges, rhs._dstPortRanges) == 0
+            && Util.cmpRepresentationLists(_protocols, rhs._protocols) == 0
+            && Util.cmpRepresentationLists(_sourceAddress, rhs._sourceAddress) == 0
+            && Util.cmpRepresentationLists(_srcPortRanges, rhs._srcPortRanges) == 0
             && Util.equalOrNull(_tName, rhs._tName);
    }
 

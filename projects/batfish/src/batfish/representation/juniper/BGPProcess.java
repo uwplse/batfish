@@ -66,9 +66,9 @@ public class BGPProcess implements RepresentationObject {
       BGPProcess rhs = (BGPProcess) o;
       return _pid == rhs._pid
             && Util.equalOrNull(_routerID, rhs._routerID)
-            && Util.sameRepresentationMaps(_peerGroups, rhs._peerGroups)
-            && Util.sameRepresentationLists(_activatedNeighbors,
-                  rhs._activatedNeighbors);
+            && Util.cmpRepresentationMaps(_peerGroups, rhs._peerGroups) == 0
+            && Util.cmpRepresentationLists(_activatedNeighbors,
+                  rhs._activatedNeighbors) == 0;
    }
 
 }

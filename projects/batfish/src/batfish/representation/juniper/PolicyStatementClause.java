@@ -69,8 +69,8 @@ public class PolicyStatementClause implements RepresentationObject {
    public boolean equalsRepresentation(Object o) {
       PolicyStatementClause rhs = (PolicyStatementClause) o;
       return Util.equalOrNull(_mapName, rhs._mapName)
-            && Util.sameRepresentationLists(_matchList, rhs._matchList)
-            && Util.sameRepresentationLists(_setList, rhs._setList)
+            && Util.cmpRepresentationLists(_matchList, rhs._matchList) == 0
+            && Util.cmpRepresentationLists(_setList, rhs._setList) == 0
             && _seqNum == rhs._seqNum && Util.equalOrNull(_type, rhs._type)
             && Util.equalOrNull(_clauseName, rhs._clauseName);
    }

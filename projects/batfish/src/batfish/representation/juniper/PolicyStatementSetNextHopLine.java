@@ -28,7 +28,7 @@ public class PolicyStatementSetNextHopLine extends PolicyStatementSetLine {
       }
 
       PolicyStatementSetNextHopLine rhsLine = (PolicyStatementSetNextHopLine) o;
-      return Util.sameRepresentationLists(_nextHops, rhsLine._nextHops);
+      return Util.cmpRepresentationLists(_nextHops, rhsLine._nextHops) == 0;
    }
 
 }

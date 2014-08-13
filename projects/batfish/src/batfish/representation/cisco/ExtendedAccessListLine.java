@@ -102,11 +102,11 @@ public class ExtendedAccessListLine implements Serializable,
       ExtendedAccessListLine rhs = (ExtendedAccessListLine) o;
       return Util.equalOrNull(_action, rhs._action)
             && Util.equalOrNull(_dstIp, rhs._dstIp)
-            && Util.sameRepresentationLists(_dstPortRanges, rhs._dstPortRanges)
+            && Util.cmpRepresentationLists(_dstPortRanges, rhs._dstPortRanges) == 0
             && Util.equalOrNull(_dstWildcard, rhs._dstWildcard)
             && _protocol == rhs._protocol
             && Util.equalOrNull(_srcIp, rhs._srcIp)
-            && Util.sameRepresentationLists(_srcPortRanges, rhs._srcPortRanges)
+            && Util.cmpRepresentationLists(_srcPortRanges, rhs._srcPortRanges) == 0
             && Util.equalOrNull(_srcWildcard, rhs._srcWildcard);
    }
 }

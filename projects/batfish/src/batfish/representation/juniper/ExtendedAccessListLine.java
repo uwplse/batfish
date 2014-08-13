@@ -127,11 +127,12 @@ public class ExtendedAccessListLine implements RepresentationObject {
       ExtendedAccessListLine rhs = (ExtendedAccessListLine) o;
       return Util.equalOrNull(_ala, rhs._ala)
             && Util.equalOrNull(_dstIp, rhs._dstIp)
-            && Util.sameRepresentationLists(_dstPortRanges, rhs._dstPortRanges)
+            && Util.cmpRepresentationLists(_dstPortRanges, rhs._dstPortRanges) == 0
             && Util.equalOrNull(_dstWildcard, rhs._dstWildcard)
-            && Util.equalOrNull(_id, rhs._id) && _protocol == rhs._protocol
+            && Util.equalOrNull(_id, rhs._id)
+            && _protocol == rhs._protocol
             && Util.equalOrNull(_srcIp, rhs._srcIp)
-            && Util.sameRepresentationLists(_srcPortRanges, rhs._srcPortRanges)
+            && Util.cmpRepresentationLists(_srcPortRanges, rhs._srcPortRanges) == 0
             && Util.equalOrNull(_srcWildcard, rhs._srcWildcard);
    }
 

@@ -30,7 +30,7 @@ public class PolicyStatementMatchProtocolLine extends PolicyStatementMatchLine {
       }
 
       PolicyStatementMatchProtocolLine rhsLine = (PolicyStatementMatchProtocolLine) o;
-      return Util.sameRepresentationLists(_protocol, rhsLine._protocol);
+      return Util.cmpRepresentationLists(_protocol, rhsLine._protocol) == 0;
    }
 
 }

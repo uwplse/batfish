@@ -114,7 +114,7 @@ public class BGPGroup implements RepresentationObject {
             && Util.equalOrNull(_name, rhs._name)
             && Util.equalOrNull(_localAS, rhs._localAS)
             && _routeReflectorClient == rhs._routeReflectorClient
-            && Util.sameRepresentationLists(_neighbors, rhs._neighbors)
+            && (Util.cmpRepresentationLists(_neighbors, rhs._neighbors) ==0)
             && _isExternal == rhs._isExternal;
    }
 

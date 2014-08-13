@@ -41,49 +41,61 @@ public class Util {
       }
    }
 
-   public static <E> boolean sameRepresentationLists(java.util.List<E> c1,
+   public static <E> int cmpRepresentationLists(java.util.List<E> c1,
          java.util.List<E> c2) {
       if (c1 == null && c2 == null)
-         return true;
-      if (c1 == null || c2 == null)
-         return false;
-      if (c1.size() != c2.size())
-         return false;
+         return 0;
+      if (c1 == null )
+         return 1;
+      if (c2 == null)
+         return 2;
+      if (c1.size() < c2.size())
+         return 1;
+      if (c1.size() > c2.size())
+         return 2;
 
       Iterator<E> it2 = c2.iterator();
       for (Iterator<E> it = c1.iterator(); it.hasNext();) {
          if (!equalOrNull((E) it.next(), (E) it2.next()))
-            return false;
+            return 3;
       }
 
-      return true;
+      return 0;
    }
 
-   public static <E> boolean sameRepresentationSets(Set<E> c1, Set<E> c2) {
+   public static <E> int cmpRepresentationSets(Set<E> c1, Set<E> c2) {
       if (c1 == null && c2 == null)
-         return true;
-      if (c1 == null || c2 == null)
-         return false;
-      if (c1.size() != c2.size())
-         return false;
+         return 0;
+      if (c1 == null )
+         return 1;
+      if (c2 == null)
+         return 2;
+      if (c1.size() < c2.size())
+         return 1;
+      if (c1.size() > c2.size())
+         return 2;
 
       Iterator<E> it2 = c2.iterator();
       for (Iterator<E> it = c1.iterator(); it.hasNext();) {
          if (!equalOrNull((E) it.next(), (E) it2.next()))
-            return false;
+            return 3;
       }
 
-      return true;
+      return 0;
    }
 
-   public static <K, V> boolean sameRepresentationMaps(Map<K, V> c1,
+   public static <K, V> int cmpRepresentationMaps(Map<K, V> c1,
          Map<K, V> c2) {
       if (c1 == null && c2 == null)
-         return true;
-      if (c1 == null || c2 == null)
-         return false;
-      if (c1.size() != c2.size())
-         return false;
+         return 0;
+      if (c1 == null )
+         return 1;
+      if (c2 == null)
+         return 2;
+      if (c1.size() < c2.size())
+         return 1;
+      if (c1.size() > c2.size())
+         return 2;
 
       Iterator<Entry<K, V>> it2 = c2.entrySet().iterator();
       for (Iterator<Entry<K, V>> it = c1.entrySet().iterator(); it.hasNext();) {
@@ -91,10 +103,10 @@ public class Util {
          Entry<K, V> e2 = it2.next();
          if (!equalOrNull(e1.getKey(), e2.getKey())
                || !equalOrNull(e1.getValue(), e2.getValue()))
-            return false;
+            return 3;
       }
 
-      return true;
+      return 0;
    }
 
    public static String clearDuplicateLines(String input) {
