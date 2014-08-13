@@ -570,6 +570,62 @@ public class Batfish {
 
    }
 
+   public void getComparenaive() {
+      Map<String, VendorConfiguration> firstConfigurations = getVenderConfigurations(_settings
+            .getCommits().get(0));
+      if (firstConfigurations == null) {
+         quit(1);
+      }
+      Map<String, VendorConfiguration> secondConfigurations = getVenderConfigurations(_settings
+            .getCommits().get(1));
+      if (secondConfigurations == null) {
+         quit(1);
+      }
+
+      boolean changed = false;
+
+      print(1, "*** Compare ***\n");
+      print(1, "Compare between " + _settings.getCommits().get(0) + ":"
+            + _settings.getCommits().get(1) + "\n");
+      for (Entry<String, VendorConfiguration> e : firstConfigurations
+            .entrySet()) {
+         if (secondConfigurations.containsKey(e.getKey())) {
+            if (firstConfigurations.get(e.getKey()).getVendor().equals("cisco")) {
+               if (compareCiscoConfigurations(
+                     (CiscoConfiguration) firstConfigurations.get(e.getKey()),
+                     (CiscoConfiguration) secondConfigurations.get(e.getKey())))
+                  changed = true;
+            }
+            else if (firstConfigurations.get(e.getKey()).getVendor()
+                  .equals("juniper")) {
+               if (compareJuniperConfigurations(
+                     (JuniperConfiguration) firstConfigurations.get(e.getKey()),
+                     (JuniperConfiguration) secondConfigurations.get(e.getKey())))
+                  changed = true;
+            }
+         }
+         else {
+            print(1, "REMOVED NODE:"
+                  + firstConfigurations.get(e.getKey()).getHostname() + "\n\n");
+         }
+      }
+
+      Set<String> tmpSet = secondConfigurations.keySet();
+      tmpSet.removeAll(firstConfigurations.keySet());
+      for (String hostname : tmpSet) {
+         print(1, "ADDED NODE:" + hostname + "\n\n");
+      }
+
+      if (changed) {
+         print(1, "FINAL:CHANGED\n");
+      }
+      else {
+         print(1, "FINAL:UNCHANGED\n");
+      }
+      print(1, "*** End Compare***\n\n");
+
+   }
+   
    private boolean compareJuniperConfigurations(
          JuniperConfiguration juniperConfiguration,
          JuniperConfiguration juniperConfiguration2) {
