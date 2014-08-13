@@ -541,7 +541,7 @@ public class Batfish {
                   changed = true;
             }
             else if (firstConfigurations.get(e.getKey()).getVendor()
-                  .equals("cisco")) {
+                  .equals("juniper")) {
                if (compareJuniperConfigurations(
                      (JuniperConfiguration) firstConfigurations.get(e.getKey()),
                      (JuniperConfiguration) secondConfigurations.get(e.getKey())))
