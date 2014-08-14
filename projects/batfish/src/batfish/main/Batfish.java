@@ -586,37 +586,47 @@ public class Batfish {
       boolean changed = false;
 
       print(1, "*** Compare ***\n");
-      print(1, "Compare between " + _settings.getCommits().get(0) + ":"
-            + _settings.getCommits().get(1) + "\n");
+      print(1, "Compare between " + _settings.getCommits().get(0) + ":Interface Whitelist:"
+            + _settings.getCommits().get(1) + ":Interface Whitelist\n");
       for (Entry<String, VendorConfiguration> e : firstConfigurations
             .entrySet()) {
          if (secondConfigurations.containsKey(e.getKey())) {
             if (firstConfigurations.get(e.getKey()).getVendor().equals("cisco")) {
-               if (compareCiscoConfigurations(
-                     (CiscoConfiguration) firstConfigurations.get(e.getKey()),
-                     (CiscoConfiguration) secondConfigurations.get(e.getKey())))
-                  changed = true;
-            }
-            else if (firstConfigurations.get(e.getKey()).getVendor()
-                  .equals("juniper")) {
-               if (compareJuniperConfigurations(
-                     (JuniperVendorConfiguration) firstConfigurations.get(e
-                           .getKey()),
-                     (JuniperVendorConfiguration) secondConfigurations.get(e
-                           .getKey())))
-                  changed = true;
-            }
-         }
-         else {
-            print(1, "REMOVED NODE:"
-                  + firstConfigurations.get(e.getKey()).getHostname() + "\n\n");
-         }
-      }
+               print(1, "Router " + e.getKey() + ":\n");
+               print(1, "_interfaceWhitelist\n");
+               boolean ifaceChanged = false;
+               OspfProcess ospfProcess1 = ((CiscoConfiguration)firstConfigurations.get(e.getKey())).getOspfProcess();
+               OspfProcess ospfProcess2 = ((CiscoConfiguration)secondConfigurations.get(e.getKey())).getOspfProcess();
+               if(ospfProcess1 != null && ospfProcess2 != null){
+                  Set<String> interfaceWhitelist1 = ospfProcess1.getInterfaceWhitelist();
+                  Set<String> interfaceWhitelist2 = ospfProcess2.getInterfaceWhitelist();
+                  if(interfaceWhitelist1!=null && interfaceWhitelist2!=null){
+                     Set<String> tmpSet = new HashSet<String>();
+                     tmpSet.addAll(interfaceWhitelist1);
+                     tmpSet.removeAll(interfaceWhitelist2);
+                     for (String string : tmpSet){
+                        print(1, string + " - \n");
+                        ifaceChanged = true;
+                     }
+                     tmpSet.clear();
+                     tmpSet.addAll(interfaceWhitelist2);
+                     tmpSet.removeAll(interfaceWhitelist1);
+                     for (String string : tmpSet){
+                        print(1, string + " + \n");
+                        ifaceChanged = true;
+                     }
+                     if(ifaceChanged)
+                        print(1, "iface whitelist Changed\n");
+                     else {
+                        print(1, "iface whitelist Unchanged\n");
+                     }                    
+                  }
+               }
 
-      Set<String> tmpSet = secondConfigurations.keySet();
-      tmpSet.removeAll(firstConfigurations.keySet());
-      for (String hostname : tmpSet) {
-         print(1, "ADDED NODE:" + hostname + "\n\n");
+
+               
+            }
+         }
       }
 
       if (changed) {
@@ -2886,7 +2896,7 @@ public class Batfish {
       }
 
       if (_settings.getCompareCommits()) {
-         getCompare();
+         getComparenaive();
          quit(0);
       }
 
