@@ -1698,12 +1698,6 @@ public class Batfish {
                interfaceChanged = true;
                print(1, "_bandwidth, ");
             }
-            
-            if (!Util.equalOrNull(interface1.getDescription(),
-                  interface2.getDescription())) {
-               interfaceChanged = true;
-               print(1, "_description, ");
-            }
 
             if (!Util.equalOrNull(interface1.getIncomingFilter(),
                   interface2.getIncomingFilter())) {
