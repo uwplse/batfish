@@ -200,7 +200,7 @@ public class DeptGenerator {
 
          print(1, "Parsing: \"" + currentPath + "\"");
          CiscoControlPlaneExtractor extractor = null;
-         BatfishCombinedParser combinedParser = new CiscoCombinedParser(
+         BatfishCombinedParser<?, ?> combinedParser = new CiscoCombinedParser(
                fileText);
          ParserRuleContext tree = combinedParser.parse();
          List<String> errors = combinedParser.getErrors();
