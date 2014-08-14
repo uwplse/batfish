@@ -60,7 +60,9 @@ batfish_analyze_history(){
    local TEST_RIG1=$PWD/test-$PREV_COMMIT/test-$PREV_COMMIT-subgroup-00
    local PREFIX=$3
    local TMP_RESULT=$PWD/$PREFIX-tmpres
+   local TMP_RESULT_ERR=$PWD/$PREFIX-tmpres-err
    local CMP_RESULT=$PWD/$PREFIX-cmpres
+{
    batfish_generate_commit $UCLA_GIT_ROOT $PREV_COMMIT || return 1 ;
    rm -rf $ORI_TEST_RIG1 
    sed -n '2,$p' $COMMITS | while read line
@@ -71,10 +73,11 @@ batfish_analyze_history(){
 	batfish_generate_commit $UCLA_GIT_ROOT $SEC_COMMIT || return 1 ;
    	rm -rf $ORI_TEST_RIG2 
 	batfish -commits $TEST_RIG1 $TEST_RIG2 || return 1 ;
-	TEST_RIG1=$TEST_TIG2
+	TEST_RIG1=$TEST_RIG2
 	rm -rf $PWD/test-$PREV_COMMIT
 	PREV_COMMIT=$SEC_COMMIT
    done
+} > $TMP_RESULT 2>$TMP_RESULT_ERR
    sed -n '/Compare/,/End Compare/p' $TMP_RESULT > $CMP_RESULT 
 }
 export -f batfish_analyze_history
