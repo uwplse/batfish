@@ -57,10 +57,8 @@ batfish_analyze_history(){
    local OLD_PWD=$PWD
    local PREV_COMMIT=$(head $COMMITS -n 1)
    local ORI_TEST_RIG1=$PWD/ucla_configs-$PREV_COMMIT
-   local TEST_RIG1=$PWD/test-$PREV_COMMIT/test-$PREV_COMMIT-subgroup-00
+   local TEST_RIG1=$PWD/test-$PREV_COMMIT
    local PREFIX=$3
-   batfish_generate_commit $UCLA_GIT_ROOT $PREV_COMMIT || return 1 ;
-   rm -rf $ORI_TEST_RIG1 
    sed -n '2,$p' $COMMITS | while read line
    do
 	SEC_COMMIT=$line
@@ -68,10 +66,8 @@ batfish_analyze_history(){
         TMP_RESULT_ERR=$PWD/$PREFIX-tmpres-err-$PREV_COMMIT-$SEC_COMMIT
         CMP_RESULT=$PWD/$PREFIX-cmpres-$PREV_COMMIT-$SEC_COMMIT
 {
-        TEST_RIG2=$PWD/test-$SEC_COMMIT/test-$SEC_COMMIT-subgroup-00
+        TEST_RIG2=$PWD/test-$SEC_COMMIT
         ORI_TEST_RIG2=$PWD/ucla_configs-$SEC_COMMIT
-	batfish_generate_commit $UCLA_GIT_ROOT $SEC_COMMIT || return 1 ;
-   	rm -rf $ORI_TEST_RIG2 
 	batfish -commits $TEST_RIG1 $TEST_RIG2 || return 1 ;
 	TEST_RIG1=$TEST_RIG2
 	rm -rf $PWD/test-$PREV_COMMIT
@@ -107,11 +103,9 @@ batfish_analyze_self_helper(){
    local CMP_RESULT=$PWD/cmpres_self/cmpres_self-$SEC_COMMIT
    local FAIL_COMMIT=$PWD/fail_commits
    {
-   TEST_RIG2=$PWD/test-$SEC_COMMIT/test-$SEC_COMMIT-subgroup-00
+   TEST_RIG2=$PWD/test-$SEC_COMMI
    ORI_TEST_RIG2=$PWD/ucla_configs-$SEC_COMMIT
    TODELETE_TEST_RIG2=$PWD/test-$SEC_COMMIT
-   batfish_generate_commit $UCLA_GIT_ROOT $SEC_COMMIT || return 1 ;
-   rm -rf $ORI_TEST_RIG2 
    batfish -ee -commits $TEST_RIG2 $TEST_RIG2 || local FAILED=1
    rm -rf $TODELETE_TEST_RIG2
    if [ -n "$FAILED" ];	then
