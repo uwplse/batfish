@@ -34,4 +34,30 @@ public class SubRange implements Serializable, RepresentationObject {
       SubRange rhs = (SubRange) o;
       return (_start == rhs.getStart() && _end == rhs.getEnd());
    }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.print("+ " + string + "SubRange(" + _start + "," + _end
+               + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.print("- " + string + "SubRange(" + _start + "," + _end
+               + "\n");
+         System.out.flush();
+         return;
+      }
+      if (!equalsRepresentation(o)) {
+         SubRange rhs = (SubRange) o;
+         System.out.print("- " + string + "SubRange(" + _start + "," + _end
+               + "\n");
+         System.out.print("+ " + string + "SubRange(" + rhs._start + ","
+               + rhs._end + "\n");
+         System.out.flush();
+      }
+      return;
+   }
 }

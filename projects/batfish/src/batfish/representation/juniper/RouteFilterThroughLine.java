@@ -1,5 +1,6 @@
 package batfish.representation.juniper;
 
+import batfish.representation.RepresentationObject;
 import batfish.util.Util;
 
 public class RouteFilterThroughLine extends RouteFilterLine {
@@ -55,6 +56,55 @@ public class RouteFilterThroughLine extends RouteFilterLine {
             && Util.equalOrNull(_secondPrefix, rhsLine._secondPrefix)
             && _secondPrefixLength == rhsLine._secondPrefixLength;
 
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._prefix:" + Util.objectToString(_prefix) + "\n");
+         System.out.println("+ " + string + "._prefixLength:" + _prefixLength + "\n");
+         System.out.println("+ " + string + "._secondPrefix:" + Util.objectToString(_secondPrefix) + "\n");
+         System.out.println("+ " + string + "._secondPrefixLength:" + _secondPrefixLength + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._prefix:" + Util.objectToString(_prefix) + "\n");
+         System.out.println("- " + string + "._prefixLength:" + _prefixLength + "\n");
+         System.out.println("- " + string + "._secondPrefix:" + Util.objectToString(_secondPrefix) + "\n");
+         System.out.println("- " + string + "._secondPrefixLength:" + _secondPrefixLength + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (((RouteFilterLine) o).getType() != RouteFilterLineType.THROUGH) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      RouteFilterThroughLine rhs = (RouteFilterThroughLine) o;
+      if (!Util.equalOrNull(_prefix, rhs._prefix)) {
+         System.out.println("- " + string + "._prefix:" + Util.objectToString(_prefix) + "\n");
+         System.out.println("+ " + string + "._prefix:" + Util.objectToString(rhs._prefix) + "\n");
+      }
+      if (_prefixLength != rhs._prefixLength) {
+         System.out.println("- " + string + "._prefixLength:" + _prefixLength + "\n");
+         System.out.println("+ " + string + "._prefixLength:" + rhs._prefixLength + "\n");
+      }
+      if (!Util.equalOrNull(_secondPrefix, rhs._secondPrefix)) {
+         System.out.println("- " + string + "._secondPrefix:" + Util.objectToString(_secondPrefix) + "\n");
+         System.out.println("+ " + string + "._secondPrefix:" + Util.objectToString(rhs._secondPrefix) + "\n");
+      }
+      if (_secondPrefixLength != rhs._secondPrefixLength) {
+         System.out.println("- " + string + "._secondPrefixLength:" + _secondPrefixLength + "\n");
+         System.out.println("+ " + string + "._secondPrefixLength:" + rhs._secondPrefixLength + "\n");
+      }
+      System.out.flush();
+      return;
    }
 
 }

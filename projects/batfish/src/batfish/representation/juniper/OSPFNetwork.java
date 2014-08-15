@@ -46,4 +46,57 @@ public class OSPFNetwork implements RepresentationObject {
             && Util.equalOrNull(_interface, rhs._interface);
    }
 
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._networkAddress:"
+               + Util.objectToString(_networkAddress) + "\n");
+         System.out.println("+ " + string + "._subnetMask:"
+               + Util.objectToString(_subnetMask) + "\n");
+         System.out.println("+ " + string + "._interface:"
+               + Util.objectToString(_interface) + "\n");
+         System.out.println("+ " + string + "._area:" + _area + "\n");
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._networkAddress:"
+               + Util.objectToString(_networkAddress) + "\n");
+         System.out.println("- " + string + "._subnetMask:"
+               + Util.objectToString(_subnetMask) + "\n");
+         System.out.println("- " + string + "._interface:"
+               + Util.objectToString(_interface) + "\n");
+         System.out.println("- " + string + "._area:" + _area + "\n");
+         return;
+      }
+
+      OSPFNetwork rhs = (OSPFNetwork) o;
+      if (!Util.equalOrNull(_networkAddress, rhs._networkAddress)) {
+         System.out.println("- " + string + "._networkAddress:"
+               + Util.objectToString(_networkAddress) + "\n");
+         System.out.println("+ " + string + "._networkAddress:"
+               + Util.objectToString(rhs._networkAddress) + "\n");
+      }
+      if (!Util.equalOrNull(_subnetMask, rhs._subnetMask)) {
+         System.out.println("- " + string + "._subnetMask:"
+               + Util.objectToString(_subnetMask) + "\n");
+         System.out.println("+ " + string + "._subnetMask:"
+               + Util.objectToString(rhs._subnetMask) + "\n");
+      }
+      if (!Util.equalOrNull(_interface, rhs._interface)) {
+         System.out.println("- " + string + "._interface:"
+               + Util.objectToString(_interface) + "\n");
+         System.out.println("+ " + string + "._interface:"
+               + Util.objectToString(rhs._interface) + "\n");
+      }
+      if (_area != rhs._area) {
+         System.out.println("- " + string + "._area:" + _area + "\n");
+         System.out.println("+ " + string + "._area:" + rhs._area + "\n");
+      }
+      System.out.flush();
+      return;
+   }
+
 }

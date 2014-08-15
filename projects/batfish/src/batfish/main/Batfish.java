@@ -80,6 +80,7 @@ import batfish.representation.Configuration;
 import batfish.representation.Edge;
 import batfish.representation.Ip;
 import batfish.representation.Protocol;
+import batfish.representation.RepresentationObject;
 import batfish.representation.Topology;
 import batfish.representation.VendorConfiguration;
 import batfish.representation.VendorConversionException;
@@ -450,7 +451,7 @@ public class Batfish {
          String node = vconfig.getHostname();
          CiscoVendorConfiguration config = null;
          try {
-            config = (CiscoVendorConfiguration)vconfig;
+            config = (CiscoVendorConfiguration) vconfig;
          }
          catch (ClassCastException e) {
             continue;
@@ -556,48 +557,28 @@ public class Batfish {
          quit(1);
       }
 
-      boolean changed = false;
-
       print(1, "*** Compare ***\n");
       print(1, "Compare between " + _settings.getCommits().get(0) + ":"
             + _settings.getCommits().get(1) + "\n");
       for (Entry<String, VendorConfiguration> e : firstConfigurations
             .entrySet()) {
          if (secondConfigurations.containsKey(e.getKey())) {
-            if (firstConfigurations.get(e.getKey()).getVendor().equals("cisco")) {
-               if (compareCiscoConfigurations(
-                     (CiscoConfiguration) firstConfigurations.get(e.getKey()),
-                     (CiscoConfiguration) secondConfigurations.get(e.getKey())))
-                  changed = true;
-            }
-            else if (firstConfigurations.get(e.getKey()).getVendor()
-                  .equals("juniper")) {
-               if (compareJuniperConfigurations(
-                     (JuniperVendorConfiguration) firstConfigurations.get(e
-                           .getKey()),
-                     (JuniperVendorConfiguration) secondConfigurations.get(e
-                           .getKey())))
-                  changed = true;
-            }
+               ((RepresentationObject)firstConfigurations.get(e.getKey())).diffRepresentation(secondConfigurations.get(e.getKey()), "router:"
+                     + firstConfigurations.get(e.getKey()).getHostname(), false);
          }
          else {
-            print(1, "REMOVED NODE:"
-                  + firstConfigurations.get(e.getKey()).getHostname() + "\n\n");
+            ((RepresentationObject)firstConfigurations.get(e.getKey())).diffRepresentation(null, "router:"
+                  + firstConfigurations.get(e.getKey()).getHostname(), false);
          }
       }
 
       Set<String> tmpSet = secondConfigurations.keySet();
       tmpSet.removeAll(firstConfigurations.keySet());
       for (String hostname : tmpSet) {
-         print(1, "ADDED NODE:" + hostname + "\n\n");
+         ((RepresentationObject)secondConfigurations.get(hostname)).diffRepresentation(null, "router:"
+               + secondConfigurations.get(hostname).getHostname(), true);
       }
 
-      if (changed) {
-         print(1, "FINAL:CHANGED\n");
-      }
-      else {
-         print(1, "FINAL:UNCHANGED\n");
-      }
       print(1, "*** End Compare***\n\n");
 
    }
@@ -1720,7 +1701,7 @@ public class Batfish {
                interfaceChanged = true;
                print(1, "_outgoingFilter, ");
             }
-            
+
             if (!Util.equalOrNull(interface1.getRoutingPolicy(),
                   interface2.getRoutingPolicy())) {
                interfaceChanged = true;
@@ -2113,42 +2094,6 @@ public class Batfish {
       return vendorConfigurations;
    }
 
-   public void getDiff() {
-      // Map<File, String> configurationData1 = readConfigurationFiles(_settings
-      // .getTestRigPath());
-      // Map<File, String> configurationData2 = readConfigurationFiles(_settings
-      // .getSecondTestRigPath());
-      //
-      // List<Configuration> firstConfigurations =
-      // parseConfigFiles(configurationData1);
-      // if (firstConfigurations == null) {
-      // quit(1);
-      // }
-      // List<Configuration> secondConfigurations =
-      // parseConfigFiles(configurationData2);
-      // if (secondConfigurations == null) {
-      // quit(1);
-      // }
-      // if (firstConfigurations.size() != secondConfigurations.size()) {
-      // System.out.println("Size MISMATCH");
-      // quit(1);
-      // }
-      // Collections.sort(firstConfigurations);
-      // Collections.sort(secondConfigurations);
-      // boolean finalRes = true;
-      // for (int i = 0; i < firstConfigurations.size(); i++) {
-      // boolean res = (firstConfigurations.get(i).sameParseTree(
-      // secondConfigurations.get(i), firstConfigurations.get(i)
-      // .getName() + " MISMATCH"));
-      // if (res == false) {
-      // finalRes = false;
-      // }
-      // }
-      // if (finalRes == true) {
-      // System.out.println("MATCH");
-      // }
-   }
-
    private double getElapsedTime(long beforeTime) {
       long difference = System.currentTimeMillis() - beforeTime;
       double seconds = difference / 1000d;
@@ -2475,10 +2420,8 @@ public class Batfish {
       }
       else {
          print(0, "...OK, PRINTING PARSE TREE:\n");
-         print(0,
-               ParseTreePrettyPrinter.print(tree,
-                     parser.getParser())
-                     + "\n\n");
+         print(0, ParseTreePrettyPrinter.print(tree, parser.getParser())
+               + "\n\n");
       }
       ParseTreeWalker walker = new ParseTreeWalker();
       walker.walk(extractor, tree);
@@ -2906,11 +2849,6 @@ public class Batfish {
          quit(0);
       }
 
-      if (_settings.getDiff()) {
-         getDiff();
-         quit(0);
-      }
-      
       if (_settings.getDr()) {
          DeptGenerator gen = new DeptGenerator(this, _settings, SEPARATOR);
          gen.generateDeptRouters();
@@ -2922,7 +2860,7 @@ public class Batfish {
          getCompare();
          quit(0);
       }
-      
+
       if (_settings.getConcretize()) {
          concretize();
          quit(0);

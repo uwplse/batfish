@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-public class PolicyStatement {
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
+public class PolicyStatement implements RepresentationObject{
    private NavigableMap<Integer, PolicyStatementClause> _clauses;
    private String _mapName;
 
@@ -29,6 +32,43 @@ public class PolicyStatement {
 
    public String getMapName() {
       return _mapName;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      // TODO Auto-generated method stub
+      return false;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         Util.diffRepresentationMaps(null, _clauses, string + "._clauses");
+         System.out.println("+ " + string + "._mapName:" + Util.objectToString(_mapName)
+               + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         Util.diffRepresentationMaps(_clauses, null, string + "._clauses");
+         System.out.println("- " + string + "._mapName:" + Util.objectToString(_mapName)
+               + "\n");
+         System.out.flush();
+         return;
+      }
+
+      PolicyStatement rhs = (PolicyStatement) o;
+      Util.diffRepresentationMaps(_clauses, rhs._clauses, string + "._clauses");
+      if (!Util.equalOrNull(_mapName, rhs._mapName)) {
+         System.out.println("- " + string + "._mapName:" + Util.objectToString(_mapName)
+               + "\n");
+         System.out.println("+ " + string + "._mapName:"
+               + Util.objectToString(rhs._mapName) + "\n");
+      }
+      
+      System.out.flush();
+      return;
    }
 
 }

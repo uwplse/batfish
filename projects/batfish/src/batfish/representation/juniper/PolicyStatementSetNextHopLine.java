@@ -2,6 +2,7 @@ package batfish.representation.juniper;
 
 import java.util.List;
 
+import batfish.representation.RepresentationObject;
 import batfish.util.Util;
 
 public class PolicyStatementSetNextHopLine extends PolicyStatementSetLine {
@@ -29,6 +30,34 @@ public class PolicyStatementSetNextHopLine extends PolicyStatementSetLine {
 
       PolicyStatementSetNextHopLine rhsLine = (PolicyStatementSetNextHopLine) o;
       return Util.cmpRepresentationLists(_nextHops, rhsLine._nextHops) == 0;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         Util.diffRepresentationLists(null, _nextHops, string + "._nextHops");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         Util.diffRepresentationLists(_nextHops, null, string + "._nextHops");
+         System.out.flush();
+         return;
+      }
+
+      if (((PolicyStatementSetLine) o).getSetType() != SetType.NEXT_HOP) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      PolicyStatementSetNextHopLine rhs = (PolicyStatementSetNextHopLine) o;
+      Util.diffRepresentationLists(_nextHops, rhs._nextHops, string + "._nextHops");
+      System.out.flush();
+      return;
    }
 
 }

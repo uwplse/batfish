@@ -1,5 +1,6 @@
 package batfish.representation.juniper;
 
+import batfish.representation.RepresentationObject;
 import batfish.util.Util;
 
 public class PolicyStatementSetAdditiveCommunityLine extends
@@ -28,6 +29,37 @@ public class PolicyStatementSetAdditiveCommunityLine extends
 
       PolicyStatementSetAdditiveCommunityLine rhsLine = (PolicyStatementSetAdditiveCommunityLine) o;
       return Util.equalOrNull(_communities, rhsLine._communities);
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._communities:" + Util.objectToString(_communities) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._communities:" + Util.objectToString(_communities) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (((PolicyStatementSetLine) o).getSetType() != SetType.ADDITIVE_COMMUNITY) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      PolicyStatementSetAdditiveCommunityLine rhs = (PolicyStatementSetAdditiveCommunityLine) o;
+      if (!Util.equalOrNull(_communities, rhs._communities)) {
+         System.out.println("- " + string + "._communities:" + Util.objectToString(_communities) + "\n");
+         System.out.println("+ " + string + "._communities:" + Util.objectToString(rhs._communities) + "\n");
+      }
+      System.out.flush();
+      return;
    }
 
 }

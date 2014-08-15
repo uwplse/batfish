@@ -118,4 +118,77 @@ public class BGPGroup implements RepresentationObject {
             && _isExternal == rhs._isExternal;
    }
 
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._clusterId:"
+               + Util.objectToString(_clusterId) + "\n");
+         System.out.println("+ " + string + "._name:"
+               + Util.objectToString(_name) + "\n");
+         System.out.println("+ " + string + "._localAS:"
+               + Util.objectToString(_localAS) + "\n");
+         System.out.println("+ " + string + "._routeReflectorClient:"
+               + _routeReflectorClient + "\n");
+         Util.diffRepresentationLists(null, _neighbors, string + "._neighbors");
+         System.out.println("+ " + string + "._isExternal:" + _isExternal
+               + "\n");
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._clusterId:"
+               + Util.objectToString(_clusterId) + "\n");
+         System.out.println("- " + string + "._name:"
+               + Util.objectToString(_name) + "\n");
+         System.out.println("- " + string + "._localAS:"
+               + Util.objectToString(_localAS) + "\n");
+         System.out.println("- " + string + "._routeReflectorClient:"
+               + _routeReflectorClient + "\n");
+         Util.diffRepresentationLists(_neighbors, null, string + "._neighbors");
+         System.out.println("- " + string + "._isExternal:" + _isExternal
+               + "\n");
+         return;
+      }
+
+      BGPGroup rhs = (BGPGroup) o;
+      if (!Util.equalOrNull(_clusterId, rhs._clusterId)) {
+         System.out.println("- " + string + "._clusterId:"
+               + Util.objectToString(_clusterId) + "\n");
+         System.out.println("+ " + string + "._clusterId:"
+               + Util.objectToString(rhs._clusterId) + "\n");
+      }
+      if (!Util.equalOrNull(_name, rhs._name)) {
+         System.out.println("- " + string + "._name:"
+               + Util.objectToString(_name) + "\n");
+         System.out.println("+ " + string + "._name:"
+               + Util.objectToString(rhs._name) + "\n");
+      }
+      if (!Util.equalOrNull(_localAS, rhs._localAS)) {
+         System.out.println("- " + string + "._localAS:"
+               + Util.objectToString(_localAS) + "\n");
+         System.out.println("+ " + string + "._localAS:"
+               + Util.objectToString(rhs._localAS) + "\n");
+      }
+      if (!Util.equalOrNull(_routeReflectorClient, rhs._routeReflectorClient)) {
+         System.out.println("- " + string + "._routeReflectorClient:"
+               + Util.objectToString(_routeReflectorClient) + "\n");
+         System.out.println("+ " + string + "._routeReflectorClient:"
+               + Util.objectToString(rhs._routeReflectorClient) + "\n");
+      }
+
+      Util.diffRepresentationLists(_neighbors, rhs._neighbors, string
+            + "._neighbors");
+
+      if (_isExternal != rhs._isExternal) {
+         System.out.println("- " + string + "._isExternal:" + _isExternal
+               + "\n");
+         System.out.println("+ " + string + "._isExternal:" + rhs._isExternal
+               + "\n");
+      }
+      System.out.flush();
+      return;
+   }
+
 }

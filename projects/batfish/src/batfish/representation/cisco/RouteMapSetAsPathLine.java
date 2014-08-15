@@ -32,4 +32,10 @@ public class RouteMapSetAsPathLine extends RouteMapSetLine {
       return RouteMapSetType.AS_PATH;
    }
 
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      // TODO Auto-generated method stub
+
+   }
+
 }

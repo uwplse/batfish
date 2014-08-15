@@ -10,10 +10,13 @@ import java.util.Set;
 
 import batfish.representation.Ip;
 import batfish.representation.Protocol;
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
-public class BgpProcess implements Serializable {
+public class BgpProcess implements Serializable,RepresentationObject {
 
    private static final long serialVersionUID = 1L;
+
    private Set<Ip> _activatedNeighbors;
    private Map<BgpNetwork, Boolean> _aggregateNetworks;
    private Map<String, BgpPeerGroup> _allPeerGroups;
@@ -251,6 +254,84 @@ public class BgpProcess implements Serializable {
 
    public void setRouterId(Ip routerId) {
       _routerId = routerId;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      // TODO Auto-generated method stub
+      return false;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         Util.diffRepresentationSets(null, _activatedNeighbors, string + "._activatedNeighbors");
+         Util.diffRepresentationMaps(null, _aggregateNetworks, string + "._aggregateNetworks");
+         System.out.println("+ " + string + "._clusterId:" + Util.objectToString(_clusterId) + "\n");
+         System.out.println("+ " + string + "._defaultMetric:" + _defaultMetric + "\n");
+         System.out.println("+ " + string + "._defaultNeighborActivate:" + _defaultNeighborActivate + "\n");
+         Util.diffRepresentationMaps(null, _ipPeerGroups, string + "._ipPeerGroups");
+         Util.diffRepresentationMaps(null, _namedPeerGroups, string + "._namedPeerGroups");
+         Util.diffRepresentationSets(null, _networks, string + "._networks");
+         System.out.println("+ " + string + "._pid:" + _pid + "\n");
+         Util.diffRepresentationMaps(null, _redistributionPolicies, string + "._redistributionPolicies");
+         System.out.println("+ " + string + "._routerId:" + Util.objectToString(_routerId) + "\n");
+         Util.diffRepresentationSets(null, _shutdownNeighbors, string + "._shutdownNeighbors");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         Util.diffRepresentationSets(_activatedNeighbors, null, string + "._activatedNeighbors");
+         Util.diffRepresentationMaps(_aggregateNetworks, null, string + "._aggregateNetworks");
+         System.out.println("- " + string + "._clusterId:" + Util.objectToString(_clusterId) + "\n");
+         System.out.println("- " + string + "._defaultMetric:" + _defaultMetric + "\n");
+         System.out.println("- " + string + "._defaultNeighborActivate:" + _defaultNeighborActivate + "\n");
+         Util.diffRepresentationMaps(_ipPeerGroups, null, string + "._ipPeerGroups");
+         Util.diffRepresentationMaps(_namedPeerGroups, null, string + "._namedPeerGroups");
+         Util.diffRepresentationSets(_networks, null, string + "._networks");
+         System.out.println("- " + string + "._pid:" + _pid + "\n");
+         Util.diffRepresentationMaps(_redistributionPolicies, null, string + "._redistributionPolicies");
+         System.out.println("- " + string + "._routerId:" + Util.objectToString(_routerId) + "\n");
+         Util.diffRepresentationSets(_shutdownNeighbors, null, string + "._shutdownNeighbors");
+         System.out.flush();
+         return;
+      }
+
+      BgpProcess rhs = (BgpProcess) o;
+      Util.diffRepresentationSets(_activatedNeighbors, rhs._activatedNeighbors, string + "._activatedNeighbors");
+      Util.diffRepresentationMaps(_aggregateNetworks, rhs._aggregateNetworks, string + "._aggregateNetworks");
+      if (!Util.equalOrNull(_clusterId, rhs._clusterId)) {
+         System.out.println("- " + string + "._clusterId:" + Util.objectToString(_clusterId) + "\n");
+         System.out.println("+ " + string + "._clusterId:" + Util.objectToString(rhs._clusterId) + "\n");
+      }
+      if (_defaultMetric != rhs._defaultMetric) {
+         System.out.println("- " + string + "._defaultMetric:" + _defaultMetric + "\n");
+         System.out.println("+ " + string + "._defaultMetric:" + rhs._defaultMetric + "\n");
+      }
+      if (_defaultNeighborActivate != rhs._defaultNeighborActivate) {
+         System.out.println("- " + string + "._defaultNeighborActivate:" + _defaultNeighborActivate + "\n");
+         System.out.println("+ " + string + "._defaultNeighborActivate:" + rhs._defaultNeighborActivate
+               + "\n");
+      }
+      Util.diffRepresentationMaps(_ipPeerGroups, rhs._ipPeerGroups, string + "._ipPeerGroups");
+      Util.diffRepresentationMaps(_namedPeerGroups, rhs._namedPeerGroups, string + "._namedPeerGroups");
+      Util.diffRepresentationSets(_networks, rhs._networks, string + "._networks");
+      if (_pid != rhs._pid) {
+         System.out.println("- " + string + "._pid:" + _pid + "\n");
+         System.out.println("+ " + string + "._pid:" + rhs._pid
+               + "\n");
+      }
+      Util.diffRepresentationMaps(_redistributionPolicies, rhs._redistributionPolicies, string + "._redistributionPolicies");
+      if (!Util.equalOrNull(_routerId, rhs._routerId)) {
+         System.out.println("- " + string + "._routerId:" + Util.objectToString(_routerId) + "\n");
+         System.out.println("+ " + string + "._routerId:" + Util.objectToString(rhs._routerId) + "\n");
+      }
+      Util.diffRepresentationSets(_shutdownNeighbors, rhs._shutdownNeighbors, string + "._shutdownNeighbors");
+      System.out.flush();
+      return;
    }
 
 }

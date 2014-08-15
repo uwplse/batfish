@@ -1,5 +1,8 @@
 package batfish.representation.cisco;
 
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
 public class RouteMapMatchNeighborLine extends RouteMapMatchLine {
 
    private static final long serialVersionUID = 1L;
@@ -27,6 +30,44 @@ public class RouteMapMatchNeighborLine extends RouteMapMatchLine {
 
       RouteMapMatchNeighborLine rhsLine = (RouteMapMatchNeighborLine) o;
       return getNeighborIp().equals(rhsLine.getNeighborIp());
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._neighborIp:"
+               + Util.objectToString(_neighborIp) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._neighborIp:"
+               + Util.objectToString(_neighborIp) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.NEIGHBOR) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      RouteMapMatchNeighborLine rhs = (RouteMapMatchNeighborLine) o;
+
+      if (!Util.equalOrNull(_neighborIp, rhs._neighborIp)) {
+         System.out.println("- " + string + "._neighborIp:"
+               + Util.objectToString(_neighborIp) + "\n");
+         System.out.println("+ " + string + "._neighborIp:"
+               + Util.objectToString(rhs._neighborIp) + "\n");
+      }
+
+      System.out.flush();
+      return;
+
    }
 
 }

@@ -2,6 +2,9 @@ package batfish.representation.cisco;
 
 import java.util.List;
 
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
 public class RouteMapMatchProtocolLine extends RouteMapMatchLine {
 
    private static final long serialVersionUID = 1L;
@@ -29,5 +32,37 @@ public class RouteMapMatchProtocolLine extends RouteMapMatchLine {
 
       RouteMapMatchProtocolLine rhsLine = (RouteMapMatchProtocolLine) o;
       return getProtocl().equals(rhsLine.getProtocl());
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         Util.diffRepresentationLists(null, _protocol, string + "._protocol");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         Util.diffRepresentationLists(_protocol, null, string + "._protocol");
+         System.out.flush();
+         return;
+      }
+
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.PROTOCOL) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      RouteMapMatchProtocolLine rhs = (RouteMapMatchProtocolLine) o;
+
+      Util.diffRepresentationLists(_protocol, rhs._protocol, string
+            + "._protocol");
+
+      System.out.flush();
+      return;
+
    }
 }
