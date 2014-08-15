@@ -5,6 +5,8 @@ import java.util.List;
 import batfish.representation.Configuration;
 import batfish.representation.PolicyMapSetCommunityLine;
 import batfish.representation.PolicyMapSetLine;
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
 public class RouteMapSetCommunityLine extends RouteMapSetLine {
 
@@ -38,6 +40,39 @@ public class RouteMapSetCommunityLine extends RouteMapSetLine {
    @Override
    public RouteMapSetType getType() {
       return RouteMapSetType.COMMUNITY;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         Util.diffRepresentationLists(null, _communities, string
+               + "._communities");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         Util.diffRepresentationLists(_communities, null, string
+               + "._communities");
+         System.out.flush();
+         return;
+      }
+
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.COMMUNITY) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      RouteMapSetCommunityLine rhs = (RouteMapSetCommunityLine) o;
+
+      Util.diffRepresentationLists(_communities, rhs._communities, string
+            + "._communities");
+
+      System.out.flush();
+      return;
    }
 
 }

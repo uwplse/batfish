@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import batfish.representation.Ip;
 import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
 public class BgpNetwork implements Serializable, RepresentationObject {
 
@@ -38,7 +39,40 @@ public class BgpNetwork implements Serializable, RepresentationObject {
 
    @Override
    public boolean equalsRepresentation(Object o) {
-      return equals(o);
+      // TODO Auto-generated method stub
+      return false;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._networkAddress:" + Util.objectToString(_networkAddress) + "\n");
+         System.out.println("+ " + string + "._subnetMask:" + Util.objectToString(_subnetMask) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._networkAddress:" + Util.objectToString(_networkAddress) + "\n");
+         System.out.println("- " + string + "._subnetMask:" + Util.objectToString(_subnetMask) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      BgpNetwork rhs = (BgpNetwork) o;
+      if (!Util.equalOrNull(_networkAddress, rhs._networkAddress)) {
+         System.out.println("- " + string + "._networkAddress:" + Util.objectToString(_networkAddress) + "\n");
+         System.out.println("+ " + string + "._networkAddress:" + Util.objectToString(rhs._networkAddress) + "\n");
+      }
+      if (!Util.equalOrNull(_subnetMask, rhs._subnetMask)) {
+         System.out.println("- " + string + "._subnetMask:" + Util.objectToString(_subnetMask) + "\n");
+         System.out.println("+ " + string + "._subnetMask:" + Util.objectToString(rhs._subnetMask) + "\n");
+      }
+      
+      System.out.flush();
+      return;
    }
 
 }

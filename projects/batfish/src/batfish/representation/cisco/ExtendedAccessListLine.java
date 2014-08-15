@@ -109,4 +109,68 @@ public class ExtendedAccessListLine implements Serializable,
             && Util.cmpRepresentationLists(_srcPortRanges, rhs._srcPortRanges) == 0
             && Util.equalOrNull(_srcWildcard, rhs._srcWildcard);
    }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._action:" + Util.objectToString(_action) + "\n");
+         System.out.println("+ " + string + "._dstIp:" + Util.objectToString(_dstIp) + "\n");
+         Util.diffRepresentationLists(null, _dstPortRanges, string + "._dstPortRanges");
+         System.out.println("+ " + string + "._dstWildcard:" + Util.objectToString(_dstWildcard) + "\n");
+         System.out.println("+ " + string + "._protocol:" + _protocol + "\n");
+         System.out.println("+ " + string + "._srcIp:" + Util.objectToString(_srcIp) + "\n");
+         Util.diffRepresentationLists(null, _srcPortRanges, string + "._srcPortRanges");
+         System.out.println("+ " + string + "._srcWildcard:" + Util.objectToString(_srcWildcard) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._action:" + Util.objectToString(_action) + "\n");
+         System.out.println("- " + string + "._dstIp:" + Util.objectToString(_dstIp) + "\n");
+         Util.diffRepresentationLists(_dstPortRanges, null, string + "._dstPortRanges");
+
+         System.out.println("- " + string + "._dstWildcard:" + Util.objectToString(_dstWildcard) + "\n");
+         System.out.println("- " + string + "._protocol:" + _protocol + "\n");
+         System.out.println("- " + string + "._srcIp:" + Util.objectToString(_srcIp) + "\n");
+         Util.diffRepresentationLists(_srcPortRanges, null, string + "._srcPortRanges");
+         System.out.println("- " + string + "._srcWildcard:" + Util.objectToString(_srcWildcard) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      ExtendedAccessListLine rhs = (ExtendedAccessListLine) o;
+
+      if (!Util.equalOrNull(_action, rhs._action)) {
+         System.out.println("- " + string + "._action:" + Util.objectToString(_action) + "\n");
+         System.out.println("+ " + string + "._action:" + Util.objectToString(rhs._action) + "\n");
+      }
+      if (!Util.equalOrNull(_dstIp, rhs._dstIp)) {
+         System.out.println("- " + string + "._dstIp:" + Util.objectToString(_dstIp) + "\n");
+         System.out.println("+ " + string + "._dstIp:" + Util.objectToString(rhs._dstIp) + "\n");
+      }
+      Util.diffRepresentationLists(_dstPortRanges, rhs._dstPortRanges, string + "._dstPortRanges");
+      if (!Util.equalOrNull(_dstWildcard, rhs._dstWildcard)) {
+         System.out.println("- " + string + "._dstWildcard:" + Util.objectToString(_dstWildcard) + "\n");
+         System.out.println("+ " + string + "._dstWildcard:" + Util.objectToString(rhs._dstWildcard) + "\n");
+      }
+      if (_protocol != rhs._protocol) {
+         System.out.println("- " + string + "._protocol:" + _protocol + "\n");
+         System.out.println("+ " + string + "._protocol:" + rhs._protocol + "\n");
+      }
+      if (!Util.equalOrNull(_srcIp, rhs._srcIp)) {
+         System.out.println("- " + string + "._srcIp:" + Util.objectToString(_srcIp) + "\n");
+         System.out.println("+ " + string + "._srcIp:" + Util.objectToString(rhs._srcIp) + "\n");
+      }
+      Util.diffRepresentationLists(_srcPortRanges, rhs._srcPortRanges, string + "._srcPortRanges");
+      if (!Util.equalOrNull(_srcWildcard, rhs._srcWildcard)) {
+         System.out.println("- " + string + "._srcWildcard:" + Util.objectToString(_srcWildcard) + "\n");
+         System.out.println("+ " + string + "._srcWildcard:" + Util.objectToString(rhs._srcWildcard) + "\n");
+      }
+      
+      System.out.flush();
+      return;
+   }
 }

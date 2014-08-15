@@ -3,6 +3,7 @@ package batfish.representation.cisco;
 import batfish.representation.Configuration;
 import batfish.representation.PolicyMapSetLine;
 import batfish.representation.PolicyMapSetMetricLine;
+import batfish.representation.RepresentationObject;
 
 public class RouteMapSetMetricLine extends RouteMapSetLine {
 
@@ -36,5 +37,36 @@ public class RouteMapSetMetricLine extends RouteMapSetLine {
 
       RouteMapSetMetricLine rhsLine = (RouteMapSetMetricLine) o;
       return getMetric() == (rhsLine.getMetric());
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._metric:" + _metric + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._metric:" + _metric + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.METRIC) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      RouteMapSetMetricLine rhs = (RouteMapSetMetricLine) o;
+      if (_metric != rhs._metric) {
+         System.out.println("- " + string + "._metric:" + _metric + "\n");
+         System.out.println("+ " + string + "._metric:" + rhs._metric + "\n");
+      }
+      System.out.flush();
+      return;
    }
 }

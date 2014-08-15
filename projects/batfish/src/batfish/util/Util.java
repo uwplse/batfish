@@ -1,5 +1,6 @@
 package batfish.util;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class Util {
          java.util.List<E> c2) {
       if (c1 == null && c2 == null)
          return 0;
-      if (c1 == null )
+      if (c1 == null)
          return 1;
       if (c2 == null)
          return 2;
@@ -66,7 +67,7 @@ public class Util {
    public static <E> int cmpRepresentationSets(Set<E> c1, Set<E> c2) {
       if (c1 == null && c2 == null)
          return 0;
-      if (c1 == null )
+      if (c1 == null)
          return 1;
       if (c2 == null)
          return 2;
@@ -84,11 +85,10 @@ public class Util {
       return 0;
    }
 
-   public static <K, V> int cmpRepresentationMaps(Map<K, V> c1,
-         Map<K, V> c2) {
+   public static <K, V> int cmpRepresentationMaps(Map<K, V> c1, Map<K, V> c2) {
       if (c1 == null && c2 == null)
          return 0;
-      if (c1 == null )
+      if (c1 == null)
          return 1;
       if (c2 == null)
          return 2;
@@ -107,6 +107,192 @@ public class Util {
       }
 
       return 0;
+   }
+
+   public static <E> void diffRepresentationLists(java.util.List<E> c1,
+         java.util.List<E> c2, String string) {
+      if (c1 == null && c2 == null)
+         return;
+      if (c1 == null) {
+         int i = 0;
+         for (E e : c2) {
+            if (e instanceof RepresentationObject) {
+               ((RepresentationObject) e).diffRepresentation(null, string
+                     + ":ListElement(" + i + ")", true);
+            }
+            else {
+               System.out.println("+ " + string + ":ListElement(" + i + "):"
+                     + e + "\n");
+            }
+            i++;
+         }
+         return;
+      }
+      if (c2 == null) {
+         int i = 0;
+         for (E e : c1) {
+            if (e instanceof RepresentationObject) {
+               ((RepresentationObject) e).diffRepresentation(null, string
+                     + ":ListElement(" + i + ")", false);
+            }
+            else {
+               System.out.println("- " + string + ":ListElement(" + i + "):"
+                     + e + "\n");
+            }
+            i++;
+         }
+         return;
+      }
+
+      int i = 0;
+      Iterator<E> it = c1.iterator();
+      Iterator<E> it2 = c2.iterator();
+      for (; it.hasNext() && it2.hasNext();) {
+         E e1 = it.next();
+         E e2 = it2.next();
+         if (e1 instanceof RepresentationObject) {
+            ((RepresentationObject) e1).diffRepresentation(e2, string
+                  + ":ListElement(" + i + ")", false);
+         }
+         else {
+            if (!e1.equals(e2)) {
+               System.out.println("- " + string + ":ListElement(" + i + "):"
+                     + e1 + "\n");
+               System.out.println("+ " + string + ":ListElement(" + i + "):"
+                     + e2 + "\n");
+            }
+         }
+         i++;
+      }
+
+      while (it.hasNext()) {
+         E e = it.next();
+         if (e instanceof RepresentationObject) {
+            ((RepresentationObject) e).diffRepresentation(null, string
+                  + ":ListElement(" + i + ")", false);
+         }
+         else {
+            System.out.println("- " + string + ":ListElement(" + i + "):" + e
+                  + "\n");
+         }
+         i++;
+      }
+
+      while (it2.hasNext()) {
+         E e = it2.next();
+         if (e instanceof RepresentationObject) {
+            ((RepresentationObject) e).diffRepresentation(null, string
+                  + ":ListElement(" + i + ")", true);
+         }
+         else {
+            System.out.println("+ " + string + ":ListElement(" + i + "):" + e
+                  + "\n");
+         }
+         i++;
+      }
+
+      return;
+   }
+
+   public static <E> void diffRepresentationSets(Set<E> c1, Set<E> c2,
+         String string) {
+      if (c1 == null && c2 == null)
+         return;
+
+      Set<E> c1minc2 = new HashSet<E>();
+      Set<E> c2minc1 = new HashSet<E>();
+
+      c1minc2.addAll(c1);
+      c1minc2.removeAll(c2);
+      c2minc1.addAll(c2);
+      c2minc1.removeAll(c1);
+
+      for (E e : c1minc2) {
+         System.out.println("- " + string + ":SetElement:" + e + "\n");
+      }
+      for (E e : c2minc1) {
+         System.out.println("+ " + string + ":SetElement:" + e + "\n");
+      }
+
+      return;
+   }
+
+   public static <K, V> void diffRepresentationMaps(Map<K, V> c1, Map<K, V> c2,
+         String string) {
+      if (c1 == null && c2 == null)
+         return;
+      if (c1 == null) {
+         for (Entry<K, V> e : c2.entrySet()) {
+            if (e.getValue() instanceof RepresentationObject) {
+               ((RepresentationObject) e.getValue()).diffRepresentation(null,
+                     string + ":MapEntry(" + e.getKey() + ")", true);
+            }
+            else {
+               System.out.println("+ " + string + ":MapEntry(" + e.getKey()
+                     + "):" + e.getValue() + "\n");
+            }
+         }
+         return;
+      }
+      if (c2 == null) {
+         for (Entry<K, V> e : c1.entrySet()) {
+            if (e.getValue() instanceof RepresentationObject) {
+               ((RepresentationObject) e.getValue()).diffRepresentation(null,
+                     string + ":MapEntry(" + e.getKey() + ")", false);
+            }
+            else {
+               System.out.println("- " + string + ":MapEntry(" + e.getKey()
+                     + "):" + e.getValue() + "\n");
+            }
+         }
+         return;
+      }
+
+      Iterator<Entry<K, V>> it = c1.entrySet().iterator();
+      Iterator<Entry<K, V>> it2 = c2.entrySet().iterator();
+      for (; it.hasNext() && it2.hasNext();) {
+         Entry<K, V> e1 = it.next();
+         Entry<K, V> e2 = it2.next();
+         if (e1.getValue() instanceof RepresentationObject) {
+            ((RepresentationObject) e1.getValue()).diffRepresentation(
+                  e2.getValue(), string + ":MapEntry(" + e1.getKey() + ")",
+                  false);
+         }
+         else {
+            if (!e1.getValue().equals(e2.getValue())) {
+               System.out.println("- " + string + ":MapEntry(" + e1.getKey()
+                     + "):" + e1.getValue() + "\n");
+               System.out.println("+ " + string + ":MapEntry(" + e2.getKey()
+                     + "):" + e2.getValue() + "\n");
+            }
+         }
+      }
+
+      while (it.hasNext()) {
+         Entry<K, V> e = it.next();
+         if (e.getValue() instanceof RepresentationObject) {
+            ((RepresentationObject) e.getValue()).diffRepresentation(null,
+                  string + ":MapEntry(" + e.getKey() + ")", false);
+         }
+         else {
+            System.out.println("- " + string + ":MapEntry(" + e.getKey() + "):"
+                  + e.getValue() + "\n");
+         }
+      }
+
+      while (it2.hasNext()) {
+         Entry<K, V> e = it2.next();
+         if (e.getValue() instanceof RepresentationObject) {
+            ((RepresentationObject) e.getValue()).diffRepresentation(null,
+                  string + ":MapEntry(" + e.getKey() + ")", true);
+         }
+         else {
+            System.out.println("+ " + string + ":MapEntry(" + e.getKey() + "):"
+                  + e.getValue() + "\n");
+         }
+      }
+
+      return;
    }
 
    public static String clearDuplicateLines(String input) {
@@ -141,16 +327,16 @@ public class Util {
       }
       return s;
    }
-   
+
    public static String getIndentString(int indentLevel) {
-	   
-	   String retString = "";
-	   
-	   for (int i=0; i< indentLevel; i++) {
-		   retString += "  ";
-	   }   
-	   
-	   return retString;
+
+      String retString = "";
+
+      for (int i = 0; i < indentLevel; i++) {
+         retString += "  ";
+      }
+
+      return retString;
    }
 
    public static String getIpFromIpSubnetPair(String pair) {
@@ -213,12 +399,12 @@ public class Util {
          return "" + port;
       }
    }
-   
+
    public static int getPrefixLengthFromIpSubnetPair(String pair) {
       int slashPos = pair.indexOf('/');
       return Integer.parseInt(pair.substring(slashPos + 1, pair.length()));
    }
-   
+
    public static String getProtocolName(int protocol) {
       switch (protocol) {
       case 0:
@@ -324,7 +510,7 @@ public class Util {
       }
       return wildcard;
    }
-   
+
    public static String toHSAInterfaceName(String name) {
       if (name.startsWith("xe-")) {
          String numberSection = name.substring(3);
@@ -343,10 +529,10 @@ public class Util {
       else if (name.startsWith("fxp")) {
          String numberSection = name.substring(3);
          String[] numbers = numberSection.split("\\.");
-         return "fxp" + numbers[0] + "/" + numbers[1];         
+         return "fxp" + numbers[0] + "/" + numbers[1];
       }
       else if (name.startsWith("Vlan")) {
-         return name.replace("Vlan","Flan") + "/0";
+         return name.replace("Vlan", "Flan") + "/0";
       }
       else if (name.startsWith("Port-channel")) {
          return name.replace("Port-channel", "pc") + "/0";
@@ -381,6 +567,16 @@ public class Util {
          product *= i;
       }
       return product;
+   }
+
+   public static String objectToString(Object o) {
+      if (o == null) {
+         return "null";
+      }
+      else {
+         return o.toString();
+      }
+
    }
 
 }

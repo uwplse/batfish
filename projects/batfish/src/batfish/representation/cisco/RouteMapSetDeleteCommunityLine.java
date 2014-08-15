@@ -4,6 +4,8 @@ import batfish.representation.CommunityList;
 import batfish.representation.Configuration;
 import batfish.representation.PolicyMapSetDeleteCommunityLine;
 import batfish.representation.PolicyMapSetLine;
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
 public class RouteMapSetDeleteCommunityLine extends RouteMapSetLine {
 
@@ -38,5 +40,41 @@ public class RouteMapSetDeleteCommunityLine extends RouteMapSetLine {
 
       RouteMapSetDeleteCommunityLine rhsLine = (RouteMapSetDeleteCommunityLine) o;
       return getListName().equals(rhsLine.getListName());
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._listName:"
+               + Util.objectToString(_listName) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._listName:"
+               + Util.objectToString(_listName) + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.DELETE_COMMUNITY) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      RouteMapSetDeleteCommunityLine rhs = (RouteMapSetDeleteCommunityLine) o;
+      if (!Util.equalOrNull(_listName, rhs._listName)) {
+         System.out.println("- " + string + "._listName:"
+               + Util.objectToString(_listName) + "\n");
+         System.out.println("+ " + string + "._listName:"
+               + Util.objectToString(rhs._listName) + "\n");
+      }
+
+      System.out.flush();
+      return;
    }
 }

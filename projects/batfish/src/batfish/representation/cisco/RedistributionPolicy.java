@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import batfish.representation.Protocol;
+import batfish.representation.RepresentationObject;
 
-public abstract class RedistributionPolicy implements Serializable {
+public abstract class RedistributionPolicy implements Serializable,
+      RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 

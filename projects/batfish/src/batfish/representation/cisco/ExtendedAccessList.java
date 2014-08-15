@@ -58,4 +58,38 @@ public class ExtendedAccessList implements Serializable, RepresentationObject {
       return Util.equalOrNull(_id, rhs._id)
             && Util.cmpRepresentationLists(_lines, rhs._lines) == 0;
    }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._id:" + Util.objectToString(_id)
+               + "\n");
+         Util.diffRepresentationLists(null, _lines, string + "._lines");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
+               + "\n");
+         Util.diffRepresentationLists(_lines, null, string + "._lines");
+         System.out.flush();
+         return;
+      }
+
+      ExtendedAccessList rhs = (ExtendedAccessList) o;
+      if (!Util.equalOrNull(_id, rhs._id)) {
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
+               + "\n");
+         System.out.println("+ " + string + "._id:"
+               + Util.objectToString(rhs._id) + "\n");
+      }
+
+      Util.diffRepresentationLists(_lines, rhs._lines, string + "._lines");
+
+      System.out.flush();
+      return;
+   }
 }

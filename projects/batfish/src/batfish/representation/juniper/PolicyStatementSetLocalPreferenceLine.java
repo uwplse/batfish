@@ -1,5 +1,6 @@
 package batfish.representation.juniper;
 
+import batfish.representation.RepresentationObject;
 import batfish.util.Util;
 
 public class PolicyStatementSetLocalPreferenceLine extends
@@ -28,6 +29,37 @@ public class PolicyStatementSetLocalPreferenceLine extends
 
       PolicyStatementSetLocalPreferenceLine rhsLine = (PolicyStatementSetLocalPreferenceLine) o;
       return Util.equalOrNull(_localPreference, rhsLine._localPreference);
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._localPreference:" + _localPreference + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._localPreference:" + _localPreference + "\n");
+         System.out.flush();
+         return;
+      }
+
+      if (((PolicyStatementSetLine) o).getSetType() != SetType.LOCAL_PREFERENCE) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      PolicyStatementSetLocalPreferenceLine rhs = (PolicyStatementSetLocalPreferenceLine) o;
+      if (_localPreference != rhs._localPreference) {
+         System.out.println("- " + string + "._localPreference:" + _localPreference + "\n");
+         System.out.println("+ " + string + "._localPreference:" + rhs._localPreference + "\n");
+      }
+      System.out.flush();
+      return;
    }
 
 }

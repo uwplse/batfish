@@ -8,6 +8,8 @@ import batfish.representation.Configuration;
 import batfish.representation.Ip;
 import batfish.representation.PolicyMapSetLine;
 import batfish.representation.PolicyMapSetNextHopLine;
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
 public class RouteMapSetNextHopLine extends RouteMapSetLine {
 
@@ -44,5 +46,33 @@ public class RouteMapSetNextHopLine extends RouteMapSetLine {
 
       RouteMapSetNextHopLine rhsLine = (RouteMapSetNextHopLine) o;
       return getNextHops().equals(rhsLine.getNextHops());
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         Util.diffRepresentationSets(null, _nextHops, string + "._nextHops");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         Util.diffRepresentationSets(_nextHops, null, string + "._nextHops");
+         System.out.flush();
+         return;
+      }
+
+      if (((RouteMapSetLine) o).getType() != RouteMapSetType.NEXT_HOP) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      RouteMapSetNextHopLine rhs = (RouteMapSetNextHopLine) o;
+      Util.diffRepresentationSets(_nextHops, rhs._nextHops, string
+            + "._nextHops");
+
+      System.out.flush();
+      return;
    }
 }

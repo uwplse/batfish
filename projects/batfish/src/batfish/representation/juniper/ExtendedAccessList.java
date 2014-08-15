@@ -5,8 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import batfish.representation.LineAction;
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
-public class ExtendedAccessList {
+public class ExtendedAccessList implements RepresentationObject{
    private List<ExtendedAccessListLine> _lines;
    private List<ExtendedAccessListTerm> _terms;
    private String _id;
@@ -57,5 +59,48 @@ public class ExtendedAccessList {
          output += "\n" + line;
       }
       return output;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      // TODO Auto-generated method stub
+      return false;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._id:" + Util.objectToString(_id)
+               + "\n");
+         Util.diffRepresentationLists(null, _lines, string + "._lines");
+         Util.diffRepresentationLists(null, _terms, string + "._terms");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
+               + "\n");
+         Util.diffRepresentationLists(_lines, null, string + "._lines");
+         Util.diffRepresentationLists(_terms, null, string + "._terms");
+         System.out.flush();
+         return;
+      }
+
+      ExtendedAccessList rhs = (ExtendedAccessList) o;
+      if (!Util.equalOrNull(_id, rhs._id)) {
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
+               + "\n");
+         System.out.println("+ " + string + "._id:"
+               + Util.objectToString(rhs._id) + "\n");
+      }
+
+      Util.diffRepresentationLists(_lines, rhs._lines, string + "._lines");
+      Util.diffRepresentationLists(_terms, rhs._terms, string + "._terms");
+
+      System.out.flush();
+      return;
    }
 }

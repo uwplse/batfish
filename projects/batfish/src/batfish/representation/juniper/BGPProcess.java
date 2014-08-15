@@ -71,4 +71,51 @@ public class BGPProcess implements RepresentationObject {
                   rhs._activatedNeighbors) == 0;
    }
 
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._pid:" + _pid + "\n");
+         System.out.println("+ " + string + "._routerID:"
+               + Util.objectToString(_routerID) + "\n");
+         Util.diffRepresentationMaps(null, _peerGroups, string + "._peerGroups");
+         Util.diffRepresentationLists(null, _activatedNeighbors, string
+               + "._activatedNeighbors");
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._pid:" + _pid + "\n");
+         System.out.println("- " + string + "._routerID:"
+               + Util.objectToString(_routerID) + "\n");
+         Util.diffRepresentationMaps(_peerGroups, null, string + "._peerGroups");
+         Util.diffRepresentationLists(_activatedNeighbors, null, string
+               + "._activatedNeighbors");
+         return;
+      }
+
+      BGPProcess rhs = (BGPProcess) o;
+
+      if (_pid != rhs._pid) {
+         System.out.println("- " + string + "._pid:" + _pid + "\n");
+         System.out.println("+ " + string + "._pid:" + rhs._pid + "\n");
+      }
+
+      if (!Util.equalOrNull(_routerID, rhs._routerID)) {
+         System.out.println("- " + string + "._routerID:"
+               + Util.objectToString(_routerID) + "\n");
+         System.out.println("+ " + string + "._routerID:"
+               + Util.objectToString(rhs._routerID) + "\n");
+      }
+
+      Util.diffRepresentationMaps(_peerGroups, rhs._peerGroups, string
+            + "._peerGroups");
+      Util.diffRepresentationLists(_activatedNeighbors,
+            rhs._activatedNeighbors, string + "._activatedNeighbors");
+
+      System.out.flush();
+      return;
+   }
+
 }

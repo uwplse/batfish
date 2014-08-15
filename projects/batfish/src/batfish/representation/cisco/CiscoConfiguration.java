@@ -7,10 +7,13 @@ import java.util.Map;
 import batfish.grammar.cisco.CiscoGrammar.Cisco_configurationContext;
 import batfish.grammar.cisco.CiscoGrammar.Router_bgp_stanzaContext;
 import batfish.grammar.cisco.CiscoGrammar.Router_ospf_stanzaContext;
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
-public class CiscoConfiguration implements Serializable {
+public class CiscoConfiguration implements Serializable, RepresentationObject {
 
    private static final long serialVersionUID = 1L;
+
    protected final Map<String, IpAsPathAccessList> _asPathAccessLists;
    protected BgpProcess _bgpProcess;
    protected transient Router_bgp_stanzaContext _bgpProcessContext;
@@ -117,6 +120,113 @@ public class CiscoConfiguration implements Serializable {
          Router_ospf_stanzaContext ctx) {
       _ospfProcess = proc;
       _ospfProcessContext = ctx;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      // TODO Auto-generated method stub
+      return false;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         Util.diffRepresentationMaps(null, _asPathAccessLists, string
+               + "._asPathAccessLists");
+         if (_bgpProcess != null) {
+            _bgpProcess.diffRepresentation(null, string + "._bgpProcess", true);
+         }
+         Util.diffRepresentationMaps(null, _expandedCommunityLists, string
+               + "._expandedCommunityLists");
+         Util.diffRepresentationMaps(null, _extendedAccessLists, string
+               + "._extendedAccessLists");
+         Util.diffRepresentationMaps(null, _interfaces, string + "._interfaces");
+         if (_ospfProcess != null) {
+            _ospfProcess.diffRepresentation(null, string + "._ospfProcess",
+                  true);
+         }
+         Util.diffRepresentationMaps(null, _prefixLists, string
+               + "._prefixLists");
+         Util.diffRepresentationMaps(null, _routeMaps, string + "._routeMaps");
+         Util.diffRepresentationMaps(null, _standardAccessLists, string
+               + "._standardAccessLists");
+         Util.diffRepresentationMaps(null, _standardCommunityLists, string
+               + "._standardCommunityLists");
+         Util.diffRepresentationMaps(null, _staticRoutes, string
+               + "._staticRoutes");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         Util.diffRepresentationMaps(_asPathAccessLists, null, string
+               + "._asPathAccessLists");
+         if (_bgpProcess != null) {
+            _bgpProcess
+                  .diffRepresentation(null, string + "._bgpProcess", false);
+         }
+         Util.diffRepresentationMaps(_expandedCommunityLists, null, string
+               + "._expandedCommunityLists");
+         Util.diffRepresentationMaps(_extendedAccessLists, null, string
+               + "._extendedAccessLists");
+         Util.diffRepresentationMaps(_interfaces, null, string + "._interfaces");
+         if (_ospfProcess != null) {
+            _ospfProcess.diffRepresentation(null, string + "._ospfProcess",
+                  false);
+         }
+         Util.diffRepresentationMaps(_prefixLists, null, string
+               + "._prefixLists");
+         Util.diffRepresentationMaps(_routeMaps, null, string + "._routeMaps");
+         Util.diffRepresentationMaps(_standardAccessLists, null, string
+               + "._standardAccessLists");
+         Util.diffRepresentationMaps(_standardCommunityLists, null, string
+               + "._standardCommunityLists");
+         Util.diffRepresentationMaps(_staticRoutes, null, string
+               + "._staticRoutes");
+         System.out.flush();
+         return;
+      }
+
+      CiscoConfiguration rhs = (CiscoConfiguration) o;
+      Util.diffRepresentationMaps(_asPathAccessLists, rhs._asPathAccessLists,
+            string + "._asPathAccessLists");
+      if (_bgpProcess != null) {
+         _bgpProcess.diffRepresentation(rhs._bgpProcess, string
+               + "._bgpProcess", false);
+      }
+      else if (rhs._bgpProcess != null) {
+         rhs._bgpProcess
+               .diffRepresentation(null, string + "._bgpProcess", true);
+      }
+      Util.diffRepresentationMaps(_expandedCommunityLists,
+            rhs._expandedCommunityLists, string + "._expandedCommunityLists");
+      Util.diffRepresentationMaps(_extendedAccessLists,
+            rhs._extendedAccessLists, string + "._extendedAccessLists");
+      Util.diffRepresentationMaps(_interfaces, rhs._interfaces, string
+            + "._interfaces");
+      if (_ospfProcess != null) {
+         _ospfProcess.diffRepresentation(rhs._ospfProcess, string
+               + "._ospfProcess", false);
+      }
+      else if(rhs._ospfProcess!= null){
+         rhs._ospfProcess.diffRepresentation(null, string
+               + "._ospfProcess", true);
+      }
+      Util.diffRepresentationMaps(_prefixLists, rhs._prefixLists, string
+            + "._prefixLists");
+      Util.diffRepresentationMaps(_routeMaps, rhs._routeMaps, string
+            + "._routeMaps");
+      Util.diffRepresentationMaps(_standardAccessLists,
+            rhs._standardAccessLists, string + "._standardAccessLists");
+      Util.diffRepresentationMaps(_standardCommunityLists,
+            rhs._standardCommunityLists, string + "._standardCommunityLists");
+      Util.diffRepresentationMaps(_staticRoutes, rhs._staticRoutes, string
+            + "._staticRoutes");
+
+      System.out.flush();
+      return;
    }
 
 }

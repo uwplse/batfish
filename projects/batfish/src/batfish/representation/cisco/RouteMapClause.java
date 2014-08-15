@@ -6,8 +6,10 @@ import java.util.List;
 
 import batfish.grammar.cisco.CiscoGrammar.Route_map_tailContext;
 import batfish.representation.LineAction;
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
-public class RouteMapClause implements Serializable {
+public class RouteMapClause implements Serializable, RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 
@@ -69,6 +71,78 @@ public class RouteMapClause implements Serializable {
 
    public void setIgnore(boolean b) {
       _ignore = b;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      // TODO Auto-generated method stub
+      return false;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._action:"
+               + Util.objectToString(_action) + "\n");
+         System.out.println("+ " + string + "._ignore:" + _ignore + "\n");
+         System.out.println("+ " + string + "._mapName:"
+               + Util.objectToString(_mapName) + "\n");
+         Util.diffRepresentationLists(null, _matchList, string + "._matchList");
+         System.out.println("+ " + string + "._seqNum:" + _seqNum + "\n");
+         Util.diffRepresentationLists(null, _setList, string + "._setList");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._action:"
+               + Util.objectToString(_action) + "\n");
+         System.out.println("- " + string + "._ignore:" + _ignore + "\n");
+         System.out.println("- " + string + "._mapName:"
+               + Util.objectToString(_mapName) + "\n");
+         Util.diffRepresentationLists(_matchList, null, string + "._matchList");
+         System.out.println("- " + string + "._seqNum:" + _seqNum + "\n");
+         Util.diffRepresentationLists(_setList, null, string + "._setList");
+         System.out.flush();
+         return;
+      }
+
+      RouteMapClause rhs = (RouteMapClause) o;
+
+      if (!Util.equalOrNull(_action, rhs._action)) {
+         System.out.println("- " + string + "._action:"
+               + Util.objectToString(_action) + "\n");
+         System.out.println("+ " + string + "._action:"
+               + Util.objectToString(rhs._action) + "\n");
+      }
+
+      if (_ignore != rhs._ignore) {
+         System.out.println("- " + string + "._ignore:" + _ignore + "\n");
+         System.out.println("+ " + string + "._ignore:" + rhs._ignore + "\n");
+      }
+
+      if (!Util.equalOrNull(_mapName, rhs._mapName)) {
+         System.out.println("- " + string + "._mapName:"
+               + Util.objectToString(_mapName) + "\n");
+         System.out.println("+ " + string + "._mapName:"
+               + Util.objectToString(rhs._mapName) + "\n");
+      }
+
+      Util.diffRepresentationLists(_matchList, rhs._matchList, string
+            + "._matchList");
+
+      if (_seqNum != rhs._seqNum) {
+         System.out.println("- " + string + "._seqNum:" + _seqNum + "\n");
+         System.out.println("+ " + string + "._seqNum:" + rhs._seqNum + "\n");
+      }
+
+      Util.diffRepresentationLists(_setList, rhs._setList, string + "._setList");
+
+      System.out.flush();
+      return;
+
    }
 
 }

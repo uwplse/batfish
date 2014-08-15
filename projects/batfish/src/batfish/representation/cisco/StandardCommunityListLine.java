@@ -5,6 +5,7 @@ import java.util.List;
 
 import batfish.representation.LineAction;
 import batfish.representation.RepresentationObject;
+import batfish.util.Util;
 
 public class StandardCommunityListLine implements Serializable,
       RepresentationObject {
@@ -37,6 +38,44 @@ public class StandardCommunityListLine implements Serializable,
 
    public List<Long> getCommunities() {
       return _communities;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._action:"
+               + Util.objectToString(_action) + "\n");
+         Util.diffRepresentationLists(null, _communities, string
+               + "._communities");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._action:"
+               + Util.objectToString(_action) + "\n");
+         Util.diffRepresentationLists(_communities, null, string
+               + "._communities");
+         System.out.flush();
+         return;
+      }
+
+      StandardCommunityListLine rhs = (StandardCommunityListLine) o;
+      if (!Util.equalOrNull(_action, rhs._action)) {
+         System.out.println("- " + string + "._action:"
+               + Util.objectToString(_action) + "\n");
+         System.out.println("+ " + string + "._action:"
+               + Util.objectToString(rhs._action) + "\n");
+      }
+
+      Util.diffRepresentationLists(_communities, rhs._communities, string
+            + "._communities");
+
+      System.out.flush();
+      return;
+
    }
 
 }

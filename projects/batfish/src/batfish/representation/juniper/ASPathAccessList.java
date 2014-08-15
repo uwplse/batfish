@@ -2,7 +2,10 @@ package batfish.representation.juniper;
 
 import java.util.List;
 
-public class ASPathAccessList {
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
+public class ASPathAccessList implements RepresentationObject{
    private List<ASPathAccessListLine> _lines;
    private String _name;
 
@@ -17,6 +20,46 @@ public class ASPathAccessList {
 
    public String getName() {
       return _name;
+   }
+
+   @Override
+   public boolean equalsRepresentation(Object o) {
+      // TODO Auto-generated method stub
+      return false;
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string + "._name:" + Util.objectToString(_name)
+               + "\n");
+         Util.diffRepresentationLists(null, _lines, string + "._lines");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         System.out.println("- " + string + "._name:" + Util.objectToString(_name)
+               + "\n");
+         Util.diffRepresentationLists(_lines, null, string + "._lines");
+         System.out.flush();
+         return;
+      }
+
+      ASPathAccessList rhs = (ASPathAccessList) o;
+      if (!Util.equalOrNull(_name, rhs._name)) {
+         System.out.println("- " + string + "._name:" + Util.objectToString(_name)
+               + "\n");
+         System.out.println("+ " + string + "._name:"
+               + Util.objectToString(rhs._name) + "\n");
+      }
+
+      Util.diffRepresentationLists(_lines, rhs._lines, string + "._lines");
+
+      System.out.flush();
+      return;
    }
 
 }

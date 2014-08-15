@@ -2,6 +2,9 @@ package batfish.representation.cisco;
 
 import java.util.Set;
 
+import batfish.representation.RepresentationObject;
+import batfish.util.Util;
+
 public class RouteMapMatchTagLine extends RouteMapMatchLine {
 
    private static final long serialVersionUID = 1L;
@@ -29,5 +32,36 @@ public class RouteMapMatchTagLine extends RouteMapMatchLine {
 
       RouteMapMatchTagLine rhsLine = (RouteMapMatchTagLine) o;
       return getTags().equals(rhsLine.getTags());
+   }
+
+   @Override
+   public void diffRepresentation(Object o, String string, boolean reverse) {
+      if (reverse) {
+         System.out.println("+ " + string + "\n");
+         Util.diffRepresentationSets(null, _tags, string + "._tags");
+         System.out.flush();
+         return;
+      }
+
+      if (o == null) {
+         System.out.println("- " + string + "\n");
+         Util.diffRepresentationSets(_tags, null, string + "._tags");
+         System.out.flush();
+         return;
+      }
+
+      if (((RouteMapMatchLine) o).getType() != RouteMapMatchType.TAG) {
+         ((RepresentationObject) o).diffRepresentation(null, string, true);
+         diffRepresentation(null, string, false);
+         return;
+      }
+
+      RouteMapMatchTagLine rhs = (RouteMapMatchTagLine) o;
+
+      Util.diffRepresentationSets(_tags, rhs._tags, string + "._tags");
+
+      System.out.flush();
+      return;
+
    }
 }
