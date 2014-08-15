@@ -198,6 +198,36 @@ public class Util {
          String string) {
       if (c1 == null && c2 == null)
          return;
+      if (c1 == null) {
+         int i = 0;
+         for (E e : c2) {
+            if (e instanceof RepresentationObject) {
+               ((RepresentationObject) e).diffRepresentation(null, string
+                     + ":SetElement(" + i + ")", true);
+            }
+            else {
+               System.out.println("+ " + string + ":ListElement(" + i + "):"
+                     + e + "\n");
+            }
+            i++;
+         }
+         return;
+      }
+      if (c2 == null) {
+         int i = 0;
+         for (E e : c1) {
+            if (e instanceof RepresentationObject) {
+               ((RepresentationObject) e).diffRepresentation(null, string
+                     + ":SetElement(" + i + ")", false);
+            }
+            else {
+               System.out.println("- " + string + ":ListElement(" + i + "):"
+                     + e + "\n");
+            }
+            i++;
+         }
+         return;
+      }
 
       Set<E> c1minc2 = new HashSet<E>();
       Set<E> c2minc1 = new HashSet<E>();
