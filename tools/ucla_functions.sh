@@ -198,6 +198,28 @@ batfish_mkucla() {
 }
 export -f batfish_mkucla
 
+batfish_mktestrig_ucla() {
+   date | tr -d '\n'
+   echo ": START: Extract a UCLA test rig from a commit"
+   batfish_expect_args 2 $# || return 1
+   local UCLA_CONFIGS=$1
+   local TEST_RIG=$2
+   local OLD_PWD=$PWD
+   local CONFIG_DIR=$TEST_RIG/configs
+   mkdir -p $CONFIG_DIR
+   cd $CONFIG_DIR
+   cp $UCLA_CONFIGS/{border,core,distribution}/configs/* .
+   rm -f $(grep -l '!RANCID-CONTENT-TYPE: aruba' *)
+   rm -f $(grep -l '!RANCID-CONTENT-TYPE: cat5' *)
+   #rm -f $(grep -l '!RANCID.*alcatel.*' *)
+   #rm -f $(grep -l '!RANCID.*cisco-nx.*' *)
+   rm -rf $UCLA_CONFIGS
+   cd $OLD_PWD
+   date | tr -d '\n'
+   echo ": END: Extract a UCLA test rig from a commit"
+}
+export -f batfish_mktestrig_ucla
+
 batfish_compile_commits() {
    date | tr -d '\n'
    echo ": START: Compute the fixed point of the control plane"
@@ -210,3 +232,67 @@ batfish_compile_commits() {
    echo ": END: Compute the fixed point of the control plane"
 }
 export -f batfish_compile
+
+batfish_extract_ucla_commits() {
+   batfish_expect_args 2 $# || return 1
+   local UCLA_GIT_ROOT=$1
+   local COMMITS=$2
+   cat $COMMITS | while read COMMIT; do
+      batfish_extract_ucla_commit $UCLA_GIT_ROOT $COMMIT
+   done
+}
+export -f batfish_extract_ucla_commits
+
+batfish_extract_ucla_commit() {
+   batfish_expect_args 2 $# || return 1
+   if [ -z "$BATFISH_CONFIRM" ]; then
+      local BATFISH_CONFIRM=true
+   fi
+   date | tr -d '\n'
+   echo ": START: Parse commit"
+   local UCLA_GIT_ROOT=$1
+   local COMMIT=$2
+   local OLD_PWD=$PWD
+   local TEST_RIG=$PWD/test-$COMMIT
+   local UCLA_CONFIGS=$OLD_PWD/ucla_configs-$COMMIT
+
+   if [ ! -e $TEST_RIG ]; then
+      echo  "Generate test rig from commit"
+      $BATFISH_CONFIRM && { batfish_extract_commit $COMMIT $UCLA_GIT_ROOT $UCLA_CONFIGS || return 1 ; }
+   
+      echo "Extract a UCLA test rig from a commit"
+      $BATFISH_CONFIRM && { batfish_mktestrig_ucla $UCLA_CONFIGS $TEST_RIG || return 1 ; }
+   fi
+   date | tr -d '\n'
+   echo ": END: Extract commit"
+}
+export -f batfish_extract_ucla_commit
+
+batfish_parse_commits() {
+   batfish_expect_args 1 $# || return 1
+   local COMMITS=$1
+   cat $COMMITS | parallel batfish_parse_commit {} \;
+}
+export -f batfish_parse_commits
+
+batfish_parse_commit() {
+   batfish_expect_args 1 $# || return 1
+   if [ -z "$BATFISH_CONFIRM" ]; then
+      local BATFISH_CONFIRM=true
+   fi
+   date | tr -d '\n'
+   echo ": START: Parse commit"
+   local COMMIT=$1
+   local OLD_PWD=$PWD
+   local TEST_RIG=$PWD/test-$COMMIT
+   local SVPATH=$PWD/sv-$COMMIT
+   
+   if [ ! -e "$SVPATH" ]; then
+      echo "Parse test rig: $TEST_RIG"
+      $BATFISH_CONFIRM && { batfish -log 1 -testrig $TEST_RIG -sv -svpath $SVPATH -ee || return 1 ; }
+   fi
+   date | tr -d '\n'
+   echo ": END: Parse commit"
+}
+export -f batfish_parse_commit
+
