@@ -59,23 +59,22 @@ batfish_analyze_history(){
    local ORI_TEST_RIG1=$PWD/ucla_configs-$PREV_COMMIT
    local TEST_RIG1=$PWD/test-$PREV_COMMIT
    local PREFIX=$3
-   local TMP_RESULT=$PWD/$PREFIX-tmpres
-   local CMP_RESULT=$PWD/$PREFIX-cmpres
-   batfish_extract_ucla_commit $UCLA_GIT_ROOT $PREV_COMMIT || return 1 ;
-   rm -rf $ORI_TEST_RIG1 
    sed -n '2,$p' $COMMITS | while read line
    do
 	SEC_COMMIT=$line
-    TEST_RIG2=$PWD/test-$SEC_COMMIT
-    ORI_TEST_RIG2=$PWD/ucla_configs-$SEC_COMMIT
-	batfish_generate_commit $UCLA_GIT_ROOT $SEC_COMMIT || return 1 ;
-   	rm -rf $ORI_TEST_RIG2 
+        TMP_RESULT=$PWD/$PREFIX-tmpres-$PREV_COMMIT-$SEC_COMMIT
+        TMP_RESULT_ERR=$PWD/$PREFIX-tmpres-err-$PREV_COMMIT-$SEC_COMMIT
+        CMP_RESULT=$PWD/$PREFIX-cmpres-$PREV_COMMIT-$SEC_COMMIT
+{
+        TEST_RIG2=$PWD/test-$SEC_COMMIT
+        ORI_TEST_RIG2=$PWD/ucla_configs-$SEC_COMMIT
 	batfish -commits $TEST_RIG1 $TEST_RIG2 || return 1 ;
-	TEST_RIG1=$TEST_TIG2
+	TEST_RIG1=$TEST_RIG2
 	rm -rf $PWD/test-$PREV_COMMIT
 	PREV_COMMIT=$SEC_COMMIT
+} > $TMP_RESULT 2>$TMP_RESULT_ERR
+        sed -n '/Compare/,/End Compare/p' $TMP_RESULT > $CMP_RESULT 
    done
-   sed -n '/Compare/,/End Compare/p' $TMP_RESULT > $CMP_RESULT 
 }
 export -f batfish_analyze_history
 
@@ -104,11 +103,9 @@ batfish_analyze_self_helper(){
    local CMP_RESULT=$PWD/cmpres_self/cmpres_self-$SEC_COMMIT
    local FAIL_COMMIT=$PWD/fail_commits
    {
-   TEST_RIG2=$PWD/test-$SEC_COMMIT
+   TEST_RIG2=$PWD/test-$SEC_COMMI
    ORI_TEST_RIG2=$PWD/ucla_configs-$SEC_COMMIT
-   TODELETE_TEST_RIG2=$PWD/test-$SEC_COMMIT
-   batfish_extract_ucla_commit $UCLA_GIT_ROOT $SEC_COMMIT || return 1 ;
-   rm -rf $ORI_TEST_RIG2 
+   TODELETE_TEST_RIG2=$PWD/test-$SEC_COMMIT 
    batfish -ee -commits $TEST_RIG2 $TEST_RIG2 || local FAILED=1
    rm -rf $TODELETE_TEST_RIG2
    if [ -n "$FAILED" ];	then
