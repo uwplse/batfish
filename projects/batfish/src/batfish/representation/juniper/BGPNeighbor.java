@@ -82,13 +82,12 @@ public class BGPNeighbor implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._ip:" + Util.objectToString(_ip)
-               + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._ip:" + Util.objectToString(_ip));
          System.out.println("+ " + string + "._remoteAS:"
-               + Util.objectToString(_remoteAS) + "\n");
+               + Util.objectToString(_remoteAS));
          System.out.println("+ " + string + "._localAS:"
-               + Util.objectToString(_localAS) + "\n");
+               + Util.objectToString(_localAS));
          Util.diffRepresentationLists(null, _inboundPolicyStatementName, string
                + "._inboundPolicyStatementName");
          Util.diffRepresentationLists(null, _outboundPolicyStatementName,
@@ -97,13 +96,12 @@ public class BGPNeighbor implements RepresentationObject {
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip)
-               + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip));
          System.out.println("- " + string + "._remoteAS:"
-               + Util.objectToString(_remoteAS) + "\n");
+               + Util.objectToString(_remoteAS));
          System.out.println("- " + string + "._localAS:"
-               + Util.objectToString(_localAS) + "\n");
+               + Util.objectToString(_localAS));
          Util.diffRepresentationLists(_inboundPolicyStatementName, null, string
                + "._inboundPolicyStatementName");
          Util.diffRepresentationLists(_outboundPolicyStatementName, null,
@@ -113,22 +111,21 @@ public class BGPNeighbor implements RepresentationObject {
 
       BGPNeighbor rhs = (BGPNeighbor) o;
       if (!Util.equalOrNull(_ip, rhs._ip)) {
-         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip)
-               + "\n");
+         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip));
          System.out.println("+ " + string + "._ip:"
-               + Util.objectToString(rhs._ip) + "\n");
+               + Util.objectToString(rhs._ip));
       }
       if (!Util.equalOrNull(_remoteAS, rhs._remoteAS)) {
          System.out.println("- " + string + "._remoteAS:"
-               + Util.objectToString(_remoteAS) + "\n");
+               + Util.objectToString(_remoteAS));
          System.out.println("+ " + string + "._remoteAS:"
-               + Util.objectToString(rhs._remoteAS) + "\n");
+               + Util.objectToString(rhs._remoteAS));
       }
       if (!Util.equalOrNull(_localAS, rhs._localAS)) {
          System.out.println("- " + string + "._localAS:"
-               + Util.objectToString(_localAS) + "\n");
+               + Util.objectToString(_localAS));
          System.out.println("+ " + string + "._localAS:"
-               + Util.objectToString(rhs._localAS) + "\n");
+               + Util.objectToString(rhs._localAS));
       }
 
       Util.diffRepresentationLists(_inboundPolicyStatementName,

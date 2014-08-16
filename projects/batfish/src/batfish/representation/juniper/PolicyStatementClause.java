@@ -78,50 +78,63 @@ public class PolicyStatementClause implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._mapName:" + Util.objectToString(_mapName) + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._mapName:"
+               + Util.objectToString(_mapName));
          Util.diffRepresentationLists(null, _matchList, string + "._matchList");
          Util.diffRepresentationLists(null, _setList, string + "._setList");
-         System.out.println("+ " + string + "._seqNum:" + _seqNum + "\n");
-         System.out.println("+ " + string + "._type:" + Util.objectToString(_type) + "\n");
-         System.out.println("+ " + string + "._clauseName:" + Util.objectToString(_clauseName) + "\n");
+         System.out.println("+ " + string + "._seqNum:" + _seqNum);
+         System.out.println("+ " + string + "._type:"
+               + Util.objectToString(_type));
+         System.out.println("+ " + string + "._clauseName:"
+               + Util.objectToString(_clauseName));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._mapName:" + Util.objectToString(_mapName) + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._mapName:"
+               + Util.objectToString(_mapName));
          Util.diffRepresentationLists(_matchList, null, string + "._matchList");
          Util.diffRepresentationLists(_setList, null, string + "._setList");
-         System.out.println("- " + string + "._seqNum:" + _seqNum + "\n");
-         System.out.println("- " + string + "._type:" + Util.objectToString(_type) + "\n");
-         System.out.println("- " + string + "._clauseName:" + Util.objectToString(_clauseName) + "\n");
+         System.out.println("- " + string + "._seqNum:" + _seqNum);
+         System.out.println("- " + string + "._type:"
+               + Util.objectToString(_type));
+         System.out.println("- " + string + "._clauseName:"
+               + Util.objectToString(_clauseName));
          System.out.flush();
          return;
       }
 
       PolicyStatementClause rhs = (PolicyStatementClause) o;
       if (!Util.equalOrNull(_mapName, rhs._mapName)) {
-         System.out.println("- " + string + "._mapName:" + Util.objectToString(_mapName) + "\n");
-         System.out.println("+ " + string + "._mapName:" + Util.objectToString(rhs._mapName) + "\n");
+         System.out.println("- " + string + "._mapName:"
+               + Util.objectToString(_mapName));
+         System.out.println("+ " + string + "._mapName:"
+               + Util.objectToString(rhs._mapName));
       }
-      Util.diffRepresentationLists(_matchList, rhs._matchList, string + "._matchList");
+      Util.diffRepresentationLists(_matchList, rhs._matchList, string
+            + "._matchList");
       Util.diffRepresentationLists(_setList, rhs._setList, string + "._setList");
 
       if (_seqNum != rhs._seqNum) {
-         System.out.println("- " + string + "._seqNum:" + _seqNum + "\n");
-         System.out.println("+ " + string + "._seqNum:" + rhs._seqNum + "\n");
+         System.out.println("- " + string + "._seqNum:" + _seqNum);
+         System.out.println("+ " + string + "._seqNum:" + rhs._seqNum);
       }
       if (!Util.equalOrNull(_type, rhs._type)) {
-         System.out.println("- " + string + "._type:" + Util.objectToString(_type) + "\n");
-         System.out.println("+ " + string + "._type:" + Util.objectToString(rhs._type) + "\n");
+         System.out.println("- " + string + "._type:"
+               + Util.objectToString(_type));
+         System.out.println("+ " + string + "._type:"
+               + Util.objectToString(rhs._type));
       }
       if (!Util.equalOrNull(_clauseName, rhs._clauseName)) {
-         System.out.println("- " + string + "._clauseName:" + Util.objectToString(_clauseName) + "\n");
-         System.out.println("+ " + string + "._clauseName:" + Util.objectToString(rhs._clauseName) + "\n");
+         System.out.println("- " + string + "._clauseName:"
+               + Util.objectToString(_clauseName));
+         System.out.println("+ " + string + "._clauseName:"
+               + Util.objectToString(rhs._clauseName));
       }
-      
+
       System.out.flush();
       return;
    }

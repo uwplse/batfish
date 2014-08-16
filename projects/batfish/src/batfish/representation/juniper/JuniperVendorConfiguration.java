@@ -43,11 +43,12 @@ import batfish.representation.VendorConfiguration;
 import batfish.representation.juniper.ExpandedCommunityList;
 import batfish.util.Util;
 
-public class JuniperVendorConfiguration implements VendorConfiguration, RepresentationObject {
+public class JuniperVendorConfiguration implements VendorConfiguration,
+      RepresentationObject {
 
    private static final long serialVersionUID = 1L;
    private static final String VENDOR_NAME = "juniper";
-   
+
    private int _asNum;
 
    private Map<String, ASPathAccessList> _asPathAccessLists;
@@ -551,8 +552,6 @@ public class JuniperVendorConfiguration implements VendorConfiguration, Represen
             staticRoute.getTag());
    }
 
-
-
    public JuniperVendorConfiguration() {
       _asPathAccessLists = new HashMap<String, ASPathAccessList>();
       _bgpProcesses = new ArrayList<BGPProcess>();
@@ -897,56 +896,85 @@ public class JuniperVendorConfiguration implements VendorConfiguration, Represen
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._asNum:" + _asNum + "\n");
-         Util.diffRepresentationMaps(null, _asPathAccessLists, string + "._asPathAccessLists");
-         Util.diffRepresentationLists(null, _bgpProcesses, string + "._bgpProcesses");
-         Util.diffRepresentationMaps(null, _expandedCommunityLists, string + "._expandedCommunityLists");
-         Util.diffRepresentationMaps(null, _extendedAccessLists, string + "._extendedAccessLists");
-         Util.diffRepresentationLists(null, _generateRoutes, string + "._generateRoutes");
-         Util.diffRepresentationLists(null, _interfaces, string + "._interfaces");
-         Util.diffRepresentationLists(null, _ospfProcesses, string + "._ospfProcesses");
-         Util.diffRepresentationMaps(null, _policyStatements, string + "._policyStatements");
-         Util.diffRepresentationMaps(null, _routeFilters, string + "._routeFilters");
-         Util.diffRepresentationLists(null, _staticRoutes, string + "._staticRoutes");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._asNum:" + _asNum);
+         Util.diffRepresentationMaps(null, _asPathAccessLists, string
+               + "._asPathAccessLists");
+         Util.diffRepresentationLists(null, _bgpProcesses, string
+               + "._bgpProcesses");
+         Util.diffRepresentationMaps(null, _expandedCommunityLists, string
+               + "._expandedCommunityLists");
+         Util.diffRepresentationMaps(null, _extendedAccessLists, string
+               + "._extendedAccessLists");
+         Util.diffRepresentationLists(null, _generateRoutes, string
+               + "._generateRoutes");
+         Util.diffRepresentationLists(null, _interfaces, string
+               + "._interfaces");
+         Util.diffRepresentationLists(null, _ospfProcesses, string
+               + "._ospfProcesses");
+         Util.diffRepresentationMaps(null, _policyStatements, string
+               + "._policyStatements");
+         Util.diffRepresentationMaps(null, _routeFilters, string
+               + "._routeFilters");
+         Util.diffRepresentationLists(null, _staticRoutes, string
+               + "._staticRoutes");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._asNum:" + _asNum + "\n");
-         Util.diffRepresentationMaps(_asPathAccessLists, null, string + "._asPathAccessLists");
-         Util.diffRepresentationLists(_bgpProcesses, null, string + "._bgpProcesses");
-         Util.diffRepresentationMaps(_expandedCommunityLists, null, string + "._expandedCommunityLists");
-         Util.diffRepresentationMaps(_extendedAccessLists, null, string + "._extendedAccessLists");
-         Util.diffRepresentationLists(_generateRoutes, null, string + "._generateRoutes");
-         Util.diffRepresentationLists(_interfaces, null, string + "._interfaces");
-         Util.diffRepresentationLists(_ospfProcesses, null, string + "._ospfProcesses");
-         Util.diffRepresentationMaps(_policyStatements, null, string + "._policyStatements");
-         Util.diffRepresentationMaps(_routeFilters, null, string + "._routeFilters");
-         Util.diffRepresentationLists(_staticRoutes, null, string + "._staticRoutes");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._asNum:" + _asNum);
+         Util.diffRepresentationMaps(_asPathAccessLists, null, string
+               + "._asPathAccessLists");
+         Util.diffRepresentationLists(_bgpProcesses, null, string
+               + "._bgpProcesses");
+         Util.diffRepresentationMaps(_expandedCommunityLists, null, string
+               + "._expandedCommunityLists");
+         Util.diffRepresentationMaps(_extendedAccessLists, null, string
+               + "._extendedAccessLists");
+         Util.diffRepresentationLists(_generateRoutes, null, string
+               + "._generateRoutes");
+         Util.diffRepresentationLists(_interfaces, null, string
+               + "._interfaces");
+         Util.diffRepresentationLists(_ospfProcesses, null, string
+               + "._ospfProcesses");
+         Util.diffRepresentationMaps(_policyStatements, null, string
+               + "._policyStatements");
+         Util.diffRepresentationMaps(_routeFilters, null, string
+               + "._routeFilters");
+         Util.diffRepresentationLists(_staticRoutes, null, string
+               + "._staticRoutes");
          System.out.flush();
          return;
       }
 
       JuniperVendorConfiguration rhs = (JuniperVendorConfiguration) o;
       if (_asNum != rhs._asNum) {
-         System.out.println("- " + string + "._asNum:" + _asNum + "\n");
-         System.out.println("+ " + string + "._asNum:" + rhs._asNum
-               + "\n");
+         System.out.println("- " + string + "._asNum:" + _asNum);
+         System.out.println("+ " + string + "._asNum:" + rhs._asNum);
       }
-      Util.diffRepresentationMaps(_asPathAccessLists, rhs._asPathAccessLists, string + "._asPathAccessLists");
-      Util.diffRepresentationLists(_bgpProcesses, rhs._bgpProcesses, string + "._bgpProcesses");
-      Util.diffRepresentationMaps(_expandedCommunityLists, rhs._expandedCommunityLists, string + "._expandedCommunityLists");
-      Util.diffRepresentationMaps(_extendedAccessLists, rhs._extendedAccessLists, string + "._extendedAccessLists");
-      Util.diffRepresentationLists(_generateRoutes, rhs._generateRoutes, string + "._generateRoutes");
-      Util.diffRepresentationLists(_interfaces, rhs._interfaces, string + "._interfaces");
-      Util.diffRepresentationLists(_ospfProcesses, rhs._ospfProcesses, string + "._ospfProcesses");
-      Util.diffRepresentationMaps(_policyStatements, rhs._policyStatements, string + "._policyStatements");
-      Util.diffRepresentationMaps(_routeFilters, rhs._routeFilters, string + "._routeFilters");
-      Util.diffRepresentationLists(_staticRoutes, rhs._staticRoutes, string + "._staticRoutes");
-      
+      Util.diffRepresentationMaps(_asPathAccessLists, rhs._asPathAccessLists,
+            string + "._asPathAccessLists");
+      Util.diffRepresentationLists(_bgpProcesses, rhs._bgpProcesses, string
+            + "._bgpProcesses");
+      Util.diffRepresentationMaps(_expandedCommunityLists,
+            rhs._expandedCommunityLists, string + "._expandedCommunityLists");
+      Util.diffRepresentationMaps(_extendedAccessLists,
+            rhs._extendedAccessLists, string + "._extendedAccessLists");
+      Util.diffRepresentationLists(_generateRoutes, rhs._generateRoutes, string
+            + "._generateRoutes");
+      Util.diffRepresentationLists(_interfaces, rhs._interfaces, string
+            + "._interfaces");
+      Util.diffRepresentationLists(_ospfProcesses, rhs._ospfProcesses, string
+            + "._ospfProcesses");
+      Util.diffRepresentationMaps(_policyStatements, rhs._policyStatements,
+            string + "._policyStatements");
+      Util.diffRepresentationMaps(_routeFilters, rhs._routeFilters, string
+            + "._routeFilters");
+      Util.diffRepresentationLists(_staticRoutes, rhs._staticRoutes, string
+            + "._staticRoutes");
+
       System.out.flush();
       return;
    }

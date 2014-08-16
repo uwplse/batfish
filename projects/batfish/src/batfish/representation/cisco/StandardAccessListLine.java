@@ -56,25 +56,23 @@ public class StandardAccessListLine implements Serializable,
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._action:"
-               + Util.objectToString(_action) + "\n");
-         System.out.println("+ " + string + "._ip:" + Util.objectToString(_ip)
-               + "\n");
+               + Util.objectToString(_action));
+         System.out.println("+ " + string + "._ip:" + Util.objectToString(_ip));
          System.out.println("+ " + string + "._wildcard:"
-               + Util.objectToString(_wildcard) + "\n");
+               + Util.objectToString(_wildcard));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._action:"
-               + Util.objectToString(_action) + "\n");
-         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip)
-               + "\n");
+               + Util.objectToString(_action));
+         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip));
          System.out.println("- " + string + "._wildcard:"
-               + Util.objectToString(_wildcard) + "\n");
+               + Util.objectToString(_wildcard));
          System.out.flush();
          return;
       }
@@ -82,21 +80,20 @@ public class StandardAccessListLine implements Serializable,
       StandardAccessListLine rhs = (StandardAccessListLine) o;
       if (!Util.equalOrNull(_action, rhs._action)) {
          System.out.println("- " + string + "._action:"
-               + Util.objectToString(_action) + "\n");
+               + Util.objectToString(_action));
          System.out.println("+ " + string + "._action:"
-               + Util.objectToString(rhs._action) + "\n");
+               + Util.objectToString(rhs._action));
       }
       if (!Util.equalOrNull(_ip, rhs._ip)) {
-         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip)
-               + "\n");
+         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip));
          System.out.println("+ " + string + "._ip:"
-               + Util.objectToString(rhs._ip) + "\n");
+               + Util.objectToString(rhs._ip));
       }
       if (!Util.equalOrNull(_wildcard, rhs._wildcard)) {
          System.out.println("- " + string + "._wildcard:"
-               + Util.objectToString(_wildcard) + "\n");
+               + Util.objectToString(_wildcard));
          System.out.println("+ " + string + "._wildcard:"
-               + Util.objectToString(rhs._wildcard) + "\n");
+               + Util.objectToString(rhs._wildcard));
       }
 
       System.out.flush();

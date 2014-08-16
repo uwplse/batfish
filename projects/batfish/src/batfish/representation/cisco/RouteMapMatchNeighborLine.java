@@ -35,17 +35,17 @@ public class RouteMapMatchNeighborLine extends RouteMapMatchLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._neighborIp:"
-               + Util.objectToString(_neighborIp) + "\n");
+               + Util.objectToString(_neighborIp));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._neighborIp:"
-               + Util.objectToString(_neighborIp) + "\n");
+               + Util.objectToString(_neighborIp));
          System.out.flush();
          return;
       }
@@ -60,9 +60,9 @@ public class RouteMapMatchNeighborLine extends RouteMapMatchLine {
 
       if (!Util.equalOrNull(_neighborIp, rhs._neighborIp)) {
          System.out.println("- " + string + "._neighborIp:"
-               + Util.objectToString(_neighborIp) + "\n");
+               + Util.objectToString(_neighborIp));
          System.out.println("+ " + string + "._neighborIp:"
-               + Util.objectToString(rhs._neighborIp) + "\n");
+               + Util.objectToString(rhs._neighborIp));
       }
 
       System.out.flush();

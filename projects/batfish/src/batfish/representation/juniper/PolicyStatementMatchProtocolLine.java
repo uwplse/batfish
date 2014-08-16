@@ -37,14 +37,14 @@ public class PolicyStatementMatchProtocolLine extends PolicyStatementMatchLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          Util.diffRepresentationLists(null, _protocol, string + "._protocol");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          Util.diffRepresentationLists(_protocol, null, string + "._protocol");
          System.out.flush();
          return;
@@ -57,7 +57,8 @@ public class PolicyStatementMatchProtocolLine extends PolicyStatementMatchLine {
       }
 
       PolicyStatementMatchProtocolLine rhs = (PolicyStatementMatchProtocolLine) o;
-      Util.diffRepresentationLists(_protocol, rhs._protocol, string + "._protocol");
+      Util.diffRepresentationLists(_protocol, rhs._protocol, string
+            + "._protocol");
       System.out.flush();
       return;
    }

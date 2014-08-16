@@ -8,7 +8,7 @@ import batfish.representation.LineAction;
 import batfish.representation.RepresentationObject;
 import batfish.util.Util;
 
-public class ExtendedAccessList implements RepresentationObject{
+public class ExtendedAccessList implements RepresentationObject {
    private List<ExtendedAccessListLine> _lines;
    private List<ExtendedAccessListTerm> _terms;
    private String _id;
@@ -54,7 +54,7 @@ public class ExtendedAccessList implements RepresentationObject{
 
    @Override
    public String toString() {
-      String output = super.toString() + "\n" + "Identifier: " + _id;
+      String output = super.toString() + "Identifier: " + _id;
       for (ExtendedAccessListLine line : _lines) {
          output += "\n" + line;
       }
@@ -70,9 +70,8 @@ public class ExtendedAccessList implements RepresentationObject{
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._id:" + Util.objectToString(_id)
-               + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._id:" + Util.objectToString(_id));
          Util.diffRepresentationLists(null, _lines, string + "._lines");
          Util.diffRepresentationLists(null, _terms, string + "._terms");
          System.out.flush();
@@ -80,9 +79,8 @@ public class ExtendedAccessList implements RepresentationObject{
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
-               + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id));
          Util.diffRepresentationLists(_lines, null, string + "._lines");
          Util.diffRepresentationLists(_terms, null, string + "._terms");
          System.out.flush();
@@ -91,10 +89,9 @@ public class ExtendedAccessList implements RepresentationObject{
 
       ExtendedAccessList rhs = (ExtendedAccessList) o;
       if (!Util.equalOrNull(_id, rhs._id)) {
-         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
-               + "\n");
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id));
          System.out.println("+ " + string + "._id:"
-               + Util.objectToString(rhs._id) + "\n");
+               + Util.objectToString(rhs._id));
       }
 
       Util.diffRepresentationLists(_lines, rhs._lines, string + "._lines");

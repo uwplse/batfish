@@ -33,13 +33,13 @@ public class RouteMapSetCommunityNoneLine extends RouteMapSetLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.flush();
          return;
       }

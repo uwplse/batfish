@@ -563,20 +563,28 @@ public class Batfish {
       for (Entry<String, VendorConfiguration> e : firstConfigurations
             .entrySet()) {
          if (secondConfigurations.containsKey(e.getKey())) {
-               ((RepresentationObject)firstConfigurations.get(e.getKey())).diffRepresentation(secondConfigurations.get(e.getKey()), "router:"
-                     + firstConfigurations.get(e.getKey()).getHostname(), false);
+            ((RepresentationObject) firstConfigurations.get(e.getKey()))
+                  .diffRepresentation(secondConfigurations.get(e.getKey()),
+                        "router:"
+                              + firstConfigurations.get(e.getKey())
+                                    .getHostname(), false);
          }
          else {
-            ((RepresentationObject)firstConfigurations.get(e.getKey())).diffRepresentation(null, "router:"
-                  + firstConfigurations.get(e.getKey()).getHostname(), false);
+            ((RepresentationObject) firstConfigurations.get(e.getKey()))
+                  .diffRepresentation(null, "router:"
+                        + firstConfigurations.get(e.getKey()).getHostname(),
+                        false);
          }
       }
 
       Set<String> tmpSet = secondConfigurations.keySet();
       tmpSet.removeAll(firstConfigurations.keySet());
       for (String hostname : tmpSet) {
-         ((RepresentationObject)secondConfigurations.get(hostname)).diffRepresentation(null, "router:"
-               + secondConfigurations.get(hostname).getHostname(), true);
+         ((RepresentationObject) secondConfigurations.get(hostname))
+               .diffRepresentation(null,
+                     "router:"
+                           + secondConfigurations.get(hostname).getHostname(),
+                     true);
       }
 
       print(1, "*** End Compare***\n\n");

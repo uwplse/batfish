@@ -68,36 +68,43 @@ public class OspfWildcardNetwork implements Comparable<OspfWildcardNetwork>,
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._area:" + _area + "\n");
-         System.out.println("+ " + string + "._prefix:" + Util.objectToString(_prefix) + "\n");
-         System.out.println("+ " + string + "._wildcard:" + Util.objectToString(_wildcard) + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._area:" + _area);
+         System.out.println("+ " + string + "._prefix:"
+               + Util.objectToString(_prefix));
+         System.out.println("+ " + string + "._wildcard:"
+               + Util.objectToString(_wildcard));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._area:" + _area + "\n");
-         System.out.println("- " + string + "._prefix:" + Util.objectToString(_prefix) + "\n");
-         System.out.println("- " + string + "._wildcard:" + Util.objectToString(_wildcard) + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._area:" + _area);
+         System.out.println("- " + string + "._prefix:"
+               + Util.objectToString(_prefix));
+         System.out.println("- " + string + "._wildcard:"
+               + Util.objectToString(_wildcard));
          System.out.flush();
          return;
       }
 
       OspfWildcardNetwork rhs = (OspfWildcardNetwork) o;
       if (_area != rhs._area) {
-         System.out.println("- " + string + "._area:" + _area + "\n");
-         System.out.println("+ " + string + "._area:" + rhs._area
-               + "\n");
+         System.out.println("- " + string + "._area:" + _area);
+         System.out.println("+ " + string + "._area:" + rhs._area);
       }
       if (!Util.equalOrNull(_prefix, rhs._prefix)) {
-         System.out.println("- " + string + "._prefix:" + Util.objectToString(_prefix) + "\n");
-         System.out.println("+ " + string + "._prefix:" + Util.objectToString(rhs._prefix) + "\n");
+         System.out.println("- " + string + "._prefix:"
+               + Util.objectToString(_prefix));
+         System.out.println("+ " + string + "._prefix:"
+               + Util.objectToString(rhs._prefix));
       }
       if (!Util.equalOrNull(_wildcard, rhs._wildcard)) {
-         System.out.println("- " + string + "._wildcard:" + Util.objectToString(_wildcard) + "\n");
-         System.out.println("+ " + string + "._wildcard:" + Util.objectToString(rhs._wildcard) + "\n");
+         System.out.println("- " + string + "._wildcard:"
+               + Util.objectToString(_wildcard));
+         System.out.println("+ " + string + "._wildcard:"
+               + Util.objectToString(rhs._wildcard));
       }
       System.out.flush();
       return;

@@ -75,26 +75,26 @@ public class OSPFProcess implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._pid:" + _pid + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._pid:" + _pid);
          Util.diffRepresentationLists(null, _networks, string + "._networks");
          System.out.println("+ " + string + "._routerId:"
-               + Util.objectToString(_routerId) + "\n");
+               + Util.objectToString(_routerId));
          System.out.println("+ " + string + "._referenceBandwidth:"
-               + _referenceBandwidth + "\n");
+               + _referenceBandwidth);
          Util.diffRepresentationLists(null, _exportPolicyStatements, string
                + "._exportPolicyStatements");
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._pid:" + _pid + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._pid:" + _pid);
          Util.diffRepresentationLists(_networks, null, string + "._networks");
          System.out.println("- " + string + "._routerId:"
-               + Util.objectToString(_routerId) + "\n");
+               + Util.objectToString(_routerId));
          System.out.println("- " + string + "._referenceBandwidth:"
-               + _referenceBandwidth + "\n");
+               + _referenceBandwidth);
          Util.diffRepresentationLists(_exportPolicyStatements, null, string
                + "._exportPolicyStatements");
          return;
@@ -102,22 +102,22 @@ public class OSPFProcess implements RepresentationObject {
 
       OSPFProcess rhs = (OSPFProcess) o;
       if (_pid != rhs._pid) {
-         System.out.println("- " + string + "._pid:" + _pid + "\n");
-         System.out.println("+ " + string + "._pid:" + rhs._pid + "\n");
+         System.out.println("- " + string + "._pid:" + _pid);
+         System.out.println("+ " + string + "._pid:" + rhs._pid);
       }
       Util.diffRepresentationLists(_networks, rhs._networks, string
             + "._networks");
       if (!Util.equalOrNull(_routerId, rhs._routerId)) {
          System.out.println("- " + string + "._routerId:"
-               + Util.objectToString(_routerId) + "\n");
+               + Util.objectToString(_routerId));
          System.out.println("+ " + string + "._routerId:"
-               + Util.objectToString(rhs._routerId) + "\n");
+               + Util.objectToString(rhs._routerId));
       }
       if (!Util.equalOrNull(_referenceBandwidth, rhs._referenceBandwidth)) {
          System.out.println("- " + string + "._referenceBandwidth:"
-               + Util.objectToString(_referenceBandwidth) + "\n");
+               + Util.objectToString(_referenceBandwidth));
          System.out.println("+ " + string + "._referenceBandwidth:"
-               + Util.objectToString(rhs._referenceBandwidth) + "\n");
+               + Util.objectToString(rhs._referenceBandwidth));
       }
       Util.diffRepresentationLists(_exportPolicyStatements,
             rhs._exportPolicyStatements, string + "._exportPolicyStatements");

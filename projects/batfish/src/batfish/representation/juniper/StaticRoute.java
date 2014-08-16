@@ -57,68 +57,67 @@ public class StaticRoute implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._distance:" + _distance + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._distance:" + _distance);
          System.out.println("+ " + string + "._mask:"
-               + Util.objectToString(_mask) + "\n");
+               + Util.objectToString(_mask));
          System.out.println("+ " + string + "._nextHopInterface:"
-               + Util.objectToString(_nextHopInterface) + "\n");
+               + Util.objectToString(_nextHopInterface));
          System.out.println("+ " + string + "._nextHopIp:"
-               + Util.objectToString(_nextHopIp) + "\n");
+               + Util.objectToString(_nextHopIp));
          System.out.println("+ " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
-         System.out.println("+ " + string + "._tag:" + _tag + "\n");
+               + Util.objectToString(_prefix));
+         System.out.println("+ " + string + "._tag:" + _tag);
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._distance:" + _distance + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._distance:" + _distance);
          System.out.println("- " + string + "._mask:"
-               + Util.objectToString(_mask) + "\n");
+               + Util.objectToString(_mask));
          System.out.println("- " + string + "._nextHopInterface:"
-               + Util.objectToString(_nextHopInterface) + "\n");
+               + Util.objectToString(_nextHopInterface));
          System.out.println("- " + string + "._nextHopIp:"
-               + Util.objectToString(_nextHopIp) + "\n");
+               + Util.objectToString(_nextHopIp));
          System.out.println("- " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
-         System.out.println("- " + string + "._tag:" + _tag + "\n");
+               + Util.objectToString(_prefix));
+         System.out.println("- " + string + "._tag:" + _tag);
          return;
       }
 
       StaticRoute rhs = (StaticRoute) o;
       if (_distance != rhs._distance) {
-         System.out.println("- " + string + "._distance:" + _distance + "\n");
-         System.out.println("+ " + string + "._distance:" + rhs._distance
-               + "\n");
+         System.out.println("- " + string + "._distance:" + _distance);
+         System.out.println("+ " + string + "._distance:" + rhs._distance);
       }
       if (!Util.equalOrNull(_mask, rhs._mask)) {
          System.out.println("- " + string + "._mask:"
-               + Util.objectToString(_mask) + "\n");
+               + Util.objectToString(_mask));
          System.out.println("+ " + string + "._mask:"
-               + Util.objectToString(rhs._mask) + "\n");
+               + Util.objectToString(rhs._mask));
       }
       if (!Util.equalOrNull(_nextHopInterface, rhs._nextHopInterface)) {
          System.out.println("- " + string + "._nextHopInterface:"
-               + Util.objectToString(_nextHopInterface) + "\n");
+               + Util.objectToString(_nextHopInterface));
          System.out.println("+ " + string + "._nextHopInterface:"
-               + Util.objectToString(rhs._nextHopInterface) + "\n");
+               + Util.objectToString(rhs._nextHopInterface));
       }
       if (!Util.equalOrNull(_nextHopIp, rhs._nextHopIp)) {
          System.out.println("- " + string + "._nextHopIp:"
-               + Util.objectToString(_nextHopIp) + "\n");
+               + Util.objectToString(_nextHopIp));
          System.out.println("+ " + string + "._nextHopIp:"
-               + Util.objectToString(rhs._nextHopIp) + "\n");
+               + Util.objectToString(rhs._nextHopIp));
       }
       if (!Util.equalOrNull(_prefix, rhs._prefix)) {
          System.out.println("- " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
+               + Util.objectToString(_prefix));
          System.out.println("+ " + string + "._prefix:"
-               + Util.objectToString(rhs._prefix) + "\n");
+               + Util.objectToString(rhs._prefix));
       }
       if (_tag != rhs._tag) {
-         System.out.println("- " + string + "._tag:" + _tag + "\n");
-         System.out.println("+ " + string + "._tag:" + rhs._tag + "\n");
+         System.out.println("- " + string + "._tag:" + _tag);
+         System.out.println("+ " + string + "._tag:" + rhs._tag);
       }
       System.out.flush();
       return;

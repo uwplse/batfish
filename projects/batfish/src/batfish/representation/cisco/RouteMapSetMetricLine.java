@@ -42,15 +42,15 @@ public class RouteMapSetMetricLine extends RouteMapSetLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._metric:" + _metric + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._metric:" + _metric);
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._metric:" + _metric + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._metric:" + _metric);
          System.out.flush();
          return;
       }
@@ -63,8 +63,8 @@ public class RouteMapSetMetricLine extends RouteMapSetLine {
 
       RouteMapSetMetricLine rhs = (RouteMapSetMetricLine) o;
       if (_metric != rhs._metric) {
-         System.out.println("- " + string + "._metric:" + _metric + "\n");
-         System.out.println("+ " + string + "._metric:" + rhs._metric + "\n");
+         System.out.println("- " + string + "._metric:" + _metric);
+         System.out.println("+ " + string + "._metric:" + rhs._metric);
       }
       System.out.flush();
       return;

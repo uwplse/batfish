@@ -45,17 +45,17 @@ public class RouteMapSetDeleteCommunityLine extends RouteMapSetLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._listName:"
-               + Util.objectToString(_listName) + "\n");
+               + Util.objectToString(_listName));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._listName:"
-               + Util.objectToString(_listName) + "\n");
+               + Util.objectToString(_listName));
          System.out.flush();
          return;
       }
@@ -69,9 +69,9 @@ public class RouteMapSetDeleteCommunityLine extends RouteMapSetLine {
       RouteMapSetDeleteCommunityLine rhs = (RouteMapSetDeleteCommunityLine) o;
       if (!Util.equalOrNull(_listName, rhs._listName)) {
          System.out.println("- " + string + "._listName:"
-               + Util.objectToString(_listName) + "\n");
+               + Util.objectToString(_listName));
          System.out.println("+ " + string + "._listName:"
-               + Util.objectToString(rhs._listName) + "\n");
+               + Util.objectToString(rhs._listName));
       }
 
       System.out.flush();

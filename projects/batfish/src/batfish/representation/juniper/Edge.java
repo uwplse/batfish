@@ -3,7 +3,7 @@ package batfish.representation.juniper;
 import batfish.representation.RepresentationObject;
 import batfish.util.Util;
 
-public class Edge implements RepresentationObject{
+public class Edge implements RepresentationObject {
    private String _host1;
    private String _host2;
    private String _int1;
@@ -41,43 +41,59 @@ public class Edge implements RepresentationObject{
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._host1:" + Util.objectToString(_host1) + "\n");
-         System.out.println("+ " + string + "._host2:" + Util.objectToString(_host2) + "\n");
-         System.out.println("+ " + string + "._int1:" + Util.objectToString(_int1) + "\n");
-         System.out.println("+ " + string + "._int2:" + Util.objectToString(_int2) + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._host1:"
+               + Util.objectToString(_host1));
+         System.out.println("+ " + string + "._host2:"
+               + Util.objectToString(_host2));
+         System.out.println("+ " + string + "._int1:"
+               + Util.objectToString(_int1));
+         System.out.println("+ " + string + "._int2:"
+               + Util.objectToString(_int2));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._host1:" + Util.objectToString(_host1) + "\n");
-         System.out.println("- " + string + "._host2:" + Util.objectToString(_host2) + "\n");
-         System.out.println("- " + string + "._int1:" + Util.objectToString(_int1) + "\n");
-         System.out.println("- " + string + "._int2:" + Util.objectToString(_int2) + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._host1:"
+               + Util.objectToString(_host1));
+         System.out.println("- " + string + "._host2:"
+               + Util.objectToString(_host2));
+         System.out.println("- " + string + "._int1:"
+               + Util.objectToString(_int1));
+         System.out.println("- " + string + "._int2:"
+               + Util.objectToString(_int2));
          System.out.flush();
          return;
       }
 
       Edge rhs = (Edge) o;
       if (!Util.equalOrNull(_host1, rhs._host1)) {
-         System.out.println("- " + string + "._host1:" + Util.objectToString(_host1) + "\n");
-         System.out.println("+ " + string + "._host1:" + Util.objectToString(rhs._host1) + "\n");
+         System.out.println("- " + string + "._host1:"
+               + Util.objectToString(_host1));
+         System.out.println("+ " + string + "._host1:"
+               + Util.objectToString(rhs._host1));
       }
       if (!Util.equalOrNull(_host2, rhs._host2)) {
-         System.out.println("- " + string + "._host2:" + Util.objectToString(_host2) + "\n");
-         System.out.println("+ " + string + "._host2:" + Util.objectToString(rhs._host2) + "\n");
+         System.out.println("- " + string + "._host2:"
+               + Util.objectToString(_host2));
+         System.out.println("+ " + string + "._host2:"
+               + Util.objectToString(rhs._host2));
       }
       if (!Util.equalOrNull(_int1, rhs._int1)) {
-         System.out.println("- " + string + "._int1:" + Util.objectToString(_int1) + "\n");
-         System.out.println("+ " + string + "._int1:" + Util.objectToString(rhs._int1) + "\n");
+         System.out.println("- " + string + "._int1:"
+               + Util.objectToString(_int1));
+         System.out.println("+ " + string + "._int1:"
+               + Util.objectToString(rhs._int1));
       }
       if (!Util.equalOrNull(_int2, rhs._int2)) {
-         System.out.println("- " + string + "._int2:" + Util.objectToString(_int2) + "\n");
-         System.out.println("+ " + string + "._int2:" + Util.objectToString(rhs._int2) + "\n");
+         System.out.println("- " + string + "._int2:"
+               + Util.objectToString(_int2));
+         System.out.println("+ " + string + "._int2:"
+               + Util.objectToString(rhs._int2));
       }
-      
+
       System.out.flush();
       return;
    }

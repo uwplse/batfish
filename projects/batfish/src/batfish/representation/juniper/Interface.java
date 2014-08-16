@@ -178,85 +178,77 @@ public class Interface implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._accessVlan:" + _accessVlan
-               + "\n");
-         System.out.println("+ " + string + "._active:" + _active + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._accessVlan:" + _accessVlan);
+         System.out.println("+ " + string + "._active:" + _active);
          Util.diffRepresentationLists(null, _allowedVlans, string
                + "._allowedVlans");
          System.out.println("+ " + string + "._bandwidth:"
-               + Util.objectToString(_bandwidth) + "\n");
+               + Util.objectToString(_bandwidth));
          System.out.println("+ " + string + "._incomingFilter:"
-               + Util.objectToString(_incomingFilter) + "\n");
-         System.out.println("+ " + string + "._ip:" + Util.objectToString(_ip)
-               + "\n");
+               + Util.objectToString(_incomingFilter));
+         System.out.println("+ " + string + "._ip:" + Util.objectToString(_ip));
          System.out.println("+ " + string + "._name:"
-               + Util.objectToString(_name) + "\n");
-         System.out.println("+ " + string + "._nativeVlan:" + _nativeVlan
-               + "\n");
+               + Util.objectToString(_name));
+         System.out.println("+ " + string + "._nativeVlan:" + _nativeVlan);
          System.out.println("+ " + string + "._ospfCost:"
-               + Util.objectToString(_ospfCost) + "\n");
+               + Util.objectToString(_ospfCost));
          System.out.println("+ " + string + "._ospfDeadInterval:"
-               + _ospfDeadInterval + "\n");
+               + _ospfDeadInterval);
          System.out.println("+ " + string + "._ospfHelloMultiplier:"
-               + _ospfHelloMultiplier + "\n");
+               + _ospfHelloMultiplier);
          System.out.println("+ " + string + "._outgoingFilter:"
-               + Util.objectToString(_outgoingFilter) + "\n");
+               + Util.objectToString(_outgoingFilter));
          System.out.println("+ " + string + "._subnet:"
-               + Util.objectToString(_subnet) + "\n");
+               + Util.objectToString(_subnet));
          System.out.println("+ " + string + "._switchportMode:"
-               + Util.objectToString(_switchportMode) + "\n");
+               + Util.objectToString(_switchportMode));
          System.out.println("+ " + string + "._switchportTrunkEncapsulation:"
-               + Util.objectToString(_switchportTrunkEncapsulation) + "\n");
+               + Util.objectToString(_switchportTrunkEncapsulation));
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._accessVlan:" + _accessVlan
-               + "\n");
-         System.out.println("- " + string + "._active:" + _active + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._accessVlan:" + _accessVlan);
+         System.out.println("- " + string + "._active:" + _active);
          Util.diffRepresentationLists(_allowedVlans, null, string
                + "._allowedVlans");
          System.out.println("- " + string + "._bandwidth:"
-               + Util.objectToString(_bandwidth) + "\n");
+               + Util.objectToString(_bandwidth));
          System.out.println("- " + string + "._incomingFilter:"
-               + Util.objectToString(_incomingFilter) + "\n");
-         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip)
-               + "\n");
+               + Util.objectToString(_incomingFilter));
+         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip));
          System.out.println("- " + string + "._name:"
-               + Util.objectToString(_name) + "\n");
-         System.out.println("- " + string + "._nativeVlan:" + _nativeVlan
-               + "\n");
+               + Util.objectToString(_name));
+         System.out.println("- " + string + "._nativeVlan:" + _nativeVlan);
          System.out.println("- " + string + "._ospfCost:"
-               + Util.objectToString(_ospfCost) + "\n");
+               + Util.objectToString(_ospfCost));
          System.out.println("- " + string + "._ospfDeadInterval:"
-               + _ospfDeadInterval + "\n");
+               + _ospfDeadInterval);
          System.out.println("- " + string + "._ospfHelloMultiplier:"
-               + _ospfHelloMultiplier + "\n");
+               + _ospfHelloMultiplier);
          System.out.println("- " + string + "._outgoingFilter:"
-               + Util.objectToString(_outgoingFilter) + "\n");
+               + Util.objectToString(_outgoingFilter));
          System.out.println("- " + string + "._subnet:"
-               + Util.objectToString(_subnet) + "\n");
+               + Util.objectToString(_subnet));
          System.out.println("- " + string + "._switchportMode:"
-               + Util.objectToString(_switchportMode) + "\n");
+               + Util.objectToString(_switchportMode));
          System.out.println("- " + string + "._switchportTrunkEncapsulation:"
-               + Util.objectToString(_switchportTrunkEncapsulation) + "\n");
+               + Util.objectToString(_switchportTrunkEncapsulation));
          return;
       }
 
       Interface rhs = (Interface) o;
 
       if (_accessVlan != rhs._accessVlan) {
-         System.out.println("- " + string + "._accessVlan:" + _accessVlan
-               + "\n");
-         System.out.println("+ " + string + "._accessVlan:" + rhs._accessVlan
-               + "\n");
+         System.out.println("- " + string + "._accessVlan:" + _accessVlan);
+         System.out.println("+ " + string + "._accessVlan:" + rhs._accessVlan);
       }
 
       if (_active != rhs._active) {
-         System.out.println("- " + string + "._active:" + _active + "\n");
-         System.out.println("+ " + string + "._active:" + rhs._active + "\n");
+         System.out.println("- " + string + "._active:" + _active);
+         System.out.println("+ " + string + "._active:" + rhs._active);
       }
 
       Util.diffRepresentationLists(_allowedVlans, rhs._allowedVlans, string
@@ -264,87 +256,84 @@ public class Interface implements RepresentationObject {
 
       if (!Util.equalOrNull(_bandwidth, rhs._bandwidth)) {
          System.out.println("- " + string + "._bandwidth:"
-               + Util.objectToString(_bandwidth) + "\n");
+               + Util.objectToString(_bandwidth));
          System.out.println("+ " + string + "._bandwidth:"
-               + Util.objectToString(rhs._bandwidth) + "\n");
+               + Util.objectToString(rhs._bandwidth));
       }
 
       if (!Util.equalOrNull(_incomingFilter, rhs._incomingFilter)) {
          System.out.println("- " + string + "._incomingFilter:"
-               + Util.objectToString(_incomingFilter) + "\n");
+               + Util.objectToString(_incomingFilter));
          System.out.println("+ " + string + "._incomingFilter:"
-               + Util.objectToString(rhs._incomingFilter) + "\n");
+               + Util.objectToString(rhs._incomingFilter));
       }
 
       if (!Util.equalOrNull(_ip, rhs._ip)) {
-         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip)
-               + "\n");
+         System.out.println("- " + string + "._ip:" + Util.objectToString(_ip));
          System.out.println("+ " + string + "._ip:"
-               + Util.objectToString(rhs._ip) + "\n");
+               + Util.objectToString(rhs._ip));
       }
 
       if (!Util.equalOrNull(_name, rhs._name)) {
          System.out.println("- " + string + "._name:"
-               + Util.objectToString(_name) + "\n");
+               + Util.objectToString(_name));
          System.out.println("+ " + string + "._name:"
-               + Util.objectToString(rhs._name) + "\n");
+               + Util.objectToString(rhs._name));
       }
 
       if (_nativeVlan != rhs._nativeVlan) {
-         System.out.println("- " + string + "._nativeVlan:" + _nativeVlan
-               + "\n");
-         System.out.println("+ " + string + "._nativeVlan:" + rhs._nativeVlan
-               + "\n");
+         System.out.println("- " + string + "._nativeVlan:" + _nativeVlan);
+         System.out.println("+ " + string + "._nativeVlan:" + rhs._nativeVlan);
       }
 
       if (!Util.equalOrNull(_ospfCost, rhs._ospfCost)) {
          System.out.println("- " + string + "._ospfCost:"
-               + Util.objectToString(_ospfCost) + "\n");
+               + Util.objectToString(_ospfCost));
          System.out.println("+ " + string + "._ospfCost:"
-               + Util.objectToString(rhs._ospfCost) + "\n");
+               + Util.objectToString(rhs._ospfCost));
       }
 
       if (_ospfDeadInterval != rhs._ospfDeadInterval) {
          System.out.println("- " + string + "._ospfDeadInterval:"
-               + _ospfDeadInterval + "\n");
+               + _ospfDeadInterval);
          System.out.println("+ " + string + "._ospfDeadInterval:"
-               + rhs._ospfDeadInterval + "\n");
+               + rhs._ospfDeadInterval);
       }
 
       if (_ospfHelloMultiplier != rhs._ospfHelloMultiplier) {
          System.out.println("- " + string + "._ospfHelloMultiplier:"
-               + _ospfHelloMultiplier + "\n");
+               + _ospfHelloMultiplier);
          System.out.println("+ " + string + "._ospfHelloMultiplier:"
-               + rhs._ospfHelloMultiplier + "\n");
+               + rhs._ospfHelloMultiplier);
       }
 
       if (!Util.equalOrNull(_outgoingFilter, rhs._outgoingFilter)) {
          System.out.println("- " + string + "._outgoingFilter:"
-               + Util.objectToString(_outgoingFilter) + "\n");
+               + Util.objectToString(_outgoingFilter));
          System.out.println("+ " + string + "._outgoingFilter:"
-               + Util.objectToString(rhs._outgoingFilter) + "\n");
+               + Util.objectToString(rhs._outgoingFilter));
       }
 
       if (!Util.equalOrNull(_subnet, rhs._subnet)) {
          System.out.println("- " + string + "._subnet:"
-               + Util.objectToString(_subnet) + "\n");
+               + Util.objectToString(_subnet));
          System.out.println("+ " + string + "._subnet:"
-               + Util.objectToString(rhs._subnet) + "\n");
+               + Util.objectToString(rhs._subnet));
       }
 
       if (!Util.equalOrNull(_switchportMode, rhs._switchportMode)) {
          System.out.println("- " + string + "._switchportMode:"
-               + Util.objectToString(_switchportMode) + "\n");
+               + Util.objectToString(_switchportMode));
          System.out.println("+ " + string + "._switchportMode:"
-               + Util.objectToString(rhs._switchportMode) + "\n");
+               + Util.objectToString(rhs._switchportMode));
       }
 
       if (!Util.equalOrNull(_switchportTrunkEncapsulation,
             rhs._switchportTrunkEncapsulation)) {
          System.out.println("- " + string + "._switchportTrunkEncapsulation:"
-               + Util.objectToString(_switchportTrunkEncapsulation) + "\n");
+               + Util.objectToString(_switchportTrunkEncapsulation));
          System.out.println("+ " + string + "._switchportTrunkEncapsulation:"
-               + Util.objectToString(rhs._switchportTrunkEncapsulation) + "\n");
+               + Util.objectToString(rhs._switchportTrunkEncapsulation));
       }
 
       System.out.flush();

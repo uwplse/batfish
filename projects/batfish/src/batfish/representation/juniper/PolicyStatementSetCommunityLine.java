@@ -33,15 +33,17 @@ public class PolicyStatementSetCommunityLine extends PolicyStatementSetLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._community:" + Util.objectToString(_community) + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._community:"
+               + Util.objectToString(_community));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._community:" + Util.objectToString(_community) + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._community:"
+               + Util.objectToString(_community));
          System.out.flush();
          return;
       }
@@ -54,8 +56,10 @@ public class PolicyStatementSetCommunityLine extends PolicyStatementSetLine {
 
       PolicyStatementSetCommunityLine rhs = (PolicyStatementSetCommunityLine) o;
       if (!Util.equalOrNull(_community, rhs._community)) {
-         System.out.println("- " + string + "._community:" + Util.objectToString(_community) + "\n");
-         System.out.println("+ " + string + "._community:" + Util.objectToString(rhs._community) + "\n");
+         System.out.println("- " + string + "._community:"
+               + Util.objectToString(_community));
+         System.out.println("+ " + string + "._community:"
+               + Util.objectToString(rhs._community));
       }
       System.out.flush();
       return;

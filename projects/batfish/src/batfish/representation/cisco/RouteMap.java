@@ -56,21 +56,21 @@ public class RouteMap implements Serializable, RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          Util.diffRepresentationMaps(null, _clauses, string + "._clauses");
-         System.out.println("+ " + string + "._ignore:" + _ignore + "\n");
+         System.out.println("+ " + string + "._ignore:" + _ignore);
          System.out.println("+ " + string + "._mapName:"
-               + Util.objectToString(_mapName) + "\n");
+               + Util.objectToString(_mapName));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          Util.diffRepresentationMaps(_clauses, null, string + "._clauses");
-         System.out.println("- " + string + "._ignore:" + _ignore + "\n");
+         System.out.println("- " + string + "._ignore:" + _ignore);
          System.out.println("- " + string + "._mapName:"
-               + Util.objectToString(_mapName) + "\n");
+               + Util.objectToString(_mapName));
          System.out.flush();
          return;
       }
@@ -80,15 +80,15 @@ public class RouteMap implements Serializable, RepresentationObject {
       Util.diffRepresentationMaps(_clauses, rhs._clauses, string + "._clauses");
 
       if (_ignore != rhs._ignore) {
-         System.out.println("- " + string + "._ignore:" + _ignore + "\n");
-         System.out.println("+ " + string + "._ignore:" + rhs._ignore + "\n");
+         System.out.println("- " + string + "._ignore:" + _ignore);
+         System.out.println("+ " + string + "._ignore:" + rhs._ignore);
       }
 
       if (!Util.equalOrNull(_mapName, rhs._mapName)) {
          System.out.println("- " + string + "._mapName:"
-               + Util.objectToString(_mapName) + "\n");
+               + Util.objectToString(_mapName));
          System.out.println("+ " + string + "._mapName:"
-               + Util.objectToString(rhs._mapName) + "\n");
+               + Util.objectToString(rhs._mapName));
       }
 
       System.out.flush();

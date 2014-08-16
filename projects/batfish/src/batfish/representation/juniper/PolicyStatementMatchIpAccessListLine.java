@@ -36,14 +36,14 @@ public class PolicyStatementMatchIpAccessListLine extends
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          Util.diffRepresentationLists(null, _listNames, string + "._listNames");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          Util.diffRepresentationLists(_listNames, null, string + "._listNames");
          System.out.flush();
          return;
@@ -56,10 +56,11 @@ public class PolicyStatementMatchIpAccessListLine extends
       }
 
       PolicyStatementMatchIpAccessListLine rhs = (PolicyStatementMatchIpAccessListLine) o;
-      Util.diffRepresentationLists(_listNames, rhs._listNames, string + "._listNames");
+      Util.diffRepresentationLists(_listNames, rhs._listNames, string
+            + "._listNames");
       System.out.flush();
       return;
-      
+
    }
 
 }

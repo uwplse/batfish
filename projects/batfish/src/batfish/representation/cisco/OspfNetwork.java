@@ -6,7 +6,8 @@ import batfish.representation.Ip;
 import batfish.representation.RepresentationObject;
 import batfish.util.Util;
 
-public class OspfNetwork implements Comparable<OspfNetwork>, Serializable, RepresentationObject {
+public class OspfNetwork implements Comparable<OspfNetwork>, Serializable,
+      RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 
@@ -68,35 +69,43 @@ public class OspfNetwork implements Comparable<OspfNetwork>, Serializable, Repre
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._area:" + _area + "\n");
-         System.out.println("+ " + string + "._networkAddress:" + Util.objectToString(_networkAddress) + "\n");
-         System.out.println("+ " + string + "._subnetMask:" + Util.objectToString(_subnetMask) + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._area:" + _area);
+         System.out.println("+ " + string + "._networkAddress:"
+               + Util.objectToString(_networkAddress));
+         System.out.println("+ " + string + "._subnetMask:"
+               + Util.objectToString(_subnetMask));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._area:" + _area + "\n");
-         System.out.println("- " + string + "._networkAddress:" + Util.objectToString(_networkAddress) + "\n");
-         System.out.println("- " + string + "._subnetMask:" + Util.objectToString(_subnetMask) + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._area:" + _area);
+         System.out.println("- " + string + "._networkAddress:"
+               + Util.objectToString(_networkAddress));
+         System.out.println("- " + string + "._subnetMask:"
+               + Util.objectToString(_subnetMask));
          System.out.flush();
          return;
       }
 
       OspfNetwork rhs = (OspfNetwork) o;
       if (_area != rhs._area) {
-         System.out.println("- " + string + "._area:" + _area + "\n");
-         System.out.println("+ " + string + "._area:" + rhs._area + "\n");
+         System.out.println("- " + string + "._area:" + _area);
+         System.out.println("+ " + string + "._area:" + rhs._area);
       }
       if (!Util.equalOrNull(_networkAddress, rhs._networkAddress)) {
-         System.out.println("- " + string + "._networkAddress:" + Util.objectToString(_networkAddress) + "\n");
-         System.out.println("+ " + string + "._networkAddress:" + Util.objectToString(rhs._networkAddress) + "\n");
+         System.out.println("- " + string + "._networkAddress:"
+               + Util.objectToString(_networkAddress));
+         System.out.println("+ " + string + "._networkAddress:"
+               + Util.objectToString(rhs._networkAddress));
       }
       if (!Util.equalOrNull(_subnetMask, rhs._subnetMask)) {
-         System.out.println("- " + string + "._subnetMask:" + Util.objectToString(_subnetMask) + "\n");
-         System.out.println("+ " + string + "._subnetMask:" + Util.objectToString(rhs._subnetMask) + "\n");
+         System.out.println("- " + string + "._subnetMask:"
+               + Util.objectToString(_subnetMask));
+         System.out.println("+ " + string + "._subnetMask:"
+               + Util.objectToString(rhs._subnetMask));
       }
       System.out.flush();
       return;

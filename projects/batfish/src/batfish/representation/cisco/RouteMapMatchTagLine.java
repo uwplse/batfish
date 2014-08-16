@@ -37,14 +37,14 @@ public class RouteMapMatchTagLine extends RouteMapMatchLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          Util.diffRepresentationSets(null, _tags, string + "._tags");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          Util.diffRepresentationSets(_tags, null, string + "._tags");
          System.out.flush();
          return;

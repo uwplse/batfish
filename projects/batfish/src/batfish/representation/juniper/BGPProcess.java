@@ -74,10 +74,10 @@ public class BGPProcess implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._pid:" + _pid + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._pid:" + _pid);
          System.out.println("+ " + string + "._routerID:"
-               + Util.objectToString(_routerID) + "\n");
+               + Util.objectToString(_routerID));
          Util.diffRepresentationMaps(null, _peerGroups, string + "._peerGroups");
          Util.diffRepresentationLists(null, _activatedNeighbors, string
                + "._activatedNeighbors");
@@ -85,10 +85,10 @@ public class BGPProcess implements RepresentationObject {
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._pid:" + _pid + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._pid:" + _pid);
          System.out.println("- " + string + "._routerID:"
-               + Util.objectToString(_routerID) + "\n");
+               + Util.objectToString(_routerID));
          Util.diffRepresentationMaps(_peerGroups, null, string + "._peerGroups");
          Util.diffRepresentationLists(_activatedNeighbors, null, string
                + "._activatedNeighbors");
@@ -98,15 +98,15 @@ public class BGPProcess implements RepresentationObject {
       BGPProcess rhs = (BGPProcess) o;
 
       if (_pid != rhs._pid) {
-         System.out.println("- " + string + "._pid:" + _pid + "\n");
-         System.out.println("+ " + string + "._pid:" + rhs._pid + "\n");
+         System.out.println("- " + string + "._pid:" + _pid);
+         System.out.println("+ " + string + "._pid:" + rhs._pid);
       }
 
       if (!Util.equalOrNull(_routerID, rhs._routerID)) {
          System.out.println("- " + string + "._routerID:"
-               + Util.objectToString(_routerID) + "\n");
+               + Util.objectToString(_routerID));
          System.out.println("+ " + string + "._routerID:"
-               + Util.objectToString(rhs._routerID) + "\n");
+               + Util.objectToString(rhs._routerID));
       }
 
       Util.diffRepresentationMaps(_peerGroups, rhs._peerGroups, string

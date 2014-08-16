@@ -264,46 +264,67 @@ public class ExtendedAccessListTerm implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._ala:" + Util.objectToString(_ala) + "\n");
-         Util.diffRepresentationLists(null, _destinationAddress, string + "._destinationAddress");
-         Util.diffRepresentationLists(null, _dstPortRanges, string + "._dstPortRanges");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._ala:"
+               + Util.objectToString(_ala));
+         Util.diffRepresentationLists(null, _destinationAddress, string
+               + "._destinationAddress");
+         Util.diffRepresentationLists(null, _dstPortRanges, string
+               + "._dstPortRanges");
          Util.diffRepresentationLists(null, _protocols, string + "._protocols");
-         Util.diffRepresentationLists(null, _sourceAddress, string + "._sourceAddress");
-         Util.diffRepresentationLists(null, _srcPortRanges, string + "._srcPortRanges");
-         System.out.println("+ " + string + "._tName:" + Util.objectToString(_tName) + "\n");
+         Util.diffRepresentationLists(null, _sourceAddress, string
+               + "._sourceAddress");
+         Util.diffRepresentationLists(null, _srcPortRanges, string
+               + "._srcPortRanges");
+         System.out.println("+ " + string + "._tName:"
+               + Util.objectToString(_tName));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._ala:" + Util.objectToString(_ala) + "\n");
-         Util.diffRepresentationLists(_destinationAddress, null, string + "._destinationAddress");
-         Util.diffRepresentationLists(_dstPortRanges, null, string + "._dstPortRanges");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._ala:"
+               + Util.objectToString(_ala));
+         Util.diffRepresentationLists(_destinationAddress, null, string
+               + "._destinationAddress");
+         Util.diffRepresentationLists(_dstPortRanges, null, string
+               + "._dstPortRanges");
          Util.diffRepresentationLists(_protocols, null, string + "._protocols");
-         Util.diffRepresentationLists(_sourceAddress, null, string + "._sourceAddress");
-         Util.diffRepresentationLists(_srcPortRanges, null, string + "._srcPortRanges");
-         System.out.println("- " + string + "._tName:" + Util.objectToString(_tName) + "\n");
+         Util.diffRepresentationLists(_sourceAddress, null, string
+               + "._sourceAddress");
+         Util.diffRepresentationLists(_srcPortRanges, null, string
+               + "._srcPortRanges");
+         System.out.println("- " + string + "._tName:"
+               + Util.objectToString(_tName));
          System.out.flush();
          return;
       }
 
       ExtendedAccessListTerm rhs = (ExtendedAccessListTerm) o;
       if (!Util.equalOrNull(_ala, rhs._ala)) {
-         System.out.println("- " + string + "._ala:" + Util.objectToString(_ala) + "\n");
-         System.out.println("+ " + string + "._ala:" + Util.objectToString(rhs._ala) + "\n");
+         System.out.println("- " + string + "._ala:"
+               + Util.objectToString(_ala));
+         System.out.println("+ " + string + "._ala:"
+               + Util.objectToString(rhs._ala));
       }
-      Util.diffRepresentationLists(_destinationAddress, rhs._destinationAddress, string + "._destinationAddress");
-      Util.diffRepresentationLists(_dstPortRanges, rhs._dstPortRanges, string + "._dstPortRanges");
-      Util.diffRepresentationLists(_protocols, rhs._protocols, string + "._protocols");
-      Util.diffRepresentationLists(_sourceAddress, rhs._sourceAddress, string + "._sourceAddress");
-      Util.diffRepresentationLists(_srcPortRanges, rhs._srcPortRanges, string + "._srcPortRanges");
+      Util.diffRepresentationLists(_destinationAddress,
+            rhs._destinationAddress, string + "._destinationAddress");
+      Util.diffRepresentationLists(_dstPortRanges, rhs._dstPortRanges, string
+            + "._dstPortRanges");
+      Util.diffRepresentationLists(_protocols, rhs._protocols, string
+            + "._protocols");
+      Util.diffRepresentationLists(_sourceAddress, rhs._sourceAddress, string
+            + "._sourceAddress");
+      Util.diffRepresentationLists(_srcPortRanges, rhs._srcPortRanges, string
+            + "._srcPortRanges");
       if (!Util.equalOrNull(_tName, rhs._tName)) {
-         System.out.println("- " + string + "._tName:" + Util.objectToString(_tName) + "\n");
-         System.out.println("+ " + string + "._tName:" + Util.objectToString(rhs._tName) + "\n");
+         System.out.println("- " + string + "._tName:"
+               + Util.objectToString(_tName));
+         System.out.println("+ " + string + "._tName:"
+               + Util.objectToString(rhs._tName));
       }
-      
+
       System.out.flush();
       return;
    }

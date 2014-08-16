@@ -121,71 +121,67 @@ public class BGPGroup implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._clusterId:"
-               + Util.objectToString(_clusterId) + "\n");
+               + Util.objectToString(_clusterId));
          System.out.println("+ " + string + "._name:"
-               + Util.objectToString(_name) + "\n");
+               + Util.objectToString(_name));
          System.out.println("+ " + string + "._localAS:"
-               + Util.objectToString(_localAS) + "\n");
+               + Util.objectToString(_localAS));
          System.out.println("+ " + string + "._routeReflectorClient:"
-               + _routeReflectorClient + "\n");
+               + _routeReflectorClient);
          Util.diffRepresentationLists(null, _neighbors, string + "._neighbors");
-         System.out.println("+ " + string + "._isExternal:" + _isExternal
-               + "\n");
+         System.out.println("+ " + string + "._isExternal:" + _isExternal);
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._clusterId:"
-               + Util.objectToString(_clusterId) + "\n");
+               + Util.objectToString(_clusterId));
          System.out.println("- " + string + "._name:"
-               + Util.objectToString(_name) + "\n");
+               + Util.objectToString(_name));
          System.out.println("- " + string + "._localAS:"
-               + Util.objectToString(_localAS) + "\n");
+               + Util.objectToString(_localAS));
          System.out.println("- " + string + "._routeReflectorClient:"
-               + _routeReflectorClient + "\n");
+               + _routeReflectorClient);
          Util.diffRepresentationLists(_neighbors, null, string + "._neighbors");
-         System.out.println("- " + string + "._isExternal:" + _isExternal
-               + "\n");
+         System.out.println("- " + string + "._isExternal:" + _isExternal);
          return;
       }
 
       BGPGroup rhs = (BGPGroup) o;
       if (!Util.equalOrNull(_clusterId, rhs._clusterId)) {
          System.out.println("- " + string + "._clusterId:"
-               + Util.objectToString(_clusterId) + "\n");
+               + Util.objectToString(_clusterId));
          System.out.println("+ " + string + "._clusterId:"
-               + Util.objectToString(rhs._clusterId) + "\n");
+               + Util.objectToString(rhs._clusterId));
       }
       if (!Util.equalOrNull(_name, rhs._name)) {
          System.out.println("- " + string + "._name:"
-               + Util.objectToString(_name) + "\n");
+               + Util.objectToString(_name));
          System.out.println("+ " + string + "._name:"
-               + Util.objectToString(rhs._name) + "\n");
+               + Util.objectToString(rhs._name));
       }
       if (!Util.equalOrNull(_localAS, rhs._localAS)) {
          System.out.println("- " + string + "._localAS:"
-               + Util.objectToString(_localAS) + "\n");
+               + Util.objectToString(_localAS));
          System.out.println("+ " + string + "._localAS:"
-               + Util.objectToString(rhs._localAS) + "\n");
+               + Util.objectToString(rhs._localAS));
       }
       if (!Util.equalOrNull(_routeReflectorClient, rhs._routeReflectorClient)) {
          System.out.println("- " + string + "._routeReflectorClient:"
-               + Util.objectToString(_routeReflectorClient) + "\n");
+               + Util.objectToString(_routeReflectorClient));
          System.out.println("+ " + string + "._routeReflectorClient:"
-               + Util.objectToString(rhs._routeReflectorClient) + "\n");
+               + Util.objectToString(rhs._routeReflectorClient));
       }
 
       Util.diffRepresentationLists(_neighbors, rhs._neighbors, string
             + "._neighbors");
 
       if (_isExternal != rhs._isExternal) {
-         System.out.println("- " + string + "._isExternal:" + _isExternal
-               + "\n");
-         System.out.println("+ " + string + "._isExternal:" + rhs._isExternal
-               + "\n");
+         System.out.println("- " + string + "._isExternal:" + _isExternal);
+         System.out.println("+ " + string + "._isExternal:" + rhs._isExternal);
       }
       System.out.flush();
       return;

@@ -51,21 +51,21 @@ public class RouteMapSetOriginTypeLine extends RouteMapSetLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._asNum:"
-               + Util.objectToString(_asNum) + "\n");
+               + Util.objectToString(_asNum));
          System.out.println("+ " + string + "._originType:"
-               + Util.objectToString(_originType) + "\n");
+               + Util.objectToString(_originType));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._asNum:"
-               + Util.objectToString(_asNum) + "\n");
+               + Util.objectToString(_asNum));
          System.out.println("- " + string + "._originType:"
-               + Util.objectToString(_originType) + "\n");
+               + Util.objectToString(_originType));
          System.out.flush();
          return;
       }
@@ -79,15 +79,15 @@ public class RouteMapSetOriginTypeLine extends RouteMapSetLine {
       RouteMapSetOriginTypeLine rhs = (RouteMapSetOriginTypeLine) o;
       if (!Util.equalOrNull(_asNum, rhs._asNum)) {
          System.out.println("- " + string + "._asNum:"
-               + Util.objectToString(_asNum) + "\n");
+               + Util.objectToString(_asNum));
          System.out.println("+ " + string + "._asNum:"
-               + Util.objectToString(rhs._asNum) + "\n");
+               + Util.objectToString(rhs._asNum));
       }
       if (!Util.equalOrNull(_originType, rhs._originType)) {
          System.out.println("- " + string + "._originType:"
-               + Util.objectToString(_originType) + "\n");
+               + Util.objectToString(_originType));
          System.out.println("+ " + string + "._originType:"
-               + Util.objectToString(rhs._originType) + "\n");
+               + Util.objectToString(rhs._originType));
       }
 
       System.out.flush();

@@ -83,27 +83,39 @@ public class OspfRedistributionPolicy extends RedistributionPolicy implements
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._map:" + Util.objectToString(_map) + "\n");
-         System.out.println("+ " + string + "._metric:" + Util.objectToString(_metric) + "\n");
-         System.out.println("+ " + string + "._metricType:" + Util.objectToString(_metricType) + "\n");
-         System.out.println("+ " + string + "._subnets:" + _subnets + "\n");
-         System.out.println("+ " + string + "._tag:" + Util.objectToString(_tag) + "\n");
-         System.out.println("+ " + string + "._destinationProtocol:" + Util.objectToString(_destinationProtocol) + "\n");
-         System.out.println("+ " + string + "._sourceProtocol:" + Util.objectToString(_sourceProtocol) + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._map:"
+               + Util.objectToString(_map));
+         System.out.println("+ " + string + "._metric:"
+               + Util.objectToString(_metric));
+         System.out.println("+ " + string + "._metricType:"
+               + Util.objectToString(_metricType));
+         System.out.println("+ " + string + "._subnets:" + _subnets);
+         System.out.println("+ " + string + "._tag:"
+               + Util.objectToString(_tag));
+         System.out.println("+ " + string + "._destinationProtocol:"
+               + Util.objectToString(_destinationProtocol));
+         System.out.println("+ " + string + "._sourceProtocol:"
+               + Util.objectToString(_sourceProtocol));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._map:" + Util.objectToString(_map) + "\n");
-         System.out.println("- " + string + "._metric:" + Util.objectToString(_metric) + "\n");
-         System.out.println("- " + string + "._metricType:" + Util.objectToString(_metricType) + "\n");
-         System.out.println("- " + string + "._subnets:" + _subnets + "\n");
-         System.out.println("- " + string + "._tag:" + Util.objectToString(_tag) + "\n");
-         System.out.println("- " + string + "._destinationProtocol:" + Util.objectToString(_destinationProtocol) + "\n");
-         System.out.println("- " + string + "._sourceProtocol:" + Util.objectToString(_sourceProtocol) + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._map:"
+               + Util.objectToString(_map));
+         System.out.println("- " + string + "._metric:"
+               + Util.objectToString(_metric));
+         System.out.println("- " + string + "._metricType:"
+               + Util.objectToString(_metricType));
+         System.out.println("- " + string + "._subnets:" + _subnets);
+         System.out.println("- " + string + "._tag:"
+               + Util.objectToString(_tag));
+         System.out.println("- " + string + "._destinationProtocol:"
+               + Util.objectToString(_destinationProtocol));
+         System.out.println("- " + string + "._sourceProtocol:"
+               + Util.objectToString(_sourceProtocol));
          System.out.flush();
          return;
       }
@@ -111,33 +123,44 @@ public class OspfRedistributionPolicy extends RedistributionPolicy implements
       OspfRedistributionPolicy rhs = (OspfRedistributionPolicy) o;
 
       if (!Util.equalOrNull(_map, rhs._map)) {
-         System.out.println("- " + string + "._map:" + Util.objectToString(_map) + "\n");
-         System.out.println("+ " + string + "._map:" + Util.objectToString(rhs._map) + "\n");
+         System.out.println("- " + string + "._map:"
+               + Util.objectToString(_map));
+         System.out.println("+ " + string + "._map:"
+               + Util.objectToString(rhs._map));
       }
       if (!Util.equalOrNull(_metric, rhs._metric)) {
-         System.out.println("- " + string + "._metric:" + Util.objectToString(_metric) + "\n");
-         System.out.println("+ " + string + "._metric:" + Util.objectToString(rhs._metric) + "\n");
+         System.out.println("- " + string + "._metric:"
+               + Util.objectToString(_metric));
+         System.out.println("+ " + string + "._metric:"
+               + Util.objectToString(rhs._metric));
       }
       if (!Util.equalOrNull(_metricType, rhs._metricType)) {
-         System.out.println("- " + string + "._metricType:" + Util.objectToString(_metricType) + "\n");
-         System.out.println("+ " + string + "._metricType:" + Util.objectToString(rhs._metricType) + "\n");
+         System.out.println("- " + string + "._metricType:"
+               + Util.objectToString(_metricType));
+         System.out.println("+ " + string + "._metricType:"
+               + Util.objectToString(rhs._metricType));
       }
       if (_subnets != rhs._subnets) {
-         System.out.println("- " + string + "._subnets:" + _subnets + "\n");
-         System.out.println("+ " + string + "._subnets:" + rhs._subnets
-               + "\n");
+         System.out.println("- " + string + "._subnets:" + _subnets);
+         System.out.println("+ " + string + "._subnets:" + rhs._subnets);
       }
       if (!Util.equalOrNull(_tag, rhs._tag)) {
-         System.out.println("- " + string + "._tag:" + Util.objectToString(_tag) + "\n");
-         System.out.println("+ " + string + "._tag:" + Util.objectToString(rhs._tag) + "\n");
+         System.out.println("- " + string + "._tag:"
+               + Util.objectToString(_tag));
+         System.out.println("+ " + string + "._tag:"
+               + Util.objectToString(rhs._tag));
       }
       if (!Util.equalOrNull(_destinationProtocol, rhs._destinationProtocol)) {
-         System.out.println("- " + string + "._destinationProtocol:" + Util.objectToString(_destinationProtocol) + "\n");
-         System.out.println("+ " + string + "._destinationProtocol:" + Util.objectToString(rhs._destinationProtocol) + "\n");
+         System.out.println("- " + string + "._destinationProtocol:"
+               + Util.objectToString(_destinationProtocol));
+         System.out.println("+ " + string + "._destinationProtocol:"
+               + Util.objectToString(rhs._destinationProtocol));
       }
       if (!Util.equalOrNull(_sourceProtocol, rhs._sourceProtocol)) {
-         System.out.println("- " + string + "._sourceProtocol:" + Util.objectToString(_sourceProtocol) + "\n");
-         System.out.println("+ " + string + "._sourceProtocol:" + Util.objectToString(rhs._sourceProtocol) + "\n");
+         System.out.println("- " + string + "._sourceProtocol:"
+               + Util.objectToString(_sourceProtocol));
+         System.out.println("+ " + string + "._sourceProtocol:"
+               + Util.objectToString(rhs._sourceProtocol));
       }
       System.out.flush();
       return;

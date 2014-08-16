@@ -131,7 +131,7 @@ public class CiscoConfiguration implements Serializable, RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          Util.diffRepresentationMaps(null, _asPathAccessLists, string
                + "._asPathAccessLists");
          if (_bgpProcess != null) {
@@ -160,7 +160,7 @@ public class CiscoConfiguration implements Serializable, RepresentationObject {
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          Util.diffRepresentationMaps(_asPathAccessLists, null, string
                + "._asPathAccessLists");
          if (_bgpProcess != null) {
@@ -210,9 +210,9 @@ public class CiscoConfiguration implements Serializable, RepresentationObject {
          _ospfProcess.diffRepresentation(rhs._ospfProcess, string
                + "._ospfProcess", false);
       }
-      else if(rhs._ospfProcess!= null){
-         rhs._ospfProcess.diffRepresentation(null, string
-               + "._ospfProcess", true);
+      else if (rhs._ospfProcess != null) {
+         rhs._ospfProcess.diffRepresentation(null, string + "._ospfProcess",
+               true);
       }
       Util.diffRepresentationMaps(_prefixLists, rhs._prefixLists, string
             + "._prefixLists");

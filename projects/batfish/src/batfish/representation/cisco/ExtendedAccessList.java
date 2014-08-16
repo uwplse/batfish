@@ -45,7 +45,7 @@ public class ExtendedAccessList implements Serializable, RepresentationObject {
 
    @Override
    public String toString() {
-      String output = super.toString() + "\n" + "Identifier: " + _id;
+      String output = super.toString() + "Identifier: " + _id;
       for (ExtendedAccessListLine line : _lines) {
          output += "\n" + line;
       }
@@ -62,18 +62,16 @@ public class ExtendedAccessList implements Serializable, RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._id:" + Util.objectToString(_id)
-               + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._id:" + Util.objectToString(_id));
          Util.diffRepresentationLists(null, _lines, string + "._lines");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
-               + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id));
          Util.diffRepresentationLists(_lines, null, string + "._lines");
          System.out.flush();
          return;
@@ -81,10 +79,9 @@ public class ExtendedAccessList implements Serializable, RepresentationObject {
 
       ExtendedAccessList rhs = (ExtendedAccessList) o;
       if (!Util.equalOrNull(_id, rhs._id)) {
-         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
-               + "\n");
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id));
          System.out.println("+ " + string + "._id:"
-               + Util.objectToString(rhs._id) + "\n");
+               + Util.objectToString(rhs._id));
       }
 
       Util.diffRepresentationLists(_lines, rhs._lines, string + "._lines");

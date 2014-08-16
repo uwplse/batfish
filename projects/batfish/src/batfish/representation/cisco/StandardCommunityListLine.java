@@ -43,9 +43,9 @@ public class StandardCommunityListLine implements Serializable,
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._action:"
-               + Util.objectToString(_action) + "\n");
+               + Util.objectToString(_action));
          Util.diffRepresentationLists(null, _communities, string
                + "._communities");
          System.out.flush();
@@ -53,9 +53,9 @@ public class StandardCommunityListLine implements Serializable,
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._action:"
-               + Util.objectToString(_action) + "\n");
+               + Util.objectToString(_action));
          Util.diffRepresentationLists(_communities, null, string
                + "._communities");
          System.out.flush();
@@ -65,9 +65,9 @@ public class StandardCommunityListLine implements Serializable,
       StandardCommunityListLine rhs = (StandardCommunityListLine) o;
       if (!Util.equalOrNull(_action, rhs._action)) {
          System.out.println("- " + string + "._action:"
-               + Util.objectToString(_action) + "\n");
+               + Util.objectToString(_action));
          System.out.println("+ " + string + "._action:"
-               + Util.objectToString(rhs._action) + "\n");
+               + Util.objectToString(rhs._action));
       }
 
       Util.diffRepresentationLists(_communities, rhs._communities, string

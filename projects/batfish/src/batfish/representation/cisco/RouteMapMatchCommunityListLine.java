@@ -37,14 +37,14 @@ public class RouteMapMatchCommunityListLine extends RouteMapMatchLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          Util.diffRepresentationSets(null, _listNames, string + "._listNames");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          Util.diffRepresentationSets(_listNames, null, string + "._listNames");
          System.out.flush();
          return;

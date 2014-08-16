@@ -61,18 +61,16 @@ public class StandardAccessList implements Serializable, RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._id:" + Util.objectToString(_id)
-               + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._id:" + Util.objectToString(_id));
          Util.diffRepresentationLists(null, _lines, string + "._lines");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
-               + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id));
          Util.diffRepresentationLists(_lines, null, string + "._lines");
          System.out.flush();
          return;
@@ -80,10 +78,9 @@ public class StandardAccessList implements Serializable, RepresentationObject {
 
       StandardAccessList rhs = (StandardAccessList) o;
       if (!Util.equalOrNull(_id, rhs._id)) {
-         System.out.println("- " + string + "._id:" + Util.objectToString(_id)
-               + "\n");
+         System.out.println("- " + string + "._id:" + Util.objectToString(_id));
          System.out.println("+ " + string + "._id:"
-               + Util.objectToString(rhs._id) + "\n");
+               + Util.objectToString(rhs._id));
       }
 
       Util.diffRepresentationLists(_lines, rhs._lines, string + "._lines");

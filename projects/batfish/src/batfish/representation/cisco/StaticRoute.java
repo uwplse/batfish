@@ -73,91 +73,89 @@ public class StaticRoute implements Serializable, RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._distance:" + _distance + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._distance:" + _distance);
          System.out.println("+ " + string + "._mask:"
-               + Util.objectToString(_mask) + "\n");
+               + Util.objectToString(_mask));
          System.out.println("+ " + string + "._nextHopInterface:"
-               + Util.objectToString(_nextHopInterface) + "\n");
+               + Util.objectToString(_nextHopInterface));
          System.out.println("+ " + string + "._nextHopIp:"
-               + Util.objectToString(_nextHopIp) + "\n");
-         System.out.println("+ " + string + "._permanent:" + _permanent + "\n");
+               + Util.objectToString(_nextHopIp));
+         System.out.println("+ " + string + "._permanent:" + _permanent);
          System.out.println("+ " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
+               + Util.objectToString(_prefix));
          System.out.println("+ " + string + "._tag:"
-               + Util.objectToString(_tag) + "\n");
+               + Util.objectToString(_tag));
          System.out.println("+ " + string + "._track:"
-               + Util.objectToString(_track) + "\n");
+               + Util.objectToString(_track));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._distance:" + _distance + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._distance:" + _distance);
          System.out.println("- " + string + "._mask:"
-               + Util.objectToString(_mask) + "\n");
+               + Util.objectToString(_mask));
          System.out.println("- " + string + "._nextHopInterface:"
-               + Util.objectToString(_nextHopInterface) + "\n");
+               + Util.objectToString(_nextHopInterface));
          System.out.println("- " + string + "._nextHopIp:"
-               + Util.objectToString(_nextHopIp) + "\n");
-         System.out.println("- " + string + "._permanent:" + _permanent + "\n");
+               + Util.objectToString(_nextHopIp));
+         System.out.println("- " + string + "._permanent:" + _permanent);
          System.out.println("- " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
+               + Util.objectToString(_prefix));
          System.out.println("- " + string + "._tag:"
-               + Util.objectToString(_tag) + "\n");
+               + Util.objectToString(_tag));
          System.out.println("- " + string + "._track:"
-               + Util.objectToString(_track) + "\n");
+               + Util.objectToString(_track));
          System.out.flush();
          return;
       }
 
       StaticRoute rhs = (StaticRoute) o;
       if (_distance != rhs._distance) {
-         System.out.println("- " + string + "._distance:" + _distance + "\n");
-         System.out.println("+ " + string + "._distance:" + rhs._distance
-               + "\n");
+         System.out.println("- " + string + "._distance:" + _distance);
+         System.out.println("+ " + string + "._distance:" + rhs._distance);
       }
       if (!Util.equalOrNull(_mask, rhs._mask)) {
          System.out.println("- " + string + "._mask:"
-               + Util.objectToString(_mask) + "\n");
+               + Util.objectToString(_mask));
          System.out.println("+ " + string + "._mask:"
-               + Util.objectToString(rhs._mask) + "\n");
+               + Util.objectToString(rhs._mask));
       }
       if (!Util.equalOrNull(_nextHopInterface, rhs._nextHopInterface)) {
          System.out.println("- " + string + "._nextHopInterface:"
-               + Util.objectToString(_nextHopInterface) + "\n");
+               + Util.objectToString(_nextHopInterface));
          System.out.println("+ " + string + "._nextHopInterface:"
-               + Util.objectToString(rhs._nextHopInterface) + "\n");
+               + Util.objectToString(rhs._nextHopInterface));
       }
       if (!Util.equalOrNull(_nextHopIp, rhs._nextHopIp)) {
          System.out.println("- " + string + "._nextHopIp:"
-               + Util.objectToString(_nextHopIp) + "\n");
+               + Util.objectToString(_nextHopIp));
          System.out.println("+ " + string + "._nextHopIp:"
-               + Util.objectToString(rhs._nextHopIp) + "\n");
+               + Util.objectToString(rhs._nextHopIp));
       }
       if (_permanent != rhs._permanent) {
-         System.out.println("- " + string + "._permanent:" + _permanent + "\n");
-         System.out.println("+ " + string + "._permanent:" + rhs._permanent
-               + "\n");
+         System.out.println("- " + string + "._permanent:" + _permanent);
+         System.out.println("+ " + string + "._permanent:" + rhs._permanent);
       }
       if (!Util.equalOrNull(_prefix, rhs._prefix)) {
          System.out.println("- " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
+               + Util.objectToString(_prefix));
          System.out.println("+ " + string + "._prefix:"
-               + Util.objectToString(rhs._prefix) + "\n");
+               + Util.objectToString(rhs._prefix));
       }
       if (!Util.equalOrNull(_tag, rhs._tag)) {
          System.out.println("- " + string + "._tag:"
-               + Util.objectToString(_tag) + "\n");
+               + Util.objectToString(_tag));
          System.out.println("+ " + string + "._tag:"
-               + Util.objectToString(rhs._tag) + "\n");
+               + Util.objectToString(rhs._tag));
       }
       if (!Util.equalOrNull(_track, rhs._track)) {
          System.out.println("- " + string + "._track:"
-               + Util.objectToString(_track) + "\n");
+               + Util.objectToString(_track));
          System.out.println("+ " + string + "._track:"
-               + Util.objectToString(rhs._track) + "\n");
+               + Util.objectToString(rhs._track));
       }
       System.out.flush();
       return;

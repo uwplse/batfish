@@ -51,18 +51,18 @@ public class RouteFilter implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._name:" + Util.objectToString(_name)
-               + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._name:"
+               + Util.objectToString(_name));
          Util.diffRepresentationLists(null, _lines, string + "._lines");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._name:" + Util.objectToString(_name)
-               + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._name:"
+               + Util.objectToString(_name));
          Util.diffRepresentationLists(_lines, null, string + "._lines");
          System.out.flush();
          return;
@@ -70,10 +70,10 @@ public class RouteFilter implements RepresentationObject {
 
       RouteFilter rhs = (RouteFilter) o;
       if (!Util.equalOrNull(_name, rhs._name)) {
-         System.out.println("- " + string + "._name:" + Util.objectToString(_name)
-               + "\n");
+         System.out.println("- " + string + "._name:"
+               + Util.objectToString(_name));
          System.out.println("+ " + string + "._name:"
-               + Util.objectToString(rhs._name) + "\n");
+               + Util.objectToString(rhs._name));
       }
 
       Util.diffRepresentationLists(_lines, rhs._lines, string + "._lines");

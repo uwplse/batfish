@@ -35,14 +35,14 @@ public class PolicyStatementSetNextHopLine extends PolicyStatementSetLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          Util.diffRepresentationLists(null, _nextHops, string + "._nextHops");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          Util.diffRepresentationLists(_nextHops, null, string + "._nextHops");
          System.out.flush();
          return;
@@ -55,7 +55,8 @@ public class PolicyStatementSetNextHopLine extends PolicyStatementSetLine {
       }
 
       PolicyStatementSetNextHopLine rhs = (PolicyStatementSetNextHopLine) o;
-      Util.diffRepresentationLists(_nextHops, rhs._nextHops, string + "._nextHops");
+      Util.diffRepresentationLists(_nextHops, rhs._nextHops, string
+            + "._nextHops");
       System.out.flush();
       return;
    }

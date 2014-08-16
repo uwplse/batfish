@@ -49,55 +49,48 @@ public class GenerateRoute implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
-         System.out.println("+ " + string + "._prefixLength:" + _prefixLength
-               + "\n");
+               + Util.objectToString(_prefix));
+         System.out.println("+ " + string + "._prefixLength:" + _prefixLength);
          System.out.println("+ " + string + "._policy:"
-               + Util.objectToString(_policy) + "\n");
-         System.out.println("+ " + string + "._preference:" + _preference
-               + "\n");
+               + Util.objectToString(_policy));
+         System.out.println("+ " + string + "._preference:" + _preference);
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
-         System.out.println("- " + string + "._prefixLength:" + _prefixLength
-               + "\n");
+               + Util.objectToString(_prefix));
+         System.out.println("- " + string + "._prefixLength:" + _prefixLength);
          System.out.println("- " + string + "._policy:"
-               + Util.objectToString(_policy) + "\n");
-         System.out.println("- " + string + "._preference:" + _preference
-               + "\n");
+               + Util.objectToString(_policy));
+         System.out.println("- " + string + "._preference:" + _preference);
          return;
       }
 
       GenerateRoute rhs = (GenerateRoute) o;
       if (!Util.equalOrNull(_prefix, rhs._prefix)) {
          System.out.println("- " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
+               + Util.objectToString(_prefix));
          System.out.println("+ " + string + "._prefix:"
-               + Util.objectToString(rhs._prefix) + "\n");
+               + Util.objectToString(rhs._prefix));
       }
       if (_prefixLength != rhs._prefixLength) {
-         System.out.println("- " + string + "._prefixLength:" + _prefixLength
-               + "\n");
+         System.out.println("- " + string + "._prefixLength:" + _prefixLength);
          System.out.println("+ " + string + "._prefixLength:"
-               + rhs._prefixLength + "\n");
+               + rhs._prefixLength);
       }
       if (!Util.equalOrNull(_policy, rhs._policy)) {
          System.out.println("- " + string + "._policy:"
-               + Util.objectToString(_policy) + "\n");
+               + Util.objectToString(_policy));
          System.out.println("+ " + string + "._policy:"
-               + Util.objectToString(rhs._policy) + "\n");
+               + Util.objectToString(rhs._policy));
       }
       if (_preference != rhs._preference) {
-         System.out.println("- " + string + "._preference:" + _preference
-               + "\n");
-         System.out.println("+ " + string + "._preference:" + rhs._preference
-               + "\n");
+         System.out.println("- " + string + "._preference:" + _preference);
+         System.out.println("+ " + string + "._preference:" + rhs._preference);
       }
       System.out.flush();
       return;

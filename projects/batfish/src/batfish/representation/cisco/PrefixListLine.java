@@ -56,27 +56,27 @@ public class PrefixListLine implements Serializable, RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._action:"
-               + Util.objectToString(_action) + "\n");
+               + Util.objectToString(_action));
          System.out.println("+ " + string + "._lengthRange:"
-               + Util.objectToString(_lengthRange) + "\n");
+               + Util.objectToString(_lengthRange));
          System.out.println("+ " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
-         System.out.println("+ " + string + "._prefixLength:" + _prefixLength + "\n");
+               + Util.objectToString(_prefix));
+         System.out.println("+ " + string + "._prefixLength:" + _prefixLength);
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._action:"
-               + Util.objectToString(_action) + "\n");
+               + Util.objectToString(_action));
          System.out.println("- " + string + "._lengthRange:"
-               + Util.objectToString(_lengthRange) + "\n");
+               + Util.objectToString(_lengthRange));
          System.out.println("- " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
-         System.out.println("- " + string + "._prefixLength:" + _prefixLength + "\n");
+               + Util.objectToString(_prefix));
+         System.out.println("- " + string + "._prefixLength:" + _prefixLength);
          System.out.flush();
          return;
       }
@@ -84,26 +84,26 @@ public class PrefixListLine implements Serializable, RepresentationObject {
       PrefixListLine rhs = (PrefixListLine) o;
       if (!Util.equalOrNull(_action, rhs._action)) {
          System.out.println("- " + string + "._action:"
-               + Util.objectToString(_action) + "\n");
+               + Util.objectToString(_action));
          System.out.println("+ " + string + "._action:"
-               + Util.objectToString(rhs._action) + "\n");
+               + Util.objectToString(rhs._action));
       }
       if (!Util.equalOrNull(_lengthRange, rhs._lengthRange)) {
          System.out.println("- " + string + "._lengthRange:"
-               + Util.objectToString(_lengthRange) + "\n");
+               + Util.objectToString(_lengthRange));
          System.out.println("+ " + string + "._lengthRange:"
-               + Util.objectToString(rhs._lengthRange) + "\n");
+               + Util.objectToString(rhs._lengthRange));
       }
       if (!Util.equalOrNull(_prefix, rhs._prefix)) {
          System.out.println("- " + string + "._prefix:"
-               + Util.objectToString(_prefix) + "\n");
+               + Util.objectToString(_prefix));
          System.out.println("+ " + string + "._prefix:"
-               + Util.objectToString(rhs._prefix) + "\n");
+               + Util.objectToString(rhs._prefix));
       }
       if (_prefixLength != rhs._prefixLength) {
-         System.out.println("- " + string + "._prefixLength:" + _prefixLength + "\n");
-         System.out.println("+ " + string + "._prefixLength:" + rhs._prefixLength
-               + "\n");
+         System.out.println("- " + string + "._prefixLength:" + _prefixLength);
+         System.out.println("+ " + string + "._prefixLength:"
+               + rhs._prefixLength);
       }
       System.out.flush();
       return;

@@ -45,7 +45,7 @@ public class RouteMapSetAdditiveCommunityLine extends RouteMapSetLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          Util.diffRepresentationLists(null, _communities, string
                + "._communities");
          System.out.flush();
@@ -53,7 +53,7 @@ public class RouteMapSetAdditiveCommunityLine extends RouteMapSetLine {
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          Util.diffRepresentationLists(_communities, null, string
                + "._communities");
          System.out.flush();

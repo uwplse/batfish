@@ -42,17 +42,17 @@ public class RouteMapSetLocalPreferenceLine extends RouteMapSetLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._localPreference:"
-               + _localPreference + "\n");
+               + _localPreference);
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._localPreference:"
-               + _localPreference + "\n");
+               + _localPreference);
          System.out.flush();
          return;
       }
@@ -66,9 +66,9 @@ public class RouteMapSetLocalPreferenceLine extends RouteMapSetLine {
       RouteMapSetLocalPreferenceLine rhs = (RouteMapSetLocalPreferenceLine) o;
       if (_localPreference != rhs._localPreference) {
          System.out.println("- " + string + "._localPreference:"
-               + _localPreference + "\n");
+               + _localPreference);
          System.out.println("+ " + string + "._localPreference:"
-               + rhs._localPreference + "\n");
+               + rhs._localPreference);
       }
       System.out.flush();
       return;

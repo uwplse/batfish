@@ -45,14 +45,14 @@ public class RouteMapSetAsPathPrependLine extends RouteMapSetLine {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          Util.diffRepresentationLists(null, _asList, string + "._asList");
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          Util.diffRepresentationLists(_asList, null, string + "._asList");
          System.out.flush();
          return;

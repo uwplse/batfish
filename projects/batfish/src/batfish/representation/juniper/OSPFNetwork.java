@@ -49,51 +49,51 @@ public class OSPFNetwork implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
+         System.out.println("+ " + string);
          System.out.println("+ " + string + "._networkAddress:"
-               + Util.objectToString(_networkAddress) + "\n");
+               + Util.objectToString(_networkAddress));
          System.out.println("+ " + string + "._subnetMask:"
-               + Util.objectToString(_subnetMask) + "\n");
+               + Util.objectToString(_subnetMask));
          System.out.println("+ " + string + "._interface:"
-               + Util.objectToString(_interface) + "\n");
-         System.out.println("+ " + string + "._area:" + _area + "\n");
+               + Util.objectToString(_interface));
+         System.out.println("+ " + string + "._area:" + _area);
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
+         System.out.println("- " + string);
          System.out.println("- " + string + "._networkAddress:"
-               + Util.objectToString(_networkAddress) + "\n");
+               + Util.objectToString(_networkAddress));
          System.out.println("- " + string + "._subnetMask:"
-               + Util.objectToString(_subnetMask) + "\n");
+               + Util.objectToString(_subnetMask));
          System.out.println("- " + string + "._interface:"
-               + Util.objectToString(_interface) + "\n");
-         System.out.println("- " + string + "._area:" + _area + "\n");
+               + Util.objectToString(_interface));
+         System.out.println("- " + string + "._area:" + _area);
          return;
       }
 
       OSPFNetwork rhs = (OSPFNetwork) o;
       if (!Util.equalOrNull(_networkAddress, rhs._networkAddress)) {
          System.out.println("- " + string + "._networkAddress:"
-               + Util.objectToString(_networkAddress) + "\n");
+               + Util.objectToString(_networkAddress));
          System.out.println("+ " + string + "._networkAddress:"
-               + Util.objectToString(rhs._networkAddress) + "\n");
+               + Util.objectToString(rhs._networkAddress));
       }
       if (!Util.equalOrNull(_subnetMask, rhs._subnetMask)) {
          System.out.println("- " + string + "._subnetMask:"
-               + Util.objectToString(_subnetMask) + "\n");
+               + Util.objectToString(_subnetMask));
          System.out.println("+ " + string + "._subnetMask:"
-               + Util.objectToString(rhs._subnetMask) + "\n");
+               + Util.objectToString(rhs._subnetMask));
       }
       if (!Util.equalOrNull(_interface, rhs._interface)) {
          System.out.println("- " + string + "._interface:"
-               + Util.objectToString(_interface) + "\n");
+               + Util.objectToString(_interface));
          System.out.println("+ " + string + "._interface:"
-               + Util.objectToString(rhs._interface) + "\n");
+               + Util.objectToString(rhs._interface));
       }
       if (_area != rhs._area) {
-         System.out.println("- " + string + "._area:" + _area + "\n");
-         System.out.println("+ " + string + "._area:" + rhs._area + "\n");
+         System.out.println("- " + string + "._area:" + _area);
+         System.out.println("+ " + string + "._area:" + rhs._area);
       }
       System.out.flush();
       return;

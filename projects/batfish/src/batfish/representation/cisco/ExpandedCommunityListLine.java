@@ -6,7 +6,8 @@ import batfish.representation.LineAction;
 import batfish.representation.RepresentationObject;
 import batfish.util.Util;
 
-public class ExpandedCommunityListLine implements Serializable, RepresentationObject {
+public class ExpandedCommunityListLine implements Serializable,
+      RepresentationObject {
 
    private static final long serialVersionUID = 1L;
 
@@ -35,29 +36,37 @@ public class ExpandedCommunityListLine implements Serializable, RepresentationOb
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
-         System.out.println("+ " + string + "\n");
-         System.out.println("+ " + string + "._action:" + Util.objectToString(_action) + "\n");
-         System.out.println("+ " + string + "._regex:" + Util.objectToString(_regex) + "\n");
+         System.out.println("+ " + string);
+         System.out.println("+ " + string + "._action:"
+               + Util.objectToString(_action));
+         System.out.println("+ " + string + "._regex:"
+               + Util.objectToString(_regex));
          System.out.flush();
          return;
       }
 
       if (o == null) {
-         System.out.println("- " + string + "\n");
-         System.out.println("- " + string + "._action:" + Util.objectToString(_action) + "\n");
-         System.out.println("- " + string + "._regex:" + Util.objectToString(_regex) + "\n");
+         System.out.println("- " + string);
+         System.out.println("- " + string + "._action:"
+               + Util.objectToString(_action));
+         System.out.println("- " + string + "._regex:"
+               + Util.objectToString(_regex));
          System.out.flush();
          return;
       }
 
       ExpandedCommunityListLine rhs = (ExpandedCommunityListLine) o;
       if (!Util.equalOrNull(_action, rhs._action)) {
-         System.out.println("- " + string + "._action:" + Util.objectToString(_action) + "\n");
-         System.out.println("+ " + string + "._action:" + Util.objectToString(rhs._action) + "\n");
+         System.out.println("- " + string + "._action:"
+               + Util.objectToString(_action));
+         System.out.println("+ " + string + "._action:"
+               + Util.objectToString(rhs._action));
       }
       if (!Util.equalOrNull(_regex, rhs._regex)) {
-         System.out.println("- " + string + "._regex:" + Util.objectToString(_regex) + "\n");
-         System.out.println("+ " + string + "._regex:" + Util.objectToString(rhs._regex) + "\n");
+         System.out.println("- " + string + "._regex:"
+               + Util.objectToString(_regex));
+         System.out.println("+ " + string + "._regex:"
+               + Util.objectToString(rhs._regex));
       }
       System.out.flush();
       return;
