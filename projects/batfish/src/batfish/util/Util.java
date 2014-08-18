@@ -122,7 +122,7 @@ public class Util {
             }
             else {
                System.out.println("+ " + string + ":ListElement(" + i + "):"
-                     + e + "\n");
+                     + e);
             }
             i++;
          }
@@ -137,7 +137,7 @@ public class Util {
             }
             else {
                System.out.println("- " + string + ":ListElement(" + i + "):"
-                     + e + "\n");
+                     + e);
             }
             i++;
          }
@@ -157,9 +157,9 @@ public class Util {
          else {
             if (!e1.equals(e2)) {
                System.out.println("- " + string + ":ListElement(" + i + "):"
-                     + e1 + "\n");
+                     + e1);
                System.out.println("+ " + string + ":ListElement(" + i + "):"
-                     + e2 + "\n");
+                     + e2);
             }
          }
          i++;
@@ -172,8 +172,7 @@ public class Util {
                   + ":ListElement(" + i + ")", false);
          }
          else {
-            System.out.println("- " + string + ":ListElement(" + i + "):" + e
-                  + "\n");
+            System.out.println("- " + string + ":ListElement(" + i + "):" + e);
          }
          i++;
       }
@@ -185,8 +184,7 @@ public class Util {
                   + ":ListElement(" + i + ")", true);
          }
          else {
-            System.out.println("+ " + string + ":ListElement(" + i + "):" + e
-                  + "\n");
+            System.out.println("+ " + string + ":ListElement(" + i + "):" + e);
          }
          i++;
       }
@@ -207,7 +205,7 @@ public class Util {
             }
             else {
                System.out.println("+ " + string + ":ListElement(" + i + "):"
-                     + e + "\n");
+                     + e);
             }
             i++;
          }
@@ -222,7 +220,7 @@ public class Util {
             }
             else {
                System.out.println("- " + string + ":ListElement(" + i + "):"
-                     + e + "\n");
+                     + e );
             }
             i++;
          }
@@ -238,10 +236,10 @@ public class Util {
       c2minc1.removeAll(c1);
 
       for (E e : c1minc2) {
-         System.out.println("- " + string + ":SetElement:" + e + "\n");
+         System.out.println("- " + string + ":SetElement:" + e);
       }
       for (E e : c2minc1) {
-         System.out.println("+ " + string + ":SetElement:" + e + "\n");
+         System.out.println("+ " + string + ":SetElement:" + e);
       }
 
       return;
@@ -259,7 +257,7 @@ public class Util {
             }
             else {
                System.out.println("+ " + string + ":MapEntry(" + e.getKey()
-                     + "):" + e.getValue() + "\n");
+                     + "):" + e.getValue());
             }
          }
          return;
@@ -272,53 +270,59 @@ public class Util {
             }
             else {
                System.out.println("- " + string + ":MapEntry(" + e.getKey()
-                     + "):" + e.getValue() + "\n");
+                     + "):" + e.getValue());
             }
          }
          return;
       }
+      
+      Set<K> c1minc2 = new HashSet<K>();
+      Set<K> c2minc1 = new HashSet<K>();
 
-      Iterator<Entry<K, V>> it = c1.entrySet().iterator();
-      Iterator<Entry<K, V>> it2 = c2.entrySet().iterator();
-      for (; it.hasNext() && it2.hasNext();) {
-         Entry<K, V> e1 = it.next();
-         Entry<K, V> e2 = it2.next();
-         if (e1.getValue() instanceof RepresentationObject) {
-            ((RepresentationObject) e1.getValue()).diffRepresentation(
-                  e2.getValue(), string + ":MapEntry(" + e1.getKey() + ")",
+      c1minc2.addAll(c1.keySet());
+      c1minc2.removeAll(c2.keySet());
+      c2minc1.addAll(c2.keySet());
+      c2minc1.removeAll(c1.keySet());
+
+      for (K key : c1minc2) {
+         if (c1.get(key) instanceof RepresentationObject) {
+            ((RepresentationObject) c1.get(key)).diffRepresentation(null,
+                  string + ":MapEntry(" + key + ")", false);
+         }
+         else {
+            System.out.println("- " + string + ":MapEntry(" + key + "):"
+                  +  c1.get(key));
+         }
+      }
+      
+      for (K key : c2minc1) {
+         if (c2.get(key) instanceof RepresentationObject) {
+            ((RepresentationObject) c2.get(key)).diffRepresentation(null,
+                  string + ":MapEntry(" + key + ")", true);
+         }
+         else {
+            System.out.println("+ " + string + ":MapEntry(" + key + "):"
+                  + c2.get(key));
+         }
+      }
+      
+      Set<K> conKeys = new HashSet<K>();
+      conKeys.addAll(c2.keySet());
+      conKeys.removeAll(c2minc1);
+
+      for (K key : conKeys) {
+         if (c1.get(key) instanceof RepresentationObject) {
+            ((RepresentationObject) c1.get(key)).diffRepresentation(
+                  c2.get(key), string + ":MapEntry(" + key + ")",
                   false);
          }
          else {
-            if (!e1.getValue().equals(e2.getValue())) {
-               System.out.println("- " + string + ":MapEntry(" + e1.getKey()
-                     + "):" + e1.getValue() + "\n");
-               System.out.println("+ " + string + ":MapEntry(" + e2.getKey()
-                     + "):" + e2.getValue() + "\n");
+            if (!c1.get(key).equals(c2.get(key))) {
+               System.out.println("- " + string + ":MapEntry(" + key
+                     + "):" + c1.get(key));
+               System.out.println("+ " + string + ":MapEntry(" + key
+                     + "):" + c2.get(key));
             }
-         }
-      }
-
-      while (it.hasNext()) {
-         Entry<K, V> e = it.next();
-         if (e.getValue() instanceof RepresentationObject) {
-            ((RepresentationObject) e.getValue()).diffRepresentation(null,
-                  string + ":MapEntry(" + e.getKey() + ")", false);
-         }
-         else {
-            System.out.println("- " + string + ":MapEntry(" + e.getKey() + "):"
-                  + e.getValue() + "\n");
-         }
-      }
-
-      while (it2.hasNext()) {
-         Entry<K, V> e = it2.next();
-         if (e.getValue() instanceof RepresentationObject) {
-            ((RepresentationObject) e.getValue()).diffRepresentation(null,
-                  string + ":MapEntry(" + e.getKey() + ")", true);
-         }
-         else {
-            System.out.println("+ " + string + ":MapEntry(" + e.getKey() + "):"
-                  + e.getValue() + "\n");
          }
       }
 
