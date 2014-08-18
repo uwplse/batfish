@@ -78,6 +78,41 @@ batfish_analyze_history(){
 }
 export -f batfish_analyze_history
 
+batfish_analyze_history_parallel(){
+   batfish_expect_args 3 $# || return 1
+   local UCLA_GIT_ROOT=$1
+   local COMMITS=$2
+   local OLD_PWD=$PWD
+   local PREFIX=$3
+   cat $COMMITS | parallel -j4 --colsep '\t' batfish_analyze_history_parallel_helper {1} {2} $UCLA_GIT_ROOT $PREFIX\;
+   if [ "${PIPESTATUS[0]}" -ne 0 -o "${PIPESTATUS[1]}" -ne 0 ]; then
+      return 1
+   fi
+}
+export -f batfish_analyze_history_parallel
+
+batfish_analyze_history_parallel_helper(){
+   batfish_expect_args 4 $# || return 1
+   local PREV_COMMIT=$1
+   local SEC_COMMIT=$2
+   local UCLA_GIT_ROOT=$3
+   local OLD_PWD=$PWD
+   local TEST_RIG1=$PWD/test-$PREV_COMMIT
+   local TEST_RIG2=$PWD/test-$SEC_COMMIT
+   local PREFIX=$4
+   local TMP_RESULT=$PWD/$PREFIX-tmpres-$PREV_COMMIT-$SEC_COMMIT
+   local TMP_RESULT_ERR=$PWD/$PREFIX-tmpres-err-$PREV_COMMIT-$SEC_COMMIT
+   local CMP_RESULT=$PWD/$PREFIX-cmpres-$PREV_COMMIT-$SEC_COMMIT
+{
+   batfish -commits $TEST_RIG1 $TEST_RIG2 || return 1 ;
+} > $TMP_RESULT 2>$TMP_RESULT_ERR
+   sed -n '/Compare/,/End Compare/p' $TMP_RESULT > $CMP_RESULT 
+   if [ "${PIPESTATUS[0]}" -ne 0 -o "${PIPESTATUS[1]}" -ne 0 ]; then
+      return 1
+   fi
+}
+export -f batfish_analyze_history_parallel_helper
+
 batfish_analyze_self(){
    batfish_expect_args 2 $# || return 1
    local UCLA_GIT_ROOT=$1
