@@ -197,14 +197,14 @@ public class Util {
       if (c1 == null && c2 == null)
          return;
       if (c1 == null) {
-         int i = 0;
          for (E e : c2) {
+            int i = 0;
             if (e instanceof RepresentationObject) {
                ((RepresentationObject) e).diffRepresentation(null, string
                      + ":SetElement(" + i + ")", true);
             }
             else {
-               System.out.println("+ " + string + ":ListElement(" + i + "):"
+               System.out.println("+ " + string + ":SetElement(" + i + "):"
                      + e);
             }
             i++;
@@ -212,14 +212,14 @@ public class Util {
          return;
       }
       if (c2 == null) {
-         int i = 0;
          for (E e : c1) {
+            int i = 0;
             if (e instanceof RepresentationObject) {
                ((RepresentationObject) e).diffRepresentation(null, string
                      + ":SetElement(" + i + ")", false);
             }
             else {
-               System.out.println("- " + string + ":ListElement(" + i + "):"
+               System.out.println("- " + string + ":SetElement(" + i + "):"
                      + e );
             }
             i++;
@@ -235,11 +235,29 @@ public class Util {
       c2minc1.addAll(c2);
       c2minc1.removeAll(c1);
 
+      int i = 0;
       for (E e : c1minc2) {
-         System.out.println("- " + string + ":SetElement:" + e);
+         if (e instanceof RepresentationObject) {
+            ((RepresentationObject) e).diffRepresentation(null, string
+                  + ":SetElement(" + i + ")", false);
+         }
+         else {
+            System.out.println("- " + string + ":SetElement(" + i + "):"
+                  + e );
+         }
+         i++;
       }
+      i+=c2.size();
       for (E e : c2minc1) {
-         System.out.println("+ " + string + ":SetElement:" + e);
+         if (e instanceof RepresentationObject) {
+            ((RepresentationObject) e).diffRepresentation(null, string
+                  + ":SetElement(" + i + ")", true);
+         }
+         else {
+            System.out.println("+ " + string + ":SetElement(" + i + "):"
+                  + e);
+         }
+         i++;
       }
 
       return;
