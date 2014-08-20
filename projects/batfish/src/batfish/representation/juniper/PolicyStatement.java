@@ -43,6 +43,7 @@ public class PolicyStatement implements RepresentationObject {
    @Override
    public void diffRepresentation(Object o, String string, boolean reverse) {
       if (reverse) {
+         System.out.println("+ " + string);
          Util.diffRepresentationMaps(null, _clauses, string + "._clauses");
          System.out.println("+ " + string + "._mapName:"
                + Util.objectToString(_mapName));
@@ -50,7 +51,8 @@ public class PolicyStatement implements RepresentationObject {
          return;
       }
 
-      if (o == null) {
+      if (o == null) {         
+         System.out.println("- " + string);
          Util.diffRepresentationMaps(_clauses, null, string + "._clauses");
          System.out.println("- " + string + "._mapName:"
                + Util.objectToString(_mapName));
