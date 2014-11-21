@@ -3300,6 +3300,11 @@ STANDBY
    'standby'
 ;
 
+DIRECT
+:
+   'direct'
+;
+
 STATIC
 :
    'static'
