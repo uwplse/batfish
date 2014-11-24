@@ -2813,6 +2813,11 @@ RATE_LIMIT
    'rate-limit'
 ;
 
+RATE_MODE
+:
+   'rate-mode'
+;
+
 RC4_SHA1
 :
    'rc4-sha1'

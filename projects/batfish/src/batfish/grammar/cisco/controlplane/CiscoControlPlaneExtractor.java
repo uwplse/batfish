@@ -707,7 +707,7 @@ public class CiscoControlPlaneExtractor extends CiscoGrammarBaseListener
       }
 
       LineAction action = getAccessListAction(ctx.ala);
-      if(ctx.srcipr.prefix==null){
+      if(ctx.srcipr.prefix!=null){
       int protocol = getProtocolNumber(ctx.prot);
       Ip srcIp = getIp(ctx.srcipr);
       Ip srcWildcard = getWildcard(ctx.srcipr);

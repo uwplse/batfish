@@ -626,6 +626,7 @@ null_template_peer_standalone_stanza
       | SHUTDOWN
       | REMOVE_PRIVATE_AS
       | EBGP_MULTIHOP
+      | TIMERS
    ) ~NEWLINE* NEWLINE
 ;
 

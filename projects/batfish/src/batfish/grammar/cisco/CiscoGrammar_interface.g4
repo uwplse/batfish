@@ -55,7 +55,7 @@ if_stanza
 
 interface_stanza
 :
-   INTERFACE iname = interface_name MULTIPOINT? NEWLINE interface_stanza_tail
+   INTERFACE iname = interface_name MULTIPOINT? (MODULE inum=DEC)? NEWLINE interface_stanza_tail
 ;
 
 interface_stanza_tail
@@ -245,6 +245,7 @@ null_standalone_if_stanza
       | PRIORITY_QUEUE
       | QOS
       | QUEUE_SET
+      | RATE_MODE
       | RCV_QUEUE
       | ROUTE_CACHE
       | SECURITY_LEVEL
