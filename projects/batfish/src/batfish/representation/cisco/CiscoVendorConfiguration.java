@@ -738,8 +738,9 @@ public class CiscoVendorConfiguration extends CiscoConfiguration implements
          for (String pathListName : pathLine.getListNames()) {
             AsPathAccessList list = c.getAsPathAccessLists().get(pathListName);
             if (list == null) {
-               throw new Error("null list");
+//               throw new Error("null list of pathListName:"+pathListName);
             }
+            else
             newAsPathMatchSet.add(list);
          }
          newLine = new PolicyMapMatchAsPathAccessListLine(newAsPathMatchSet);

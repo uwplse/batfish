@@ -218,6 +218,7 @@ null_standalone_if_stanza
       | LOAD_INTERVAL
       | LOGGING
       | LRE
+      | MAC
       | MAC_ADDRESS
       | MACRO
       | MANAGEMENT_ONLY

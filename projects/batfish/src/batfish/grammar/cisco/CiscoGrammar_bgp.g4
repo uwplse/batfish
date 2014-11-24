@@ -623,6 +623,7 @@ null_template_peer_standalone_stanza
 :
    (
       PASSWORD
+      | DESCRIPTION
       | SHUTDOWN
       | REMOVE_PRIVATE_AS
       | EBGP_MULTIHOP
@@ -771,6 +772,11 @@ template_peer_remote_as
    REMOTE_AS asnum = DEC NEWLINE
 ;
 
+template_peer_inherit
+:
+   INHERIT PEER_SESSION peer = VARIABLE NEWLINE
+;
+
 template_peer_stanza
 :
    TEMPLATE PEER name = VARIABLE NEWLINE template_peer_stanza_tail
@@ -779,7 +785,8 @@ template_peer_stanza
 template_peer_stanza_tail
 :
    (
-      template_peer_remote_as
+      template_peer_inherit
+      | template_peer_remote_as
       | template_peer_update_source
       | null_template_peer_stanza
    )+

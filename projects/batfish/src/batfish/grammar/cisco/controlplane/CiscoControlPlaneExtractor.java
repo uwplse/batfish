@@ -237,7 +237,7 @@ public class CiscoControlPlaneExtractor extends CiscoGrammarBaseListener
       if (ipPrefixToken.getType() != CiscoGrammarCommonLexer.IP_PREFIX) {
          throw new Error(
                "attempted to get prefix length from non-IP_PREFIX token: "
-                     + ipPrefixToken.getType());
+                     + ipPrefixToken.getType()+ ": "+ipPrefixToken+"; IP_PREFIX is "+CiscoGrammarCommonLexer.IP_PREFIX);
       }
       String text = ipPrefixToken.getText();
       String[] parts = text.split("/");
@@ -707,7 +707,7 @@ public class CiscoControlPlaneExtractor extends CiscoGrammarBaseListener
       }
 
       LineAction action = getAccessListAction(ctx.ala);
-      if(ctx.srcipr.prefix!=null){
+//      if(ctx.srcipr.prefix!=null){
       int protocol = getProtocolNumber(ctx.prot);
       Ip srcIp = getIp(ctx.srcipr);
       Ip srcWildcard = getWildcard(ctx.srcipr);
@@ -721,7 +721,7 @@ public class CiscoControlPlaneExtractor extends CiscoGrammarBaseListener
             protocol, srcIp, srcWildcard, dstIp, dstWildcard, srcPortRanges,
             dstPortRanges);
       _currentExtendedAcl.addLine(line);
-      }
+//      }
    }
 
    @Override

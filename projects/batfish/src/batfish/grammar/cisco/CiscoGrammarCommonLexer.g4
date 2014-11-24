@@ -602,6 +602,11 @@ CLASS_MAP
    'class-map'
 ;
 
+CLI
+:
+   'cli'
+;
+
 CLNS
 :
    'clns'
@@ -2543,6 +2548,11 @@ PEER_GROUP
    'peer-group' -> pushMode(M_NEIGHBOR)
 ;
 
+PEER_SESSION
+:
+   'peer-session'
+;
+
 PERMANENT
 :
    'permanent'
@@ -2656,6 +2666,11 @@ PORT_UNREACHABLE
 POWER
 :
    'power'
+;
+
+POWEROFF
+:
+   'poweroff'
 ;
 
 PPP

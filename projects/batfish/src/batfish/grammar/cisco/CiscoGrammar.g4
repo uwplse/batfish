@@ -458,6 +458,7 @@ null_standalone_stanza
       | CHAT_SCRIPT
       | CIPC
       | CLASS_MAP
+      | CLI
       | CLOCK
       | CLUSTER
       | CNS
@@ -687,6 +688,7 @@ null_standalone_stanza
       | PORT_CHANNEL
       | PORT_OBJECT
       | POWER
+      | POWEROFF
       | PRE_SHARED_KEY
       | PRIORITY
       | PRIORITY_QUEUE
