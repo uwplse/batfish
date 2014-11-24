@@ -577,6 +577,11 @@ CHANNELIZED
    'channelized'
 ;
 
+CHAT_SCRIPT
+:
+   'chat-script'
+;
+
 CIPC
 :
    'cipc'
@@ -912,6 +917,11 @@ DIALER_LIST
    'dialer-list'
 ;
 
+DIRECT
+:
+   'direct'
+;
+
 DIRECTED_BROADCAST
 :
    'directed-broadcast'
@@ -1050,6 +1060,11 @@ ECHO
 ECHO_REPLY
 :
    'echo-reply'
+;
+
+ECHO_REQUEST
+:
+   'echo-request'
 ;
 
 EGP
@@ -1813,6 +1828,11 @@ LIFETIME
    'lifetime'
 ;
 
+LIMIT_RESOURCE
+:
+   'limit-resource'
+;
+
 LINE
 :
    'line'
@@ -2091,6 +2111,21 @@ MLAG
 MLD
 :
    'mld'
+;
+
+MLD_QUERY
+:
+   'mld-query'
+;
+
+MLD_REDUCTION
+:
+   'mld-reduction'
+;
+
+MLD_REPORT
+:
+   'mld-report'
 ;
 
 MLS
@@ -2513,6 +2548,11 @@ PERMANENT
    'permanent'
 ;
 
+PEER_CONFIG_CHECK_BYPASS
+:
+   'peer-config-check-bypass'
+;
+
 PEER_GATEWAY
 :
    'peer-gateway'
@@ -2908,6 +2948,11 @@ RIP
    'rip'
 ;
 
+RMON
+:
+   'rmon'
+;
+
 ROLE
 :
    'role'
@@ -2948,9 +2993,19 @@ ROUTER
    'router'
 ;
 
+ROUTER_ADVERTISEMENT
+:
+   'router-advertisement'
+;
+
 ROUTER_ID
 :
    'router-id'
+;
+
+ROUTER_SOLICITATION
+:
+   'router-solicitation'
 ;
 
 ROUTING
@@ -3300,14 +3355,14 @@ STANDBY
    'standby'
 ;
 
-DIRECT
-:
-   'direct'
-;
-
 STATIC
 :
    'static'
+;
+
+STATISTICS
+:
+   'statistics'
 ;
 
 STCAPP
@@ -3698,6 +3753,11 @@ USERNAME
 VALIDATION_USAGE
 :
    'validation-usage'
+;
+
+VDC
+:
+   'vdc'
 ;
 
 VERIFY

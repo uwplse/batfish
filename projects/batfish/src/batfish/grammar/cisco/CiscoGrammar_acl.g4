@@ -53,10 +53,26 @@ appletalk_access_list_stanza
    numbered = appletalk_access_list_numbered_stanza
 ;
 
+
+arp_access_list_stanza
+:
+   ARP ~NEWLINE* NEWLINE
+   (
+      arp_al_substanza
+   )*   
+;
+
+arp_al_substanza
+:
+   DEC (REMARK | PERMIT | DENY) ~NEWLINE* NEWLINE
+;
+
+
 extended_access_list_additional_feature
 :
    (
       ECHO_REPLY
+      | ECHO_REQUEST
       | ECHO
       | ESTABLISHED
       | FRAGMENTS
@@ -64,6 +80,9 @@ extended_access_list_additional_feature
       | HOST_UNREACHABLE
       | LOG
       | LOG_INPUT
+      | MLD_QUERY
+      | MLD_REDUCTION
+      | MLD_REPORT
       | ND_NA
       | ND_NS
       | NETWORK_UNKNOWN
@@ -72,6 +91,8 @@ extended_access_list_additional_feature
       | PARAMETER_PROBLEM
       | PORT_UNREACHABLE
       | REDIRECT
+      | ROUTER_ADVERTISEMENT
+      | ROUTER_SOLICITATION
       | RST
       | SOURCE_QUENCH
       | TIME_EXCEEDED
@@ -387,6 +408,19 @@ ipx_sap_access_list_stanza
    numbered = ipx_sap_access_list_numbered_stanza
 ;
 
+mac_access_list_stanza
+:
+   MAC ~NEWLINE* NEWLINE
+   (
+      mac_al_substanza
+   )*   
+;
+
+mac_al_substanza
+:
+   DEC (REMARK | PERMIT | DENY) ~NEWLINE* NEWLINE
+;
+
 nexus_access_list_null_tail
 :
    num = DEC REMARK ~NEWLINE* NEWLINE
@@ -401,7 +435,13 @@ nexus_access_list_stanza
    (
       nexus_access_list_tail
       | nexus_access_list_null_tail
+      | nexus_access_list_statistics
    )*
+;
+
+nexus_access_list_statistics
+:
+   STATISTICS ~NEWLINE* NEWLINE
 ;
 
 nexus_access_list_tail

@@ -751,9 +751,10 @@ public class CiscoVendorConfiguration extends CiscoConfiguration implements
          for (String listName : communityLine.getListNames()) {
             CommunityList list = c.getCommunityLists().get(listName);
             if (list == null) {
-               throw new VendorConversionException(
-                     "Reference to nonexistent community list: " + listName);
+            //   throw new VendorConversionException(
+            //         "Reference to nonexistent community list: " + listName);
             }
+            else
             newCommunityMatchSet.add(list);
          }
          newLine = new PolicyMapMatchCommunityListLine(newCommunityMatchSet);

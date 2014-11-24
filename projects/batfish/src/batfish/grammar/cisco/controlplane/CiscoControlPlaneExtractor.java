@@ -707,6 +707,7 @@ public class CiscoControlPlaneExtractor extends CiscoGrammarBaseListener
       }
 
       LineAction action = getAccessListAction(ctx.ala);
+      if(ctx.srcipr.prefix==null){
       int protocol = getProtocolNumber(ctx.prot);
       Ip srcIp = getIp(ctx.srcipr);
       Ip srcWildcard = getWildcard(ctx.srcipr);
@@ -720,6 +721,7 @@ public class CiscoControlPlaneExtractor extends CiscoGrammarBaseListener
             protocol, srcIp, srcWildcard, dstIp, dstWildcard, srcPortRanges,
             dstPortRanges);
       _currentExtendedAcl.addLine(line);
+      }
    }
 
    @Override
@@ -1089,10 +1091,10 @@ public class CiscoControlPlaneExtractor extends CiscoGrammarBaseListener
 
       proc.addIpPeerGroup(ip);
 
-      if (ctx.REMOTE_AS() != null) {
-         BgpPeerGroup pg = proc.getPeerGroup(ip.toString());
-         pg.setRemoteAS(toInteger(ctx.asnum));
-      }
+//      if (ctx.REMOTE_AS() != null) {
+//         BgpPeerGroup pg = proc.getPeerGroup(ip.toString());
+//         pg.setRemoteAS(toInteger(ctx.asnum));
+//      }
 
       for (Neighbor_nexus_tailContext tCtx : ctx.tail) {
          if (tCtx.neighbor_nexus_inherit_stanza() != null) {

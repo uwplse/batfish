@@ -200,6 +200,12 @@ neighbor_filter_list_af_stanza
    neighbor_filter_list_tail_bgp
 ;
 
+
+neighbor_filter_list_rb_stanza
+:
+   neighbor_filter_list_tail_bgp
+;
+
 neighbor_filter_list_tail_bgp
 :
    NEIGHBOR neighbor = . FILTER_LIST num = DEC
@@ -218,9 +224,6 @@ neighbor_nexus_stanza
       | ip_prefix = IP_PREFIX
       | ipv6_prefix = IPV6_PREFIX
    )
-   (
-      REMOTE_AS asnum = DEC
-   )? NEWLINE
    (
       tail += neighbor_nexus_tail
    )+
@@ -244,13 +247,59 @@ neighbor_nexus_shutdown_stanza
    NO? SHUTDOWN NEWLINE
 ;
 
+neighbor_nexus_remote_as_stanza
+:
+   (
+      REMOTE_AS asnum = DEC
+   )? NEWLINE
+;
+
+neighbor_nexus_update_source_stanza
+:
+   UPDATE_SOURCE source = VARIABLE NEWLINE
+;
+
+neighbor_nexus_vrf_rb_substanza
+:
+   neighbor_nexus_stanza
+;
+
+neighbor_next_hop_self_af_stanza
+:
+   neighbor_next_hop_self_tail_bgp
+;
+
 neighbor_nexus_tail
 :
    (
       neighbor_nexus_inherit_stanza
       | neighbor_nexus_null_tail
       | neighbor_nexus_shutdown_stanza
+      | neighbor_nexus_remote_as_stanza
+      | neighbor_nexus_update_source_stanza
+      | neighbor_nexus_af_stanza
    )
+;
+
+neighbor_nexus_af_stanza
+:
+   ADDRESS_FAMILY
+   (
+      IPV4
+      | IPV6
+      | VPNV4
+      | VPNV6
+   )
+   (
+      UNICAST
+      | MULTICAST
+   )? NEWLINE neighbor_nexus_af_stanza_tail 
+;
+
+neighbor_nexus_af_stanza_tail 
+:
+   SEND_COMMUNITY
+   NEWLINE
 ;
 
 neighbor_nexus_vrf_rb_substanza
@@ -532,6 +581,7 @@ null_standalone_rb_stanza
          BGP
          (
             ALWAYS_COMPARE_MED
+            | BESTPATH
             | DAMPENING
             | DEFAULT
             | DETERMINISTIC_MED
@@ -573,6 +623,7 @@ null_template_peer_standalone_stanza
 :
    (
       PASSWORD
+      | SHUTDOWN
       | REMOVE_PRIVATE_AS
       | EBGP_MULTIHOP
    ) ~NEWLINE* NEWLINE
@@ -587,6 +638,7 @@ rb_stanza
    | neighbor_description_rb_stanza
    | neighbor_distribute_list_rb_stanza
    | neighbor_ebgp_multihop_rb_stanza
+   | neighbor_filter_list_rb_stanza
    | neighbor_next_hop_self_rb_stanza
    | neighbor_nexus_stanza
    | neighbor_peer_group_creation_rb_stanza

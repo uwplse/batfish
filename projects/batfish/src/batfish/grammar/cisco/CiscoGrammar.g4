@@ -83,7 +83,7 @@ ip_route_stanza
       (
          TRACK track = DEC
       )
-   )* NEWLINE
+   )* (NAME ~NEWLINE*)? NEWLINE
 ;
 
 macro_stanza
@@ -298,6 +298,7 @@ null_block_substanza
          | KEYPAIR
          | KEYRING
          | L2TP
+         | LENGTH
          | LINE
          | LINECODE
          | LLDP
@@ -323,6 +324,7 @@ null_block_substanza
          | PASSWORD
          | PASSWORD_STORAGE
          | PATH_JITTER
+         | PEER_CONFIG_CHECK_BYPASS
          | PEER_GATEWAY
          | PEER_KEEPALIVE
          | PERMIT
@@ -453,6 +455,7 @@ null_standalone_stanza
       | CCM_MANAGER
       | CDP
       | CFS
+      | CHAT_SCRIPT
       | CIPC
       | CLASS_MAP
       | CLOCK
@@ -703,6 +706,7 @@ null_standalone_stanza
       | RESOURCE_POOL
       | REVERSE_ROUTE
       | REVOCATION_CHECK
+      | RMON
       | ROUTE
       | ROUTE_TARGET
       | RSAKEYPAIR
@@ -785,6 +789,13 @@ null_standalone_stanza
       | USE_VRF
       | USERNAME
       | VALIDATION_USAGE
+      |
+      (
+         VDC ~NEWLINE* NEWLINE
+         (
+            LIMIT_RESOURCE ~NEWLINE* NEWLINE
+         )*
+      )
       | VERSION
       |
       (
@@ -817,8 +828,10 @@ null_standalone_stanza
 
 null_stanza
 :
-   banner_stanza
+   arp_access_list_stanza
+   | banner_stanza
    | certificate_stanza
+   | mac_access_list_stanza
    | macro_stanza
    | null_block_stanza
    | null_standalone_stanza
@@ -867,7 +880,10 @@ vrf_context_stanza
 :
    VRF CONTEXT ~NEWLINE NEWLINE
    (
-      IP ROUTE ~NEWLINE NEWLINE
+      IP ROUTE ~NEWLINE* NEWLINE
+      | IP DOMAIN_NAME ~NEWLINE* NEWLINE
+      | IP DOMAIN_LIST ~NEWLINE* NEWLINE
+      | IP NAME_SERVER ~NEWLINE* NEWLINE
    )*
 ;
 
