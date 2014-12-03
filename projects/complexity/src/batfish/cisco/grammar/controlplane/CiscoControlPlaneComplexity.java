@@ -1,6 +1,11 @@
 package batfish.cisco.grammar.controlplane;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -9,7 +14,7 @@ import batfish.grammar.cisco.*;
 import batfish.grammar.cisco.CiscoGrammar.Arp_access_list_stanzaContext;
 import batfish.grammar.cisco.CiscoGrammar.Arp_al_substanzaContext;
 import batfish.grammar.cisco.CiscoGrammar.Mac_access_list_stanzaContext;
-import batfish.grammar.cisco.CiscoGrammar.Mac_al_substanzaContext;
+import batfish.grammar.cisco.CiscoGrammar.Mac_access_list_substanzaContext;
 import batfish.grammar.cisco.CiscoGrammar.Neighbor_filter_list_rb_stanzaContext;
 import batfish.grammar.cisco.CiscoGrammar.Neighbor_nexus_af_stanzaContext;
 import batfish.grammar.cisco.CiscoGrammar.Neighbor_nexus_af_stanza_tailContext;
@@ -18,7 +23,92 @@ import batfish.grammar.cisco.CiscoGrammar.Neighbor_nexus_update_source_stanzaCon
 import batfish.grammar.cisco.CiscoGrammar.Nexus_access_list_statisticsContext;
 import batfish.grammar.cisco.CiscoGrammar.Template_peer_inheritContext;
 
+enum stanza_type{IFACE, ACL, ROUTEMAP, ROUTER};
+class stanza{
+	public stanza_type type;
+	public String name;
+	List<reference_to> references;
+	public stanza(stanza_type t){
+		type = t;
+		name = null;
+		references = new ArrayList<reference_to>();
+	}
+	public stanza(stanza_type t, String n){
+		type = t;
+		name = n;
+	}
+	public void AddReference(stanza_type type, String name){
+		references.add(new reference_to(type, name));
+	}
+	@Override
+	public int hashCode(){
+		return type.hashCode()+name.hashCode();
+	}
+	@Override
+	public boolean equals(Object obj){
+		if( obj  instanceof stanza){
+			stanza stanza_obj = (stanza) obj;
+			return stanza_obj.type == this.type && stanza_obj.name.equals(this.name);
+		}
+		return false;
+	}
+	@Override
+	public String toString(){
+		return "stanza:"+name+"("+type.name()+")";
+	}
+}
+class reference_to{
+	public stanza_type type;
+	public String name;
+	public reference_to(stanza_type t, String n){
+		type = t;
+		name = n;
+	}
+}
 public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
+	Set<stanza> stanzas = new HashSet<stanza>();
+	stanza current = null;
+	
+	public Integer getComplexit(){
+		int totalReferences=0;
+		for(stanza s: stanzas){
+			List<reference_to> references = s.references;
+			for(reference_to to: references){
+				stanza dst = new stanza(to.type, to.name);
+				if(!stanzas.contains(dst)){
+					System.out.println(s+" references to a non-existing stanza: "+dst);
+				}
+				else{
+					totalReferences++;
+				}
+			}
+		}
+		
+		return totalReferences;
+	}
+	
+	private void enterStanza(stanza_type t){
+		if(current !=null){
+			System.out.println("enter a new stanza without exiting the previous, please check. "+current);
+		}
+		current = new stanza(t);
+	}
+	private void exitStanza(String name){
+		if(current == null){
+			System.out.println("exit a null stanza, please check.");
+		}
+		current.name = name;
+		if(stanzas.contains(current)){
+			System.out.println("duplicated stanzas, please check: "+current);
+		}
+		else{
+			stanzas.add(current);
+		}
+		current = null;
+	}
+	private void AddReference(stanza_type type, String name) {
+		current.AddReference(type, name);		
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -186,7 +276,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNeighbor_default_originate_tail_bgp(@NotNull CiscoGrammar.Neighbor_default_originate_tail_bgpContext ctx) { }
+	@Override public void exitNeighbor_default_originate_tail_bgp(@NotNull CiscoGrammar.Neighbor_default_originate_tail_bgpContext ctx) { 
+		if(ctx.map!=null){
+			AddReference(stanza_type.ROUTEMAP, ctx.map.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -228,13 +322,13 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_community_list_standard_numbered_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_numbered_stanzaContext ctx) { }
+	@Override public void enterIp_community_list_standard_numbered_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_numbered_stanzaContext ctx) {	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_community_list_standard_numbered_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_numbered_stanzaContext ctx) { }
+	@Override public void exitIp_community_list_standard_numbered_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -258,7 +352,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMatch_community_list_rm_stanza(@NotNull CiscoGrammar.Match_community_list_rm_stanzaContext ctx) { }
+	@Override public void exitMatch_community_list_rm_stanza(@NotNull CiscoGrammar.Match_community_list_rm_stanzaContext ctx) {
+		for(Token name: ctx.name_list){
+			AddReference(stanza_type.ACL, name.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -342,7 +440,9 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMatch_tag_rm_stanza(@NotNull CiscoGrammar.Match_tag_rm_stanzaContext ctx) { }
+	@Override public void exitMatch_tag_rm_stanza(@NotNull CiscoGrammar.Match_tag_rm_stanzaContext ctx) {
+		System.out.println("Try to match a tag, but I did not see where the tags are defined");
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -384,25 +484,27 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_community_list_standard_named_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_named_stanzaContext ctx) { }
+	@Override public void enterIp_community_list_standard_named_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_named_stanzaContext ctx) {	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_community_list_standard_named_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_named_stanzaContext ctx) { }
+	@Override public void exitIp_community_list_standard_named_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_named_stanzaContext ctx) { 
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAppletalk_access_list_null_tail(@NotNull CiscoGrammar.Appletalk_access_list_null_tailContext ctx) { }
+	@Override public void enterAppletalk_access_list_null_tail(@NotNull CiscoGrammar.Appletalk_access_list_null_tailContext ctx) {	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAppletalk_access_list_null_tail(@NotNull CiscoGrammar.Appletalk_access_list_null_tailContext ctx) { }
+	@Override public void exitAppletalk_access_list_null_tail(@NotNull CiscoGrammar.Appletalk_access_list_null_tailContext ctx) {
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -480,13 +582,15 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_community_list_expanded_numbered_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_numbered_stanzaContext ctx) { }
+	@Override public void enterIp_community_list_expanded_numbered_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_numbered_stanzaContext ctx) { 
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_community_list_expanded_numbered_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_numbered_stanzaContext ctx) { }
+	@Override public void exitIp_community_list_expanded_numbered_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_numbered_stanzaContext ctx) {
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -510,7 +614,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMatch_ip_prefix_list_rm_stanza(@NotNull CiscoGrammar.Match_ip_prefix_list_rm_stanzaContext ctx) { }
+	@Override public void exitMatch_ip_prefix_list_rm_stanza(@NotNull CiscoGrammar.Match_ip_prefix_list_rm_stanzaContext ctx) {
+		for(Token name: ctx.name_list){
+			AddReference(stanza_type.ACL, name.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -552,13 +660,22 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_community_list_standard_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_stanzaContext ctx) { }
+	@Override public void enterIp_community_list_standard_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_stanzaContext ctx) { 
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_community_list_standard_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_stanzaContext ctx) { }
+	@Override public void exitIp_community_list_standard_stanza(@NotNull CiscoGrammar.Ip_community_list_standard_stanzaContext ctx) {
+		if(ctx.named!=null){
+			exitStanza(ctx.named.name.getText());
+		}
+		else{
+			exitStanza(ctx.numbered.name.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -600,13 +717,13 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_community_list_expanded_named_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_named_stanzaContext ctx) { }
+	@Override public void enterIp_community_list_expanded_named_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_named_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_community_list_expanded_named_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_named_stanzaContext ctx) { }
+	@Override public void exitIp_community_list_expanded_named_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_named_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -630,19 +747,27 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRedistribute_connected_tail_bgp(@NotNull CiscoGrammar.Redistribute_connected_tail_bgpContext ctx) { }
+	@Override public void exitRedistribute_connected_tail_bgp(@NotNull CiscoGrammar.Redistribute_connected_tail_bgpContext ctx) {
+		if(ctx.map!=null){
+			AddReference(stanza_type.ROUTEMAP, ctx.map.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRoute_map_stanza(@NotNull CiscoGrammar.Route_map_stanzaContext ctx) { }
+	@Override public void enterRoute_map_stanza(@NotNull CiscoGrammar.Route_map_stanzaContext ctx) {
+		enterStanza(stanza_type.ROUTEMAP);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRoute_map_stanza(@NotNull CiscoGrammar.Route_map_stanzaContext ctx) { }
+	@Override public void exitRoute_map_stanza(@NotNull CiscoGrammar.Route_map_stanzaContext ctx) {
+		exitStanza(ctx.named.name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -654,7 +779,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMatch_as_path_access_list_rm_stanza(@NotNull CiscoGrammar.Match_as_path_access_list_rm_stanzaContext ctx) { }
+	@Override public void exitMatch_as_path_access_list_rm_stanza(@NotNull CiscoGrammar.Match_as_path_access_list_rm_stanzaContext ctx) {
+		for(Token name : ctx.name_list){
+			AddReference(stanza_type.ACL, name.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -672,7 +801,9 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRouter_rip_stanza(@NotNull CiscoGrammar.Router_rip_stanzaContext ctx) { }
+	@Override public void enterRouter_rip_stanza(@NotNull CiscoGrammar.Router_rip_stanzaContext ctx) { 
+		System.out.println("There is a rip stanza, I ignore it.");
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -714,7 +845,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRedistribute_static_tail_bgp(@NotNull CiscoGrammar.Redistribute_static_tail_bgpContext ctx) { }
+	@Override public void exitRedistribute_static_tail_bgp(@NotNull CiscoGrammar.Redistribute_static_tail_bgpContext ctx) {
+		if(ctx.map!=null){
+			AddReference(stanza_type.ROUTEMAP, ctx.map.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -840,13 +975,17 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_prefix_list_stanza(@NotNull CiscoGrammar.Ip_prefix_list_stanzaContext ctx) { }
+	@Override public void enterIp_prefix_list_stanza(@NotNull CiscoGrammar.Ip_prefix_list_stanzaContext ctx) { 
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_prefix_list_stanza(@NotNull CiscoGrammar.Ip_prefix_list_stanzaContext ctx) { }
+	@Override public void exitIp_prefix_list_stanza(@NotNull CiscoGrammar.Ip_prefix_list_stanzaContext ctx) {
+		exitStanza(ctx.named.name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -864,13 +1003,13 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStandard_access_list_numbered_stanza(@NotNull CiscoGrammar.Standard_access_list_numbered_stanzaContext ctx) { }
+	@Override public void enterStandard_access_list_numbered_stanza(@NotNull CiscoGrammar.Standard_access_list_numbered_stanzaContext ctx) {	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStandard_access_list_numbered_stanza(@NotNull CiscoGrammar.Standard_access_list_numbered_stanzaContext ctx) { }
+	@Override public void exitStandard_access_list_numbered_stanza(@NotNull CiscoGrammar.Standard_access_list_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -882,7 +1021,9 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNeighbor_route_map_tail_bgp(@NotNull CiscoGrammar.Neighbor_route_map_tail_bgpContext ctx) { }
+	@Override public void exitNeighbor_route_map_tail_bgp(@NotNull CiscoGrammar.Neighbor_route_map_tail_bgpContext ctx) {
+		AddReference(stanza_type.ROUTEMAP, ctx.name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -906,7 +1047,9 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRedistribute_rip_ro_stanza(@NotNull CiscoGrammar.Redistribute_rip_ro_stanzaContext ctx) { }
+	@Override public void exitRedistribute_rip_ro_stanza(@NotNull CiscoGrammar.Redistribute_rip_ro_stanzaContext ctx) {
+		System.out.println("there is a reference to rip, check it");
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -924,13 +1067,17 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIpv6_router_ospf_stanza(@NotNull CiscoGrammar.Ipv6_router_ospf_stanzaContext ctx) { }
+	@Override public void enterIpv6_router_ospf_stanza(@NotNull CiscoGrammar.Ipv6_router_ospf_stanzaContext ctx) { 
+		enterStanza(stanza_type.ROUTER);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIpv6_router_ospf_stanza(@NotNull CiscoGrammar.Ipv6_router_ospf_stanzaContext ctx) { }
+	@Override public void exitIpv6_router_ospf_stanza(@NotNull CiscoGrammar.Ipv6_router_ospf_stanzaContext ctx) {
+		exitStanza("ospf_"+ctx.procnum.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -972,13 +1119,22 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExtended_access_list_stanza(@NotNull CiscoGrammar.Extended_access_list_stanzaContext ctx) { }
+	@Override public void enterExtended_access_list_stanza(@NotNull CiscoGrammar.Extended_access_list_stanzaContext ctx) {
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExtended_access_list_stanza(@NotNull CiscoGrammar.Extended_access_list_stanzaContext ctx) { }
+	@Override public void exitExtended_access_list_stanza(@NotNull CiscoGrammar.Extended_access_list_stanzaContext ctx) { 
+		if(ctx.named!=null){
+			exitStanza(ctx.named.name.getText());
+		}
+		else{
+			exitStanza(ctx.numbered.name.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1026,7 +1182,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMatch_ip_access_list_rm_stanza(@NotNull CiscoGrammar.Match_ip_access_list_rm_stanzaContext ctx) { }
+	@Override public void exitMatch_ip_access_list_rm_stanza(@NotNull CiscoGrammar.Match_ip_access_list_rm_stanzaContext ctx) {
+		for(Token name: ctx.name_list){
+			AddReference(stanza_type.ACL, name.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1038,7 +1198,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDefault_information_ro_stanza(@NotNull CiscoGrammar.Default_information_ro_stanzaContext ctx) { }
+	@Override public void exitDefault_information_ro_stanza(@NotNull CiscoGrammar.Default_information_ro_stanzaContext ctx) {
+		if(ctx.map!=null){
+			AddReference(stanza_type.ROUTEMAP, ctx.map.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1128,13 +1292,17 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNexus_access_list_stanza(@NotNull CiscoGrammar.Nexus_access_list_stanzaContext ctx) { }
+	@Override public void enterNexus_access_list_stanza(@NotNull CiscoGrammar.Nexus_access_list_stanzaContext ctx) {
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNexus_access_list_stanza(@NotNull CiscoGrammar.Nexus_access_list_stanzaContext ctx) { }
+	@Override public void exitNexus_access_list_stanza(@NotNull CiscoGrammar.Nexus_access_list_stanzaContext ctx) {
+		exitStanza( ctx.name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1278,7 +1446,12 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRedistribute_ospf_tail_bgp(@NotNull CiscoGrammar.Redistribute_ospf_tail_bgpContext ctx) { }
+	@Override public void exitRedistribute_ospf_tail_bgp(@NotNull CiscoGrammar.Redistribute_ospf_tail_bgpContext ctx) {
+		AddReference(stanza_type.ROUTER, "ospf_"+ctx.procnum.getText());
+		if(ctx.map!=null){
+			AddReference(stanza_type.ROUTEMAP, ctx.map.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1302,19 +1475,25 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_policy_if_stanza(@NotNull CiscoGrammar.Ip_policy_if_stanzaContext ctx) { }
+	@Override public void exitIp_policy_if_stanza(@NotNull CiscoGrammar.Ip_policy_if_stanzaContext ctx) {
+		AddReference(stanza_type.ROUTEMAP, ctx.name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIpx_sap_access_list_stanza(@NotNull CiscoGrammar.Ipx_sap_access_list_stanzaContext ctx) { }
+	@Override public void enterIpx_sap_access_list_stanza(@NotNull CiscoGrammar.Ipx_sap_access_list_stanzaContext ctx) {
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIpx_sap_access_list_stanza(@NotNull CiscoGrammar.Ipx_sap_access_list_stanzaContext ctx) { }
+	@Override public void exitIpx_sap_access_list_stanza(@NotNull CiscoGrammar.Ipx_sap_access_list_stanzaContext ctx) {
+		exitStanza(ctx.numbered.name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1326,7 +1505,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRedistribute_static_ro_stanza(@NotNull CiscoGrammar.Redistribute_static_ro_stanzaContext ctx) { }
+	@Override public void exitRedistribute_static_ro_stanza(@NotNull CiscoGrammar.Redistribute_static_ro_stanzaContext ctx) {
+		if(ctx.map!=null){
+			AddReference(stanza_type.ROUTEMAP, ctx.map.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1416,13 +1599,17 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_as_path_access_list_stanza(@NotNull CiscoGrammar.Ip_as_path_access_list_stanzaContext ctx) { }
+	@Override public void enterIp_as_path_access_list_stanza(@NotNull CiscoGrammar.Ip_as_path_access_list_stanzaContext ctx) { 
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_as_path_access_list_stanza(@NotNull CiscoGrammar.Ip_as_path_access_list_stanzaContext ctx) { }
+	@Override public void exitIp_as_path_access_list_stanza(@NotNull CiscoGrammar.Ip_as_path_access_list_stanzaContext ctx) {
+		exitStanza(ctx.numbered.name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1584,13 +1771,22 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStandard_access_list_stanza(@NotNull CiscoGrammar.Standard_access_list_stanzaContext ctx) { }
+	@Override public void enterStandard_access_list_stanza(@NotNull CiscoGrammar.Standard_access_list_stanzaContext ctx) {
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStandard_access_list_stanza(@NotNull CiscoGrammar.Standard_access_list_stanzaContext ctx) { }
+	@Override public void exitStandard_access_list_stanza(@NotNull CiscoGrammar.Standard_access_list_stanzaContext ctx) {
+		if(ctx.named!=null){
+			exitStanza(ctx.named.name.getText());
+		}
+		else{
+			exitStanza(ctx.numbered.name.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1656,13 +1852,17 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRouter_ospf_stanza(@NotNull CiscoGrammar.Router_ospf_stanzaContext ctx) { }
+	@Override public void enterRouter_ospf_stanza(@NotNull CiscoGrammar.Router_ospf_stanzaContext ctx) {
+		enterStanza(stanza_type.ROUTER);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRouter_ospf_stanza(@NotNull CiscoGrammar.Router_ospf_stanzaContext ctx) { }
+	@Override public void exitRouter_ospf_stanza(@NotNull CiscoGrammar.Router_ospf_stanzaContext ctx) { 
+		exitStanza("ospf_"+ctx.procnum.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1794,7 +1994,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRedistribute_bgp_ro_stanza(@NotNull CiscoGrammar.Redistribute_bgp_ro_stanzaContext ctx) { }
+	@Override public void exitRedistribute_bgp_ro_stanza(@NotNull CiscoGrammar.Redistribute_bgp_ro_stanzaContext ctx) {
+		if(ctx.map!=null){
+			AddReference(stanza_type.ROUTEMAP, ctx.map.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1884,13 +2088,13 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStandard_access_list_named_stanza(@NotNull CiscoGrammar.Standard_access_list_named_stanzaContext ctx) { }
+	@Override public void enterStandard_access_list_named_stanza(@NotNull CiscoGrammar.Standard_access_list_named_stanzaContext ctx) {	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStandard_access_list_named_stanza(@NotNull CiscoGrammar.Standard_access_list_named_stanzaContext ctx) { }
+	@Override public void exitStandard_access_list_named_stanza(@NotNull CiscoGrammar.Standard_access_list_named_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1926,7 +2130,9 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPassive_interface_ro_stanza(@NotNull CiscoGrammar.Passive_interface_ro_stanzaContext ctx) { }
+	@Override public void exitPassive_interface_ro_stanza(@NotNull CiscoGrammar.Passive_interface_ro_stanzaContext ctx) {
+		AddReference(stanza_type.IFACE, ctx.i.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1968,13 +2174,22 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_community_list_expanded_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_stanzaContext ctx) { }
+	@Override public void enterIp_community_list_expanded_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_stanzaContext ctx) {
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_community_list_expanded_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_stanzaContext ctx) { }
+	@Override public void exitIp_community_list_expanded_stanza(@NotNull CiscoGrammar.Ip_community_list_expanded_stanzaContext ctx) {
+		if(ctx.named!=null){
+			exitStanza(ctx.named.name.getText());
+		}
+		else{
+			exitStanza(ctx.numbered.name.getText());
+		}
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1987,18 +2202,19 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRoute_map_tail_tail(@NotNull CiscoGrammar.Route_map_tail_tailContext ctx) { }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIpx_sap_access_list_numbered_stanza(@NotNull CiscoGrammar.Ipx_sap_access_list_numbered_stanzaContext ctx) { }
+	@Override public void enterIpx_sap_access_list_numbered_stanza(@NotNull CiscoGrammar.Ipx_sap_access_list_numbered_stanzaContext ctx) {}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIpx_sap_access_list_numbered_stanza(@NotNull CiscoGrammar.Ipx_sap_access_list_numbered_stanzaContext ctx) { }
+	@Override public void exitIpx_sap_access_list_numbered_stanza(@NotNull CiscoGrammar.Ipx_sap_access_list_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2028,13 +2244,17 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRouter_bgp_stanza(@NotNull CiscoGrammar.Router_bgp_stanzaContext ctx) { }
+	@Override public void enterRouter_bgp_stanza(@NotNull CiscoGrammar.Router_bgp_stanzaContext ctx) {
+		enterStanza(stanza_type.ROUTER);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRouter_bgp_stanza(@NotNull CiscoGrammar.Router_bgp_stanzaContext ctx) { }
+	@Override public void exitRouter_bgp_stanza(@NotNull CiscoGrammar.Router_bgp_stanzaContext ctx) { 
+		exitStanza("bgp_"+ctx.procnum.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2112,13 +2332,13 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_as_path_numbered_stanza(@NotNull CiscoGrammar.Ip_as_path_numbered_stanzaContext ctx) { }
+	@Override public void enterIp_as_path_numbered_stanza(@NotNull CiscoGrammar.Ip_as_path_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_as_path_numbered_stanza(@NotNull CiscoGrammar.Ip_as_path_numbered_stanzaContext ctx) { }
+	@Override public void exitIp_as_path_numbered_stanza(@NotNull CiscoGrammar.Ip_as_path_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2316,13 +2536,13 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProtocol_type_code_access_list_numbered_stanza(@NotNull CiscoGrammar.Protocol_type_code_access_list_numbered_stanzaContext ctx) { }
+	@Override public void enterProtocol_type_code_access_list_numbered_stanza(@NotNull CiscoGrammar.Protocol_type_code_access_list_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProtocol_type_code_access_list_numbered_stanza(@NotNull CiscoGrammar.Protocol_type_code_access_list_numbered_stanzaContext ctx) { }
+	@Override public void exitProtocol_type_code_access_list_numbered_stanza(@NotNull CiscoGrammar.Protocol_type_code_access_list_numbered_stanzaContext ctx) {}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2334,7 +2554,9 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNeighbor_update_source_rb_stanza(@NotNull CiscoGrammar.Neighbor_update_source_rb_stanzaContext ctx) { }
+	@Override public void exitNeighbor_update_source_rb_stanza(@NotNull CiscoGrammar.Neighbor_update_source_rb_stanzaContext ctx) {
+		AddReference(stanza_type.IFACE, ctx.source.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2478,7 +2700,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRedistribute_connected_ro_stanza(@NotNull CiscoGrammar.Redistribute_connected_ro_stanzaContext ctx) { }
+	@Override public void exitRedistribute_connected_ro_stanza(@NotNull CiscoGrammar.Redistribute_connected_ro_stanzaContext ctx) {
+		if(ctx.map!=null){
+			AddReference(stanza_type.ROUTEMAP, ctx.map.getText());
+		}		
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2520,13 +2746,17 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInterface_stanza(@NotNull CiscoGrammar.Interface_stanzaContext ctx) { }
+	@Override public void enterInterface_stanza(@NotNull CiscoGrammar.Interface_stanzaContext ctx) {
+		enterStanza(stanza_type.IFACE);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInterface_stanza(@NotNull CiscoGrammar.Interface_stanzaContext ctx) { }
+	@Override public void exitInterface_stanza(@NotNull CiscoGrammar.Interface_stanzaContext ctx) { 
+		exitStanza(ctx.iname.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2556,25 +2786,25 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExtended_access_list_named_stanza(@NotNull CiscoGrammar.Extended_access_list_named_stanzaContext ctx) { }
+	@Override public void enterExtended_access_list_named_stanza(@NotNull CiscoGrammar.Extended_access_list_named_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExtended_access_list_named_stanza(@NotNull CiscoGrammar.Extended_access_list_named_stanzaContext ctx) { }
+	@Override public void exitExtended_access_list_named_stanza(@NotNull CiscoGrammar.Extended_access_list_named_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAppletalk_access_list_numbered_stanza(@NotNull CiscoGrammar.Appletalk_access_list_numbered_stanzaContext ctx) { }
+	@Override public void enterAppletalk_access_list_numbered_stanza(@NotNull CiscoGrammar.Appletalk_access_list_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAppletalk_access_list_numbered_stanza(@NotNull CiscoGrammar.Appletalk_access_list_numbered_stanzaContext ctx) { }
+	@Override public void exitAppletalk_access_list_numbered_stanza(@NotNull CiscoGrammar.Appletalk_access_list_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2610,7 +2840,9 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTemplate_peer_update_source(@NotNull CiscoGrammar.Template_peer_update_sourceContext ctx) { }
+	@Override public void exitTemplate_peer_update_source(@NotNull CiscoGrammar.Template_peer_update_sourceContext ctx) {
+		AddReference(stanza_type.IFACE, ctx.source.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2646,7 +2878,10 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_access_group_if_stanza(@NotNull CiscoGrammar.Ip_access_group_if_stanzaContext ctx) { }
+	@Override public void exitIp_access_group_if_stanza(@NotNull CiscoGrammar.Ip_access_group_if_stanzaContext ctx) {
+		AddReference(stanza_type.ACL, ctx.name.getText());
+	}
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2766,19 +3001,25 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNeighbor_filter_list_tail_bgp(@NotNull CiscoGrammar.Neighbor_filter_list_tail_bgpContext ctx) { }
+	@Override public void exitNeighbor_filter_list_tail_bgp(@NotNull CiscoGrammar.Neighbor_filter_list_tail_bgpContext ctx) { 
+		AddReference(stanza_type.ACL, ctx.num.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProtocol_type_code_access_list_stanza(@NotNull CiscoGrammar.Protocol_type_code_access_list_stanzaContext ctx) { }
+	@Override public void enterProtocol_type_code_access_list_stanza(@NotNull CiscoGrammar.Protocol_type_code_access_list_stanzaContext ctx) {
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProtocol_type_code_access_list_stanza(@NotNull CiscoGrammar.Protocol_type_code_access_list_stanzaContext ctx) { }
+	@Override public void exitProtocol_type_code_access_list_stanza(@NotNull CiscoGrammar.Protocol_type_code_access_list_stanzaContext ctx) { 
+		exitStanza(ctx.numbered.name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2808,7 +3049,7 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRoute_map_named_stanza(@NotNull CiscoGrammar.Route_map_named_stanzaContext ctx) { }
+	@Override public void enterRoute_map_named_stanza(@NotNull CiscoGrammar.Route_map_named_stanzaContext ctx) {}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2832,13 +3073,13 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExtended_access_list_numbered_stanza(@NotNull CiscoGrammar.Extended_access_list_numbered_stanzaContext ctx) { }
+	@Override public void enterExtended_access_list_numbered_stanza(@NotNull CiscoGrammar.Extended_access_list_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExtended_access_list_numbered_stanza(@NotNull CiscoGrammar.Extended_access_list_numbered_stanzaContext ctx) { }
+	@Override public void exitExtended_access_list_numbered_stanza(@NotNull CiscoGrammar.Extended_access_list_numbered_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2862,19 +3103,25 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNeighbor_prefix_list_tail_bgp(@NotNull CiscoGrammar.Neighbor_prefix_list_tail_bgpContext ctx) { }
+	@Override public void exitNeighbor_prefix_list_tail_bgp(@NotNull CiscoGrammar.Neighbor_prefix_list_tail_bgpContext ctx) {
+		AddReference(stanza_type.ACL, ctx.list_name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAppletalk_access_list_stanza(@NotNull CiscoGrammar.Appletalk_access_list_stanzaContext ctx) { }
+	@Override public void enterAppletalk_access_list_stanza(@NotNull CiscoGrammar.Appletalk_access_list_stanzaContext ctx) {
+		enterStanza(stanza_type.ACL);
+	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAppletalk_access_list_stanza(@NotNull CiscoGrammar.Appletalk_access_list_stanzaContext ctx) { }
+	@Override public void exitAppletalk_access_list_stanza(@NotNull CiscoGrammar.Appletalk_access_list_stanzaContext ctx) { 
+		exitStanza(ctx.numbered.name.getText());
+	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2928,13 +3175,13 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIp_prefix_list_named_stanza(@NotNull CiscoGrammar.Ip_prefix_list_named_stanzaContext ctx) { }
+	@Override public void enterIp_prefix_list_named_stanza(@NotNull CiscoGrammar.Ip_prefix_list_named_stanzaContext ctx) {	}
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIp_prefix_list_named_stanza(@NotNull CiscoGrammar.Ip_prefix_list_named_stanzaContext ctx) { }
+	@Override public void exitIp_prefix_list_named_stanza(@NotNull CiscoGrammar.Ip_prefix_list_named_stanzaContext ctx) { 	}
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3054,7 +3301,11 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNetwork_tail_bgp(@NotNull CiscoGrammar.Network_tail_bgpContext ctx) { }
+	@Override public void exitNetwork_tail_bgp(@NotNull CiscoGrammar.Network_tail_bgpContext ctx) {
+		if(ctx.mapname!=null){
+			AddReference(stanza_type.ROUTEMAP, ctx.mapname.getText());
+		}
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -3082,9 +3333,7 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	@Override public void visitErrorNode(@NotNull ErrorNode node) { }
 	
 
-	public Integer getComplexit(){
-		return 0;
-	}
+
 	@Override
 	public void enterNeighbor_nexus_remote_as_stanza(
 			Neighbor_nexus_remote_as_stanzaContext ctx) {
@@ -3132,13 +3381,12 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	}
 	@Override
 	public void enterMac_access_list_stanza(Mac_access_list_stanzaContext ctx) {
-		// TODO Auto-generated method stub
+		current = new stanza(stanza_type.ACL);
 		
 	}
 	@Override
 	public void exitMac_access_list_stanza(Mac_access_list_stanzaContext ctx) {
-		// TODO Auto-generated method stub
-		
+		exitStanza(ctx.name.getText());
 	}
 	@Override
 	public void enterNeighbor_filter_list_rb_stanza(
@@ -3164,16 +3412,7 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void enterMac_al_substanza(Mac_al_substanzaContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void exitMac_al_substanza(Mac_al_substanzaContext ctx) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	public void enterTemplate_peer_inherit(Template_peer_inheritContext ctx) {
 		// TODO Auto-generated method stub
@@ -3185,15 +3424,13 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 		
 	}
 	@Override
-	public void enterNeighbor_nexus_update_source_stanza(
-			Neighbor_nexus_update_source_stanzaContext ctx) {
-		// TODO Auto-generated method stub
+	public void enterNeighbor_nexus_update_source_stanza(Neighbor_nexus_update_source_stanzaContext ctx) {
+		
 		
 	}
 	@Override
-	public void exitNeighbor_nexus_update_source_stanza(
-			Neighbor_nexus_update_source_stanzaContext ctx) {
-		// TODO Auto-generated method stub
+	public void exitNeighbor_nexus_update_source_stanza(Neighbor_nexus_update_source_stanzaContext ctx) {
+		AddReference(stanza_type.IFACE, ctx.source.getText());
 		
 	}
 	@Override
@@ -3203,6 +3440,20 @@ public class CiscoControlPlaneComplexity implements CiscoGrammarListener{
 	}
 	@Override
 	public void exitArp_al_substanza(Arp_al_substanzaContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterMac_access_list_substanza(
+			Mac_access_list_substanzaContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitMac_access_list_substanza(
+			Mac_access_list_substanzaContext ctx) {
 		// TODO Auto-generated method stub
 		
 	}

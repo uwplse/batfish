@@ -1861,16 +1861,6 @@ public interface CiscoGrammarListener extends ParseTreeListener {
 	 */
 	void exitNexus_access_list_statistics(@NotNull CiscoGrammar.Nexus_access_list_statisticsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CiscoGrammar#mac_al_substanza}.
-	 * @param ctx the parse tree
-	 */
-	void enterMac_al_substanza(@NotNull CiscoGrammar.Mac_al_substanzaContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CiscoGrammar#mac_al_substanza}.
-	 * @param ctx the parse tree
-	 */
-	void exitMac_al_substanza(@NotNull CiscoGrammar.Mac_al_substanzaContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CiscoGrammar#switchport_trunk_encapsulation_if_stanza}.
 	 * @param ctx the parse tree
 	 */
@@ -1990,6 +1980,16 @@ public interface CiscoGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNull_template_peer_stanza(@NotNull CiscoGrammar.Null_template_peer_stanzaContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CiscoGrammar#mac_access_list_substanza}.
+	 * @param ctx the parse tree
+	 */
+	void enterMac_access_list_substanza(@NotNull CiscoGrammar.Mac_access_list_substanzaContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CiscoGrammar#mac_access_list_substanza}.
+	 * @param ctx the parse tree
+	 */
+	void exitMac_access_list_substanza(@NotNull CiscoGrammar.Mac_access_list_substanzaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CiscoGrammar#null_rb_stanza}.
 	 * @param ctx the parse tree

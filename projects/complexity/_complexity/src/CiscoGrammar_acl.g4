@@ -410,13 +410,13 @@ ipx_sap_access_list_stanza
 
 mac_access_list_stanza
 :
-   MAC ~NEWLINE* NEWLINE
+   MAC ACCESS_LIST name = VARIABLE NEWLINE
    (
-      mac_al_substanza
+      mac_access_list_substanza
    )*   
 ;
 
-mac_al_substanza
+mac_access_list_substanza
 :
    DEC (REMARK | PERMIT | DENY) ~NEWLINE* NEWLINE
 ;

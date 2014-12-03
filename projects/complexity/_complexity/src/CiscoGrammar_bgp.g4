@@ -256,7 +256,7 @@ neighbor_nexus_remote_as_stanza
 
 neighbor_nexus_update_source_stanza
 :
-   UPDATE_SOURCE source = VARIABLE NEWLINE
+   UPDATE_SOURCE source = interface_name NEWLINE
 ;
 
 neighbor_nexus_vrf_rb_substanza
@@ -472,7 +472,7 @@ neighbor_shutdown_tail_bgp
 
 neighbor_update_source_rb_stanza
 :
-   NEIGHBOR neighbor = ~NEWLINE UPDATE_SOURCE source = VARIABLE NEWLINE
+   NEIGHBOR neighbor = ~NEWLINE UPDATE_SOURCE source = interface_name NEWLINE
 ;
 
 network_af_stanza
@@ -794,7 +794,7 @@ template_peer_stanza_tail
 
 template_peer_update_source
 :
-   UPDATE_SOURCE source = VARIABLE NEWLINE
+   UPDATE_SOURCE source = interface_name NEWLINE
 ;
 
 vrf_rb_stanza

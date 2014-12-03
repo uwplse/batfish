@@ -1,8 +1,13 @@
 package batfish.main;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -21,7 +26,7 @@ import batfish.grammar.cisco.CiscoGrammar;
 import batfish.grammar.cisco.CiscoGrammarCommonLexer;
 
 public class Batfish {
-
+	Map<String, Integer> complexity=new TreeMap<String, Integer>();
 	private String readFile(File file) throws Exception {
 		String text = null;
 		try {
@@ -55,10 +60,11 @@ public class Batfish {
 		return configurationData;
 	}
 
-	public Map<String, Integer> parseVendorConfigurations(
+	
+	public void parseVendorConfigurations(
 			Map<File, String> configurationData) {
 		System.out.println("\n*** PARSING VENDOR CONFIGURATION FILES ***\n");
-		Map<String, Integer> vendorConfigurations = new TreeMap<String, Integer>();
+	//	Map<String, Integer> vendorConfigurations = new TreeMap<String, Integer>();
 		for (File currentFile : configurationData.keySet()) {
 			String fileText = configurationData.get(currentFile);
 			String currentPath = currentFile.getAbsolutePath();
@@ -73,15 +79,34 @@ public class Batfish {
 			CiscoControlPlaneComplexity extractor = new CiscoControlPlaneComplexity();
 			
 			if (fileText.charAt(0) == '!') {
+				System.out.println("parsing "+currentFile.getName());
 				ParserRuleContext tree = parser.cisco_configuration();
 				ParseTreeWalker walker = new ParseTreeWalker();
 				walker.walk(extractor, tree);
-				vendorConfigurations.put(currentFile.getName(), extractor.getComplexit());
+				complexity.put(currentFile.getName(), extractor.getComplexit());
 			} else {
 				System.out.print("Parsing: \"" + currentPath + "\" ERROR\n");
 			}
 
 		}
-		return vendorConfigurations;
+	}
+	public void outputComplexity(String path) throws FileNotFoundException{
+		String file = path+"/"+"complexity.txt";
+		Writer writer  = null;
+		double total = 0;
+		int count = 0;
+		try {
+		    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+		    for(String net: complexity.keySet()){
+		    	Integer comp= complexity.get(net);
+		    	writer.write(net+":"+comp+"\n");
+		    	total += comp;
+		    	count++;
+		    }
+		    writer.write("average:"+(total/count));
+		    writer.close();
+		} catch (Exception ex) {
+		    
+		}
 	}
 }

@@ -2239,18 +2239,6 @@ public class CiscoGrammarBaseListener implements CiscoGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMac_al_substanza(@NotNull CiscoGrammar.Mac_al_substanzaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMac_al_substanza(@NotNull CiscoGrammar.Mac_al_substanzaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterSwitchport_trunk_encapsulation_if_stanza(@NotNull CiscoGrammar.Switchport_trunk_encapsulation_if_stanzaContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2390,6 +2378,18 @@ public class CiscoGrammarBaseListener implements CiscoGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNull_template_peer_stanza(@NotNull CiscoGrammar.Null_template_peer_stanzaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMac_access_list_substanza(@NotNull CiscoGrammar.Mac_access_list_substanzaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMac_access_list_substanza(@NotNull CiscoGrammar.Mac_access_list_substanzaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
