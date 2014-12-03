@@ -21,7 +21,7 @@ import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FileUtils;
 
-import batfish.cisco.grammar.controlplane.CiscoControlPlaneComplexity;
+import batfish.grammar.cisco.controlplane.CiscoControlPlaneComplexity;
 import batfish.grammar.cisco.CiscoGrammar;
 import batfish.grammar.cisco.CiscoGrammarCommonLexer;
 
