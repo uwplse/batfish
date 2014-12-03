@@ -8,6 +8,12 @@ export BATFISH=$BATFISH_PATH/batfish
 export BATFISH_Z3=$(which z3)
 export BATFISH_Z3_DATALOG="$BATFISH_Z3 fixedpoint.engine=datalog fixedpoint.default_relation=hassel_diff fixedpoint.unbound_compressor=false fixedpoint.print_answer=true fixedpoint.inline_eager=false"
 
+export COMPLEXITY=$BATFISH_ROOT/projects/complexity/complexity
+
+complexity(){
+   $COMPLEXITY $@
+}
+
 batfish() {
    # if cygwin, shift and replace each parameter
    if [ "Cygwin" = "$(uname -o)" ]; then
