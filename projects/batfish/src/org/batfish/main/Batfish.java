@@ -113,6 +113,7 @@ import org.batfish.nxtnet.Relation;
 import org.batfish.nxtnet.TopologyFactExtractor;
 import org.batfish.protocoldependency.ProtocolDependencyAnalysis;
 import org.batfish.question.AclReachabilityQuestion;
+import org.batfish.question.BagpipeQuestion;
 import org.batfish.question.DestinationQuestion;
 import org.batfish.question.Environment;
 import org.batfish.question.ReducedReachabilityQuestion;
@@ -564,6 +565,10 @@ public class Batfish implements AutoCloseable {
          answerAclReachability((AclReachabilityQuestion) question);
          break;
 
+      case BAGPIPE:
+         answerBagpipe((BagpipeQuestion) question);
+         break;
+
       case DESTINATION:
          answerDestination((DestinationQuestion) question);
          break;
@@ -768,6 +773,13 @@ public class Batfish implements AutoCloseable {
          }
          Util.writeFile(jsonOutputPath, jsonOutput);
       }
+   }
+
+   private void answerBagpipe(BagpipeQuestion question) {
+      checkConfigurations();
+      Map<String, Configuration> configurations = loadConfigurations();
+
+      _logger.output("CALLED THE BAGPIPE CHECKER\n");
    }
 
    private void answerDestination(DestinationQuestion question) {
@@ -2704,6 +2716,9 @@ public class Batfish implements AutoCloseable {
       String questionText = Util.readFile(questionFile);
       _logger.info("OK\n");
       QuestionParameters parameters = parseQuestionParameters();
+      if (questionText.startsWith("# bagpipe setup")) {
+         return new BagpipeQuestion(parameters);
+      }
       QuestionCombinedParser parser = new QuestionCombinedParser(questionText,
             _settings.getThrowOnParserError(), _settings.getThrowOnLexerError());
       QuestionExtractor extractor = new QuestionExtractor(parser, getFlowTag(),
