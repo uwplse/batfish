@@ -793,21 +793,15 @@ public class Batfish implements AutoCloseable {
          PrintWriter out = new PrintWriter("/setup/setup.rkt");
          out.print(question.getText());
          out.close();
-         _logger.info("Wrote setup.rkt File\n");
          String[] bagpipe = new String[] {
             "racket", "/bagpipe/src/bagpipe/racket/main/bagpipe.rkt",
             "verify", "/setup", "export-wrong-metric"
          };
-         _logger.info("About To Call Bagpipe\n");
          Process p = Runtime.getRuntime().exec(bagpipe);
-         _logger.info("Done Calling Bagpipe\n");
-         p.waitFor();
-         /*
          InputStream stdout = p.getInputStream();
          InputStream stderr = p.getErrorStream();
          BufferedReader rd = new BufferedReader(new InputStreamReader(
                      new SequenceInputStream(stderr, stdout)));
-
          while (true) {
             String l = rd.readLine();
             if (l != null) {
@@ -817,13 +811,12 @@ public class Batfish implements AutoCloseable {
                break;
             }
          }
-         */
-         _logger.info("Got All the Output From Bagpipe\n");
+         p.waitFor();
       }
+      catch (InterruptedException e) {}
       catch (IOException e) {
          throw new BatfishException("Problem communicating with Bagpipe", e);
       }
-      catch (InterruptedException e) {}
    }
 
    private void answerDestination(DestinationQuestion question) {
