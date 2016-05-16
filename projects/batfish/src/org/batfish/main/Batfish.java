@@ -1,13 +1,19 @@
 package org.batfish.main;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.io.SequenceInputStream;
+import java.lang.Process;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileVisitResult;
@@ -778,8 +784,46 @@ public class Batfish implements AutoCloseable {
    private void answerBagpipe(BagpipeQuestion question) {
       checkConfigurations();
       Map<String, Configuration> configurations = loadConfigurations();
+      _logger.info("Answering Bagpipe Question");
+      boolean toText = _settings.getSerializeToText();
+      _settings.setSerializeToText(true);
+      serializeIndependentConfigs(configurations, "/setup/configs");
+      _settings.setSerializeToText(toText);
+      try {
+         PrintWriter out = new PrintWriter("/setup/setup.rkt");
+         out.print(question.getText());
+         out.close();
+         _logger.info("Wrote setup.rkt File\n");
+         String[] bagpipe = new String[] {
+            "racket", "/bagpipe/src/bagpipe/racket/main/bagpipe.rkt",
+            "verify", "/setup", "export-wrong-metric"
+         };
+         _logger.info("About To Call Bagpipe\n");
+         Process p = Runtime.getRuntime().exec(bagpipe);
+         _logger.info("Done Calling Bagpipe\n");
+         p.waitFor();
+         /*
+         InputStream stdout = p.getInputStream();
+         InputStream stderr = p.getErrorStream();
+         BufferedReader rd = new BufferedReader(new InputStreamReader(
+                     new SequenceInputStream(stderr, stdout)));
 
-      _logger.output("CALLED THE BAGPIPE CHECKER\n");
+         while (true) {
+            String l = rd.readLine();
+            if (l != null) {
+               _logger.output(l + "\n");
+            }
+            else {
+               break;
+            }
+         }
+         */
+         _logger.info("Got All the Output From Bagpipe\n");
+      }
+      catch (IOException e) {
+         throw new BatfishException("Problem communicating with Bagpipe", e);
+      }
+      catch (InterruptedException e) {}
    }
 
    private void answerDestination(DestinationQuestion question) {
@@ -2716,8 +2760,8 @@ public class Batfish implements AutoCloseable {
       String questionText = Util.readFile(questionFile);
       _logger.info("OK\n");
       QuestionParameters parameters = parseQuestionParameters();
-      if (questionText.startsWith("# bagpipe setup")) {
-         return new BagpipeQuestion(parameters);
+      if (questionText.startsWith("; bagpipe setup")) {
+         return new BagpipeQuestion(parameters, questionText);
       }
       QuestionCombinedParser parser = new QuestionCombinedParser(questionText,
             _settings.getThrowOnParserError(), _settings.getThrowOnLexerError());

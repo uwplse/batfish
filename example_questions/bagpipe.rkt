@@ -1,4 +1,4 @@
-# bagpipe setup
+; bagpipe setup
 
 (define (export-metric m) (lambda (r i o p ai al al* ae)
   (implies (available? ae)
@@ -27,5 +27,5 @@
 (define (driver args) 'all)
 
 (define (as args)
-  (as-from-configs 'batfish (list "example/as2dept1")))
+  (as-from-configs 'batfish (list "configs/as2dept1")))
 

@@ -1383,6 +1383,10 @@ public final class Settings extends BaseSettings {
       _serializeIndependentPath = path;
    }
 
+   public void setSerializeToText(boolean toText) {
+      _serializeToText = toText;
+   }
+
    public void setSerializeVendorPath(String path) {
       _serializeVendorPath = path;
    }
