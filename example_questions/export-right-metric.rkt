@@ -15,7 +15,7 @@
            (available? ae))))
 
 (define (policy args)
-  (define prop (first args))
+  (define prop "export-right-metric")
   (cond
     [(equal? prop "export-right-metric") (export-metric 50)]
     [(equal? prop "export-wrong-metric") (export-metric 60)]
